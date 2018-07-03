@@ -5,12 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="SenderWindow" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="SenderWindow" Height="277" Width="519" WindowStartupLocation="CenterScreen">
     <Grid>
-        <TextBox x:Name="TextToSend" HorizontalAlignment="Left" Height="23" Margin="333,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <GroupBox Header="Текст:" HorizontalAlignment="Left" Height="162" Margin="75,80,0,0" VerticalAlignment="Top" Width="214"/>
-        <RadioButton Content="Произвольный текст" HorizontalAlignment="Left" Margin="333,200,0,0" VerticalAlignment="Top"/>
-        <RadioButton Content="Текст из БД" HorizontalAlignment="Left" Margin="333,220,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="TextToSend" HorizontalAlignment="Left" Height="66" Margin="46,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
+        <TextBox x:Name="NumbersToSend" HorizontalAlignment="Left" Height="66" Margin="288,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
+        <GroupBox x:Name="Textgroupbox" Header="Текст:" HorizontalAlignment="Left" Height="162" Margin="30,18,0,0" VerticalAlignment="Top" Width="214"/>
+        <RadioButton x:Name="TextSecondRadioButton" Content="Произвольный текст" HorizontalAlignment="Left" Margin="46,65,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="TextFirstRadioButton" Content="Текст из БД" HorizontalAlignment="Left" Margin="46,45,0,0" VerticalAlignment="Top"/>
+        <GroupBox x:Name="NumbersGroupBox" Header="Получатели:" HorizontalAlignment="Left" Height="162" Margin="269,18,0,0" VerticalAlignment="Top" Width="214"/>
+        <RadioButton x:Name="NumbersSecondRadioButton" Content="Произвольный получатель" HorizontalAlignment="Left" Margin="288,65,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="NumbersFirstRadioButton" Content="Получатели из БД" HorizontalAlignment="Left" Margin="288,45,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="FinalSendButton" Content="Отправить" HorizontalAlignment="Left" Margin="188,201,0,0" VerticalAlignment="Top" Width="135" Height="29" Click="FinalSendButton_Click"/>
 
     </Grid>
 </Window>

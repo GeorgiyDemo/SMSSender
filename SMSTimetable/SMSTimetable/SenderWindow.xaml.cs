@@ -23,5 +23,15 @@ namespace SMSTimetable
         {
             InitializeComponent();
         }
+
+        private void TextSecondRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void FinalSendButton_Click(object sender, RoutedEventArgs e)
+        {
+            SMSSenderClass.SMSWorker();
+        }
     }
 }

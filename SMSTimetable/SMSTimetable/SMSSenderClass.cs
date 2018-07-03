@@ -15,7 +15,7 @@ namespace SMSTimetable
         const string SMSAero_API_Key = ""; // ваш api-key
         const string From = "SMS Aero"; // подпись отправителя
 
-        static void Main()
+        public static void SMSWorker()
         {
 
             int unixTime = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds + 10; // время отправки в unixtime +10 секунд от настоящего времени
@@ -24,13 +24,13 @@ namespace SMSTimetable
             // API V2 example
 
             // Отправка SMS сообщений
-            string[] numbers = new string[] { "78945612309", "78945612303" };
+            string[] numbers = new string[] { "79994935590" };
             var request = new Request { numbers = numbers, text = "Привет!", channel = "DIRECT" };
             smsc.sms_send(request);
 
             // Проверка статуса SMS сообщения 
-            var request1 = new Request { id = 44197982 };
-            smsc.check_send(request1);
+            //var request1 = new Request { id = 44197982 };
+            //smsc.check_send(request1);
 
             // Получение списка отправленных сообщений
             // var request = new Request { text = "Hello"};
@@ -52,8 +52,8 @@ namespace SMSTimetable
             // smsc.group_list(request);
 
             // Добавление контакта
-            // var request = new Request { number = "700000000000", name = "Filip" , sex = "male"};
-            // smsc.contact_add(request); 
+            //var request1 = new Request { number = "+79997335592", fname = "КАРТИНА" , sex = "female"};
+            //smsc.contact_add(request1); 
 
             // Удаление контакта
             // var request = new Request { id = 123};
