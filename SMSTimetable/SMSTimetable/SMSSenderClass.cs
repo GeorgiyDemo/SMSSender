@@ -13,7 +13,7 @@ namespace SMSTimetable
         // Константы с параметрами отправки
         const string SMSAero_LOGIN = ""; // логин
         const string SMSAero_API_Key = ""; // ваш api-key
-        const string From = "SMS Aero"; // подпись отправителя
+        const string From = "KIPCollege"; // подпись отправителя
 
         public static void SMSWorker()
         {

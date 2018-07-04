@@ -5,17 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="SenderWindow" Height="277" Width="519" WindowStartupLocation="CenterScreen">
+        Title="SenderWindow" Height="323" Width="519" WindowStartupLocation="CenterScreen">
     <Grid>
-        <TextBox x:Name="TextToSend" HorizontalAlignment="Left" Height="66" Margin="46,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
-        <TextBox x:Name="NumbersToSend" HorizontalAlignment="Left" Height="66" Margin="288,85,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
-        <GroupBox x:Name="Textgroupbox" Header="Текст:" HorizontalAlignment="Left" Height="162" Margin="30,18,0,0" VerticalAlignment="Top" Width="214"/>
-        <RadioButton x:Name="TextSecondRadioButton" Content="Произвольный текст" HorizontalAlignment="Left" Margin="46,65,0,0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="TextFirstRadioButton" Content="Текст из БД" HorizontalAlignment="Left" Margin="46,45,0,0" VerticalAlignment="Top"/>
-        <GroupBox x:Name="NumbersGroupBox" Header="Получатели:" HorizontalAlignment="Left" Height="162" Margin="269,18,0,0" VerticalAlignment="Top" Width="214"/>
-        <RadioButton x:Name="NumbersSecondRadioButton" Content="Произвольный получатель" HorizontalAlignment="Left" Margin="288,65,0,0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="NumbersFirstRadioButton" Content="Получатели из БД" HorizontalAlignment="Left" Margin="288,45,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="FinalSendButton" Content="Отправить" HorizontalAlignment="Left" Margin="188,201,0,0" VerticalAlignment="Top" Width="135" Height="29" Click="FinalSendButton_Click"/>
+        <TextBox x:Name="TextToSend" HorizontalAlignment="Left" Height="66" Margin="46,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
+        <TextBox x:Name="NumbersToSend" HorizontalAlignment="Left" Height="66" Margin="288,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
+        <GroupBox x:Name="Textgroupbox" Header="Текст:" HorizontalAlignment="Left" Height="162" Margin="30,47,0,0" VerticalAlignment="Top" Width="214"/>
+        <RadioButton x:Name="TextSecondRadioButton" Content="Произвольный текст" HorizontalAlignment="Left" Margin="46,94,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="TextFirstRadioButton" Content="Текст из БД" HorizontalAlignment="Left" Margin="46,74,0,0" VerticalAlignment="Top"/>
+        <GroupBox x:Name="NumbersGroupBox" Header="Получатели:" HorizontalAlignment="Left" Height="162" Margin="269,47,0,0" VerticalAlignment="Top" Width="214"/>
+        <RadioButton x:Name="NumbersSecondRadioButton" Content="Произвольный получатель" HorizontalAlignment="Left" Margin="288,94,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="NumbersFirstRadioButton" Content="Получатели из БД" HorizontalAlignment="Left" Margin="288,74,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="FinalSendButton" Content="Отправить" HorizontalAlignment="Left" Margin="188,230,0,0" VerticalAlignment="Top" Width="135" Height="29" Click="FinalSendButton_Click"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="354,21,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>

@@ -30,8 +30,8 @@ namespace SMSTimetable
         {
             
             SenderWindow SenderWindow_obj = new SenderWindow();
-            TelegramClass.TelegramInit();
-            SenderWindow_obj.Show();;
+            SenderWindow_obj.Show();
+            //TelegramClass.TelegramInit();
         }
     }
 }
