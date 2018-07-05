@@ -13,12 +13,14 @@ namespace SMSTimetable
 {
     public static class TelegramClass
     {
-        private static readonly TelegramBotClient Bot = new TelegramBotClient("TOKEN_MEOW_MEOW");
-        //var botClient = new Telegram.Bot.TelegramBotClient("TOKEN_MEOW_MEOW");
-        public static async void TelegramInit()
+        private static TelegramBotClient Bot = new TelegramBotClient(JustTokenClass.TG_APIKey);
+
+        public static void TelegramInit()
         {
             var me = Bot.GetMeAsync().Result;
-            MessageBox.Show(me.Username);
+            #if DEBUG
+            MessageBox.Show("Telegram бот запущен \n"+me.Username);
+            #endif
 
             Bot.OnMessage += BotOnMessageReceived;
             Bot.OnMessageEdited += BotOnMessageReceived;

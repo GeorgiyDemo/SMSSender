@@ -28,10 +28,13 @@ namespace SMSTimetable
 
         private void EnterButton_Click(object sender, RoutedEventArgs e)
         {
-            
             SenderWindow SenderWindow_obj = new SenderWindow();
             SenderWindow_obj.Show();
-            //TelegramClass.TelegramInit();
+        }
+
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+            TelegramClass.TelegramInit();
         }
     }
 }

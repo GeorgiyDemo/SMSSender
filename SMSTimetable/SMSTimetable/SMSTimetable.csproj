@@ -112,7 +112,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DatabaseLogicClass.cs" />
-    <Compile Include="MainClass.cs" />
+    <Compile Include="JustTokenClass.cs" />
     <Compile Include="SenderWindow.xaml.cs">
       <DependentUpon>SenderWindow.xaml</DependentUpon>
     </Compile>

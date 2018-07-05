@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="Вход в систему" Height="213" Width="294" WindowStartupLocation="CenterScreen">
+        Title="Вход в систему" Height="213" Width="294" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized">
     <Grid>
         <Label x:Name="LoginLabel" Content="Логин:" HorizontalAlignment="Left" Margin="21,53,0,0" VerticalAlignment="Top" Height="25" Width="65"/>
         <Button x:Name="EnterButton" Content="Вход" HorizontalAlignment="Left" Margin="105,132,0,0" VerticalAlignment="Top" Width="75" Click="EnterButton_Click"/>

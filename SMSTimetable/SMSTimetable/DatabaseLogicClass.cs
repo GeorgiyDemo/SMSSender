@@ -8,11 +8,10 @@ namespace SMSTimetable
 {
     public class DatabaseLogicClass
     {
-        public static string connStr = "ДЕМ МОЖЕТ УЖЕ НАЙДЕТ СЕБЕ ТЯН?";
 
         public static string GetSQL(string sql)
         {
-            MySqlConnection conn = new MySqlConnection(connStr);
+            MySqlConnection conn = new MySqlConnection(JustTokenClass.SQL_ConnectionString);
             conn.Open();
             MySqlCommand command = new MySqlCommand(sql, conn);
             string name = command.ExecuteScalar().ToString();
@@ -23,7 +22,7 @@ namespace SMSTimetable
         public static async Task<string> GetSQLAsync(string SQL)
         {
             string return_str = "";
-            using (var conn = new MySqlConnection(connStr))
+            using (var conn = new MySqlConnection(JustTokenClass.SQL_ConnectionString))
             {
                 await conn.OpenAsync();
                 /*

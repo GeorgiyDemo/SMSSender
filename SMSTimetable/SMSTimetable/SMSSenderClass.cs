@@ -10,23 +10,19 @@ namespace SMSTimetable
 {
     public class SMSSenderClass
     {
-        // Константы с параметрами отправки
-        const string SMSAero_LOGIN = ""; // логин
-        const string SMSAero_API_Key = ""; // ваш api-key
-        const string From = "KIPCollege"; // подпись отправителя
+  
+        const string From = "SMS Aero";
+
 
         public static void SMSWorker()
         {
+            //ВСЕ, ЧТО ЗДЕСЬ НАПИСАНО НАДО РЕАЛИЗОВЫВАТЬ НА СТОРОНЕ ТОЙ ЧАСТИ КОДА, ГДЕ НУЖНО РАБОТАТЬ С СМС ПУТЕМ СОЗДАНИЯ ОБЪЕКТА
 
-            int unixTime = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds + 10; // время отправки в unixtime +10 секунд от настоящего времени
-            SMSSenderClass smsc = new SMSSenderClass();
-
-            // API V2 example
 
             // Отправка SMS сообщений
-            string[] numbers = new string[] { "79994935590" };
-            var request = new Request { numbers = numbers, text = "Привет!", channel = "DIRECT" };
-            smsc.sms_send(request);
+            //string[] numbers = new string[] { "79994935590" };
+            //var request = new Request { numbers = numbers, text = "Привет!", channel = "DIRECT" };
+            //smsc.sms_send(request);
 
             // Проверка статуса SMS сообщения 
             //var request1 = new Request { id = 44197982 };
@@ -409,9 +405,9 @@ namespace SMSTimetable
         private string send(string Data, string method)
         {
 
-            string basic_auth_data = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(SMSAero_LOGIN + ":" + SMSAero_API_Key));
+            string basic_auth_data = System.Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(JustTokenClass.SMS_Login + ":" + JustTokenClass.SMS_APIKey));
 
-            string url = ("https://gate.smsaero.ru/v2/" + method);
+            string url = ("http://gate.smsaero.ru/v2/" + method);
 
             WebRequest req = WebRequest.Create(url + "?" + Data);
             req.Headers.Add("Authorization", "Basic " + basic_auth_data);
