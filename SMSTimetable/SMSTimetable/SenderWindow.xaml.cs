@@ -29,9 +29,11 @@ namespace SMSTimetable
 
         }
 
-        private void FinalSendButton_Click(object sender, RoutedEventArgs e)
+        private async void FinalSendButton_Click(object sender, RoutedEventArgs e)
         {
-           MessageBox.Show(DatabaseLogicClass.GetSQL("SELECT ServiceKey FROM ServiceTable WHERE ServiceName='SMSAeroAPIKey'"));
+           //string x = await DatabaseLogicClass.GetSQLAsync("SELECT ServiceKey FROM ServiceTable WHERE ServiceName='SMSAeroAPIKey'");
+           MessageBox.Show(await DatabaseLogicClass.GetSQLAsync("SELECT ServiceKey FROM ServiceTable WHERE ServiceName='SMSAeroAPIKey'"));
+            MessageBox.Show(await DatabaseLogicClass.GetSQLAsync("SELECT ServiceKey FROM ServiceTable"));
             //SMSSenderClass sms_obj = new SMSSenderClass();
             //string[] numbers = new string[] { NumbersToSend.Text };
             //var request = new Request { numbers = numbers, text = TextToSend.Text, channel = "DIRECT" };
