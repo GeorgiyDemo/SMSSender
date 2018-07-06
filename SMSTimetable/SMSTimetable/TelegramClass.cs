@@ -8,13 +8,16 @@ using Telegram.Bot.Args;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.ReplyMarkups;
+using MihaZupan;
 
 namespace SMSTimetable
 {
-    public static class TelegramClass
+    public class TelegramClass
     {
-        private static TelegramBotClient Bot = new TelegramBotClient(JustTokenClass.TG_APIKey);
 
+        private static HttpToSocks5Proxy TG_Proxy = new HttpToSocks5Proxy(JustTokenClass.TGProxy_ServerIP, Convert.ToInt32(JustTokenClass.TGProxy_ServerPort),JustTokenClass.TGProxy_User,JustTokenClass.TGProxy_Pass);
+        private static TelegramBotClient Bot = new TelegramBotClient(JustTokenClass.TG_APIKey, TG_Proxy);
+    
         public static void TelegramInit()
         {
             var me = Bot.GetMeAsync().Result;
