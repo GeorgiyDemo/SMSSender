@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="SenderWindow" Height="323" Width="519" WindowStartupLocation="CenterScreen">
+        Title="SenderWindow" Height="323" Width="519" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized">
     <Grid>
         <TextBox x:Name="TextToSend" HorizontalAlignment="Left" Height="66" Margin="46,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
         <TextBox x:Name="NumbersToSend" HorizontalAlignment="Left" Height="66" Margin="288,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
@@ -16,7 +16,7 @@
         <RadioButton x:Name="NumbersSecondRadioButton" Content="Произвольный получатель" HorizontalAlignment="Left" Margin="288,94,0,0" VerticalAlignment="Top"/>
         <RadioButton x:Name="NumbersFirstRadioButton" Content="Получатели из БД" HorizontalAlignment="Left" Margin="288,74,0,0" VerticalAlignment="Top"/>
         <Button x:Name="FinalSendButton" Content="Отправить" HorizontalAlignment="Left" Margin="188,230,0,0" VerticalAlignment="Top" Width="135" Height="29" Click="FinalSendButton_Click"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="354,21,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="BalanceLabel" Content="Текущий баланс: ₽" HorizontalAlignment="Left" Margin="344,10,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

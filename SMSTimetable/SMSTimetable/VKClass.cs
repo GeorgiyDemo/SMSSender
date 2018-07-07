@@ -9,6 +9,8 @@ namespace SMSTimetable
 {
     class VKClass
     {
+        /*
+        void SetSessionData(string accessToken, int userId, int sessionDuration = 20 * 60 * 60);
 
         static async void VKInit()
         {
@@ -30,6 +32,7 @@ namespace SMSTimetable
                 ShowFriendsList(friends.Data.Items.Where(friend => friend.Online));
             }
         }
+        */
        
     }
 }
