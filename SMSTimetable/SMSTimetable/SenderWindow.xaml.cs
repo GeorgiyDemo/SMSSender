@@ -59,7 +59,7 @@ namespace SMSTimetable
         {
             SMSSenderClass sms_obj = new SMSSenderClass();
             dynamic BalanceJSON = JObject.Parse(sms_obj.balance());
-            BalanceLabel.Content = "Текущий баланс : " + BalanceJSON.data.balance + "₽";
+            BalanceLabel.Content = "Текущий баланс: " + BalanceJSON.data.balance + "₽";
         }
     }
 }
