@@ -203,6 +203,9 @@
       <DependentUpon>SenderWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SMSSenderClass.cs" />
+    <Compile Include="SMSStatusWindow.xaml.cs">
+      <DependentUpon>SMSStatusWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TelegramClass.cs" />
     <Compile Include="VKClass.cs" />
     <Page Include="MainWindow.xaml">
@@ -218,6 +221,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SenderWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SMSStatusWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,15 @@
+﻿<Window x:Class="SMSTimetable.SMSStatusWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SMSTimetable"
+        mc:Ignorable="d"
+        Title="SMSStatusWindow" Height="450" Width="800" Initialized="Window_Initialized">
+    <Grid>
+        <Button x:Name="ExitButton" Content="&lt;=" HorizontalAlignment="Left" Margin="95,338,0,0" VerticalAlignment="Top" Width="157" Height="51" Click="ExitButton_Click"/>
+        <DataGrid x:Name="SMSStatusDataGrid" HorizontalAlignment="Left" Height="100" Margin="574,186,0,0" VerticalAlignment="Top" Width="100"/>
+        <Grid x:Name="SMSStatusGrid" HorizontalAlignment="Left" Height="100" Margin="469,186,0,0" VerticalAlignment="Top" Width="100"/>
+
+    </Grid>
+</Window>

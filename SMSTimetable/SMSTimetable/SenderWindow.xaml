@@ -16,7 +16,9 @@
         <RadioButton x:Name="NumbersSecondRadioButton" Content="Произвольный получатель" HorizontalAlignment="Left" Margin="288,94,0,0" VerticalAlignment="Top"/>
         <RadioButton x:Name="NumbersFirstRadioButton" Content="Получатели из БД" HorizontalAlignment="Left" Margin="288,74,0,0" VerticalAlignment="Top"/>
         <Button x:Name="FinalSendButton" Content="Отправить" HorizontalAlignment="Left" Margin="188,230,0,0" VerticalAlignment="Top" Width="135" Height="29" Click="FinalSendButton_Click"/>
-        <Label x:Name="BalanceLabel" Content="Текущий баланс: ₽" HorizontalAlignment="Left" Margin="344,10,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="BalanceLabel" Content="Текущий баланс: ₽" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="SMSStatusButton" Content="SMS" HorizontalAlignment="Left" Margin="436,6,0,0" VerticalAlignment="Top" Width="31" Height="30" Click="SMSStatusButton_Click"/>
+        <Button x:Name="SMSContactsButton" Content="CON" HorizontalAlignment="Left" Margin="472,6,0,0" VerticalAlignment="Top" Width="31" Height="30"/>
 
     </Grid>
 </Window>
