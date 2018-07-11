@@ -3,7 +3,6 @@
 Фронт библиотеки:
 * [MySQLConnector](https://github.com/mysql-net/MySqlConnector)
 * [HttpToSocks5Proxy](https://github.com/MihaZupan/HttpToSocks5Proxy)
-* [ModernDev.InTouch](https://github.com/virtyaluk/InTouch)
 * [Telegram.Bot](https://github.com/TelegramBots/Telegram.Bot)
 
 Бэкенд:

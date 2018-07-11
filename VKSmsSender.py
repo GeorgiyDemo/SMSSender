@@ -3,6 +3,7 @@ from pytils import numeral
 import pymysql.cursors
 import string, vk, time, datetime, json, requests, urllib3, dateutil.parser
 
+
 #####Параметры MySQL######
 HOST = "HOST"            #
 USER = "USER"            #
@@ -10,6 +11,13 @@ PASSWORD = "PASSWORD"    #
 DB = "DB"                #
 ##########################
 
+BeautifulNumbers = {
+	"1": "1️⃣",
+	"2": "2️⃣",
+	"3": "3️⃣",
+	"4": "4️⃣",
+	"5": "5️⃣",
+}
 #Проверка словаря админов
 def CheckAdmin(d, value):
     for i in range(len(d)):
@@ -147,6 +155,16 @@ while True:
 					SMSBalance = str(requests.get(all_url+"/balance").json()["data"]["balance"])
 					api.messages.send(user_id=chat_longpoll,message="Сообщение успешно отправлено!\nТекущий баланс: "+SMSBalance+"₽",v=APIVersion)
 				else:
-					api.messages.send(user_id=chat_longpoll,message="",v=APIVersion)
+					api.messages.send(user_id=chat_longpoll,message="Что-то пошло не так при отправке сообщения 😔\nПовторно воспользуйтесь командой /sms",v=APIVersion)
 				SMSNumber = None;
 				SMSMessage = None;
+
+			elif message_longpoll == "/history":
+				history = requests.get(all_url+"/sms/list").json()["data"]
+				OutMessage = ""
+				for i in range(5):
+					OutMessage += BeautifulNumbers[str(i+1)]+" +"+str(history[str(i)]["number"])+" \""+history[str(i)]["text"]+"\"\n\n"
+				api.messages.send(user_id=chat_longpoll,message="Последние 5 отправленных сообщений:\n"+OutMessage,v=APIVersion)
+
+			elif message_longpoll == "/help":
+				api.messages.send(user_id=chat_longpoll,message="Список команд бота:\n/sms - отправка сообщения\n/balance - получаение текущего баланса\n/history - 5 последних отправленных смс",v=APIVersion)
