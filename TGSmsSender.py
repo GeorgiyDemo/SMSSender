@@ -51,6 +51,17 @@ def MySQLFetchAll(SQLString):
 	    connection.close()
 	return result;
 
+#Функция для записи в БД (на самом деле дубляж)
+def MySQLWriter(SQLString):
+	connection = pymysql.connect(host=HOST,user=USER,password=PASSWORD,db=DB,cursorclass=pymysql.cursors.DictCursor)
+
+	try:
+	    with connection.cursor() as cursor:
+	        cursor.execute(SQLString)
+	    connection.commit()
+
+	finally:
+	    connection.close()
 
 #Основная конфигурация
 TGUpdater = Updater(token=MySQLFetchOne("SELECT ServiceKey FROM ServiceTable WHERE ServiceName='TelegramAPIKey'")["ServiceKey"])
@@ -64,7 +75,7 @@ all_url = "https://"+SMSAuth+"@gate.smsaero.ru/v2"
 GENDER, PHOTO, LOCATION, BIO = range(4)
 #Процедуры для обработок команд бота
 def StartHandler(bot, update):
-	bot.send_message(chat_id=update.message.chat_id, text="Привет, список команд бота:\n/sms - отправка сообщения\n/balance - получаение текущего баланса\n/history - 5 последних отправленных смс\n/users - управление пользователями")
+	bot.send_message(chat_id=update.message.chat_id, text="Привет, список команд бота:\n/sms - отправка сообщения\n/balance - получаение текущего баланса\n/history - 5 последних отправленных смс\n/user - управление пользователем")
 
 def SMSHandler(bot, update):
 	reply_keyboard = [["Да", "Нет"]]
@@ -97,20 +108,28 @@ def HistroyHandler(bot,update):
 	bot.send_message(chat_id=update.message.chat_id, text="Последние 5 отправленных сообщений:\n"+OutMessage)
 
 def MainUsersHandler(bot,update):
+	global SMSUser
+	SMSUser = update.message.text.split(" ")[1]
 	UsersKeyboard = [["Добавление", "Удаление"]]
-	bot.send_message(chat_id=update.message.chat_id, text="Управление пользователями\nКакое действие с пользователем вы хотите осуществить?",reply_markup=ReplyKeyboardMarkup(UsersKeyboard, one_time_keyboard=True))
-
+	bot.send_message(chat_id=update.message.chat_id,text="Доступные действия с пользователем "+SMSUser+":",reply_markup=ReplyKeyboardMarkup(UsersKeyboard, one_time_keyboard=True))
+	
 def AddUserHandler(bot,update):
-	update.message.reply_text('Bye! I hope we can talk again some day.',reply_markup=ReplyKeyboardRemove())
+	global SMSUser
+	MySQLWriter("INSERT INTO TGAdmins(AdminTG) VALUES ('"+SMSUser+"')")
+	update.message.reply_text("Добавление пользователя "+SMSUser+" успешно")
+	SMSUser = None
 
 def RemoveUserHandler(bot,update):
-	update.message.reply_text("MOEW")
+	global SMSUser
+	MySQLWriter("DELETE FROM TGAdmins WHERE AdminTG = '"+SMSUser+"'")
+	update.message.reply_text("Удаление пользователя "+SMSUser+" успешно")
+	SMSUser = None
 
 dispatcher = TGUpdater.dispatcher
 dispatcher.add_handler(CommandHandler('start', StartHandler))
 dispatcher.add_handler(CommandHandler('sms', SMSHandler))
 dispatcher.add_handler(CommandHandler('balance', BalanceHandler))
-dispatcher.add_handler(CommandHandler('users', MainUsersHandler))
+dispatcher.add_handler(CommandHandler('user', MainUsersHandler))
 dispatcher.add_handler(CommandHandler('history', HistroyHandler))
 dispatcher.add_handler(RegexHandler('^(Да)$',AcceptHandler))
 dispatcher.add_handler(RegexHandler('^(Добавление)$',AddUserHandler))
