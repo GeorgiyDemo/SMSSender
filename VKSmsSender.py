@@ -3,7 +3,6 @@ from pytils import numeral
 import pymysql.cursors
 import string, vk, time, datetime, json, requests, urllib3, dateutil.parser
 
-
 #####Параметры MySQL######
 HOST = "HOST"            #
 USER = "USER"            #
@@ -168,3 +167,4 @@ while True:
 
 			elif message_longpoll == "/help":
 				api.messages.send(user_id=chat_longpoll,message="Список команд бота:\n/sms - отправка сообщения\n/balance - получаение текущего баланса\n/history - 5 последних отправленных смс",v=APIVersion)
+			
