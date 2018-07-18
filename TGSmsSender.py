@@ -79,7 +79,6 @@ SMSAPIKey = MySQLFetchOne("SELECT ServiceKey FROM ServiceTable WHERE ServiceName
 SMSAuth = SMSLogin+":"+SMSAPIKey
 all_url = "https://"+SMSAuth+"@gate.smsaero.ru/v2"
 
-GENDER, PHOTO, LOCATION, BIO = range(4)
 #Процедуры для обработок команд бота
 def StartHandler(bot, update):
 	if (CheckAdmin(TGAdmins,update.message.chat.id) == True):
