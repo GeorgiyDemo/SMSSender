@@ -51,7 +51,7 @@ namespace SMSTimetable
         private void Window_Initialized(object sender, EventArgs e)
         {
             DataTable table = GetTable();
-            DataGridTableSMSStatus;
+            //DataGridTableSMSStatus;
         }
     }
 }

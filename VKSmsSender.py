@@ -166,5 +166,5 @@ while True:
 				api.messages.send(user_id=chat_longpoll,message="Последние 5 отправленных сообщений:\n"+OutMessage,v=APIVersion)
 
 			elif message_longpoll == "/help":
-				api.messages.send(user_id=chat_longpoll,message="Список команд бота:\n/sms - отправка сообщения\n/balance - получаение текущего баланса\n/history - 5 последних отправленных смс",v=APIVersion)
-			
+				CommandsText = "Cписок команд бота:\n/sms - отправка сообщения\n/balance - текущий баланс\n/history - последние отправленные сообщения\n/user - управление пользователями" 
+				api.messages.send(user_id=chat_longpoll,message=CommandsText,v=APIVersion)

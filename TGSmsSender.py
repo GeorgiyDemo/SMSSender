@@ -82,7 +82,8 @@ all_url = "https://"+SMSAuth+"@gate.smsaero.ru/v2"
 #Процедуры для обработок команд бота
 def StartHandler(bot, update):
 	if (CheckAdmin(TGAdmins,update.message.chat.id) == True):
-		bot.send_message(chat_id=update.message.chat_id, text="Привет, список команд бота:\n/sms - отправка сообщения\n/balance - получаение текущего баланса\n/history - 5 последних отправленных смс\n/user - управление пользователем",reply_markup=ReplyKeyboardRemove())
+		CommandsText = "Привет, список команд бота:\n/sms - отправка сообщения\n/balance - текущий баланс\n/history - последние отправленные сообщения\n/user - управление пользователями" 
+		bot.send_message(chat_id=update.message.chat_id, text=CommandsText,reply_markup=ReplyKeyboardRemove())
 
 def SMSHandler(bot, update):
 	global SMSNumber, SMSMessage
