@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-from pytils import numeral
-import pymysql.cursors
-import string, vk, time, datetime, json, requests, urllib3, dateutil.parser
+import pymysql.cursors, vk, time, json, requests
 
 #####Параметры MySQL######
 HOST = "HOST"            #
@@ -17,6 +15,14 @@ BeautifulNumbers = {
 	"4": "4️⃣",
 	"5": "5️⃣",
 }
+
+def UserValidation(value):
+    try:
+        int(value)
+        return True
+    except ValueError:
+        return False
+
 #Проверка словаря админов
 def CheckAdmin(d, value):
     for i in range(len(d)):
@@ -50,6 +56,18 @@ def MySQLFetchAll(SQLString):
 	    connection.close()
 	return result;
 
+#Функция для записи в БД (на самом деле дубляж)
+def MySQLWriter(SQLString):
+	connection = pymysql.connect(host=HOST,user=USER,password=PASSWORD,db=DB,cursorclass=pymysql.cursors.DictCursor)
+
+	try:
+	    with connection.cursor() as cursor:
+	        cursor.execute(SQLString)
+	    connection.commit()
+
+	finally:
+	    connection.close()
+
 #Основная конфигурация
 VKSession = vk.Session(access_token=MySQLFetchOne("SELECT ServiceKey FROM ServiceTable WHERE ServiceName='VKAPIKey'")["ServiceKey"])
 VKAdmins = (MySQLFetchAll("SELECT AdminVK FROM VKAdmins"))
@@ -67,7 +85,7 @@ server = None
 key    = None
 ts     = None
 
-KEYBOARD = {
+SmsKeyboard = {
 	"one_time":True,
 	"buttons":[
 		[
@@ -92,6 +110,33 @@ KEYBOARD = {
 		]
 	]
 }
+
+UsersKeyboard = {
+	"one_time":True,
+	"buttons":[
+		[
+			{
+			"action":{
+				"type":"text",
+				"payload":"{\"button\": \"1\"}",
+				"label":"Добавление"
+			},
+			"color":"primary"
+			},
+
+			{
+			"action":{
+				"type":"text",
+				"payload":"{\"button\": \"2\"}",
+				"label":"Удаление"
+			},
+			"color":"primary"
+			},
+
+		]
+	]
+}
+
 
 while True:
 
@@ -143,7 +188,7 @@ while True:
 				try:
 					SMSNumber = message_longpoll.split(" ")[1]
 					SMSMessage = message_longpoll.split("&quot;")[1]
-					api.messages.send(user_id=chat_longpoll,message="Вы действительно хотите отправить сообщение \""+SMSMessage+"\" на номер "+SMSNumber+"?",keyboard=json.dumps(KEYBOARD,ensure_ascii=False),v=APIVersion)
+					api.messages.send(user_id=chat_longpoll,message="Вы действительно хотите отправить сообщение \""+SMSMessage+"\" на номер "+SMSNumber+"?",keyboard=json.dumps(SmsKeyboard,ensure_ascii=False),v=APIVersion)
 				except:
 					api.messages.send(user_id=chat_longpoll,message="Синтаксис использования команды:\n/sms номер_телефона \"Сообщение\"",v=APIVersion)
 
@@ -155,8 +200,8 @@ while True:
 					api.messages.send(user_id=chat_longpoll,message="Сообщение успешно отправлено!\nТекущий баланс: "+SMSBalance+"₽",v=APIVersion)
 				else:
 					api.messages.send(user_id=chat_longpoll,message="Что-то пошло не так при отправке сообщения 😔\nПовторно воспользуйтесь командой /sms",v=APIVersion)
-				SMSNumber = None;
-				SMSMessage = None;
+				SMSNumber = "";
+				SMSMessage = "";
 
 			elif message_longpoll == "/history":
 				history = requests.get(all_url+"/sms/list").json()["data"]
@@ -168,3 +213,23 @@ while True:
 			elif message_longpoll == "/help":
 				CommandsText = "Cписок команд бота:\n/sms - отправка сообщения\n/balance - текущий баланс\n/history - последние отправленные сообщения\n/user - управление пользователями" 
 				api.messages.send(user_id=chat_longpoll,message=CommandsText,v=APIVersion)
+
+			elif message_longpoll.split(" ")[0] == "/user":
+				try:
+					SMSUser = message_longpoll.split(" ")[1]
+					if (UserValidation(SMSUser)==True):
+						api.messages.send(user_id=chat_longpoll,message="Доступные действия с пользователем "+SMSUser+":",keyboard=json.dumps(UsersKeyboard,ensure_ascii=False),v=APIVersion)
+					else:
+						api.messages.send(user_id=chat_longpoll,message="Некорректный ввод пользователя, попробуйте заново",v=APIVersion)
+				except:
+					api.messages.send(user_id=chat_longpoll,message="Синтаксис использования команды:\n/user id_пользователя",v=APIVersion)
+
+			elif message_longpoll == "Добавление":
+				MySQLWriter("INSERT INTO VKAdmins(AdminVK) VALUES ('"+SMSUser+"')")
+				api.messages.send(user_id=chat_longpoll,message="Добавление пользователя "+SMSUser+" успешно",v=APIVersion)
+				SMSUser = ""
+
+			elif message_longpoll == "Удаление":
+				MySQLWriter("DELETE FROM VKAdmins WHERE AdminVK = '"+SMSUser+"'")
+				api.messages.send(user_id=chat_longpoll,message="Удаление пользователя "+SMSUser+" успешно",v=APIVersion)
+				SMSUser = ""
