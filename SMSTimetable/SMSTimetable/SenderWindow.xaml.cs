@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Newtonsoft.Json.Linq;
 
 namespace SMSTimetable
@@ -33,11 +23,22 @@ namespace SMSTimetable
 
         private void FinalSendButton_Click(object sender, RoutedEventArgs e)
         {
-           SMSSenderClass sms_obj = new SMSSenderClass();
-           string[] numbers = new string[] { NumbersToSend.Text };
-           var request = new Request { numbers = numbers, text = TextToSend.Text, channel = "DIRECT" };
-           sms_obj.sms_send(request);
-           GetSMSBalance();
+            if ((TextSecondRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true))
+    
+                if (MessageBox.Show("Вы действительно хотите отправить сообщение '"+ TextToSend.Text+"' на номер "+NumbersToSend.Text+"?", "Отправка сообщения", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    SMSSenderClass sms_obj = new SMSSenderClass();
+                    string[] numbers = new string[] { NumbersToSend.Text };
+                    var request = new Request { numbers = numbers, text = TextToSend.Text, channel = "DIRECT" };
+                    sms_obj.sms_send(request);
+                    MessageBox.Show("Успешная отправка сообщения!");
+                }
+
+            GetSMSBalance();
+            TextToSend.Text = "";
+            NumbersToSend.Text = "";
+
+
         }
 
         private void Window_Initialized(object sender, EventArgs e)
@@ -66,6 +67,16 @@ namespace SMSTimetable
         {
             SMSStatusWindow window_obj = new SMSStatusWindow();
             window_obj.Show();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+        }
+
+        private void UsersButton_Click(object sender, RoutedEventArgs e)
+        {
+            UserManagmentWindow UserWindow_obj = new UserManagmentWindow();
+            UserWindow_obj.Show();
         }
     }
 }

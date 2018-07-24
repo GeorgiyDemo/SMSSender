@@ -198,6 +198,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DatabaseLogicClass.cs" />
+    <Compile Include="DEMKAInputBox.cs" />
     <Compile Include="JustTokenClass.cs" />
     <Compile Include="SenderWindow.xaml.cs">
       <DependentUpon>SenderWindow.xaml</DependentUpon>
@@ -207,6 +208,9 @@
       <DependentUpon>SMSStatusWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TelegramClass.cs" />
+    <Compile Include="UserManagmentWindow.xaml.cs">
+      <DependentUpon>UserManagmentWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="VKClass.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -225,6 +229,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SMSStatusWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserManagmentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
