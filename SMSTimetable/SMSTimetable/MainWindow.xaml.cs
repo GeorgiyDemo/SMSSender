@@ -28,12 +28,11 @@ namespace SMSTimetable
 
         private void EnterButton_Click(object sender, RoutedEventArgs e)
         {
-            DEMKAInputBox demka_obj = new DEMKAInputBox("MEOW");
-            string test = demka_obj.ShowDialog();
-            MessageBox.Show(test);
+     
+            //DEMKAInputBox demka_obj = new DEMKAInputBox("Ввведите код резко");
+            //string test = demka_obj.ShowDialog();
+            //MessageBox.Show(test);
 
-
-            //string test = new DEMKAInputBox.DEMKAInputBox("text");
             SenderWindow SenderWindow_obj = new SenderWindow();
             SenderWindow_obj.Show();
         }

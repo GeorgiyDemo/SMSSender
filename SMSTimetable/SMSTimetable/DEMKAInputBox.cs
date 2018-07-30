@@ -88,11 +88,12 @@ namespace SMSTimetable
 
             private void windowdef()
             {
-                Box.Height = 120;
+                Box.Height = 150;
                 Box.Width = 250;
                 Box.Background = BoxBackgroundColor;
                 Box.Title = title;
                 Box.Content = sp1;
+                Box.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 Box.Closing += Box_Closing;
                 TextBlock content = new TextBlock();
                 content.TextWrapping = TextWrapping.Wrap;
@@ -120,12 +121,6 @@ namespace SMSTimetable
 
             }
 
-            void Box_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-            {
-                if (!clicked)
-                    e.Cancel = true;
-            }
-
             private void input_MouseDown(object sender, MouseEventArgs e)
             {
                 if ((sender as TextBox).Text == defaulttext && inputreset == false)
@@ -151,6 +146,11 @@ namespace SMSTimetable
             {
                 Box.ShowDialog();
                 return input.Text;
+            }
+
+            void Box_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+            {
+
             }
 
     }

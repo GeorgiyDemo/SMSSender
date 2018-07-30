@@ -13,63 +13,6 @@ namespace SMSTimetable
   
         const string From = "SMS Aero";
 
-
-        public static void SMSWorker()
-        {
-            //ВСЕ, ЧТО ЗДЕСЬ НАПИСАНО НАДО РЕАЛИЗОВЫВАТЬ НА СТОРОНЕ ТОЙ ЧАСТИ КОДА, ГДЕ НУЖНО РАБОТАТЬ С СМС ПУТЕМ СОЗДАНИЯ ОБЪЕКТА
-
-
-            // Отправка SMS сообщений
-            //string[] numbers = new string[] { "79994935590" };
-            //var request = new Request { numbers = numbers, text = "Привет!", channel = "DIRECT" };
-            //smsc.sms_send(request);
-
-            // Проверка статуса SMS сообщения 
-            //var request1 = new Request { id = 44197982 };
-            //smsc.check_send(request1);
-
-            // Получение списка отправленных сообщений
-            // var request = new Request { text = "Hello"};
-            // smsc.sms_list(request);
-
-            // Запрос баланса
-            // smsc.balance();
-
-            // Добавление группы
-            // var request = new Request { name = "Fish"};
-            // smsc.group_add(request);
-
-            // Удаление группы
-            // var request = new Request { id = 231697 };
-            // smsc.group_delete(request);
-
-            // Получение списка групп
-            // var request = new Request { };
-            // smsc.group_list(request);
-
-            // Добавление контакта
-            //var request1 = new Request { number = "+79997335592", fname = "КАРТИНА" , sex = "female"};
-            //smsc.contact_add(request1); 
-
-            // Удаление контакта
-            // var request = new Request { id = 123};
-            // smsc.contact_delete(request);
-
-            // Список контактов
-            // var request = new Request { number = "71234567890" };
-            // smsc.contact_list(request);
-
-            // Создание запроса на проверку HLR
-            // string[] numbers = new string[] { "71234567890", "71234567891" };
-            // var request = new Request { numbers = numbers };
-            // smsc.hlr_check(request);
-
-            // Определение оператора
-            // var request = new Request { number = "791234567890" };
-            // smsc.number_operator(request);
-
-        }
-
         /**
         * Отправка сообщения
         * @param numbers dynamic    - Номер телефона

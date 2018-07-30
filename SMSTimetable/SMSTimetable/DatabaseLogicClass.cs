@@ -1,15 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Windows;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
-
+using Microsoft.Data.Sqlite;
 
 namespace SMSTimetable
 {
+
     public class DatabaseLogicClass
     {
 
-        public static string GetSQL(string sql)
+        public static string MySQLGet(string sql)
         {
             MySqlConnection conn = new MySqlConnection(JustTokenClass.SQL_ConnectionString);
             conn.Open();
@@ -19,7 +22,7 @@ namespace SMSTimetable
             return name;
         }
 
-        public static async Task<Boolean> ExecuteSQLAsync(string sql)
+        public static async Task<Boolean> MySQLExecuteAsync(string sql)
         {
             using (var conn = new MySqlConnection(JustTokenClass.SQL_ConnectionString))
             {
@@ -35,7 +38,12 @@ namespace SMSTimetable
             }
         }
 
-        public static async Task<string> GetSQLAsync(string SQL)
+        internal static void MySQLExecuteAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static async Task<string> MySQLGetAsync(string SQL)
         {
             string return_str = "";
             using (var conn = new MySqlConnection(JustTokenClass.SQL_ConnectionString))
@@ -49,6 +57,44 @@ namespace SMSTimetable
             return return_str;
         }
 
-      
+
+        public static void SQLiteExecute(string sql)
+        {
+
+            SqliteConnection myConn = new SqliteConnection("DataSource=" + JustTokenClass.SQLiteDBPatch + ";");
+            SqliteCommand sqCommand = new SqliteCommand(sql);
+            sqCommand.Connection = myConn;
+            myConn.Open();
+            try
+            {
+                sqCommand.ExecuteNonQuery();
+            }
+            finally
+            {
+                myConn.Close();
+            }
+        }
+
+        public static string SQLiteGet(string sql)
+        {
+            string outstr = "";
+            using (SqliteConnection con = new SqliteConnection("DataSource=" + JustTokenClass.SQLiteDBPatch + ";"))
+            {
+                con.Open();
+
+                using (SqliteCommand cmd = new SqliteCommand(sql, con))
+                {
+                    using (SqliteDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                            outstr += rdr.GetString(0);
+                    }
+                }
+
+                con.Close();
+            }
+
+            return outstr;
+        }
     }
 }

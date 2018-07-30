@@ -1,0 +1,16 @@
+﻿<Window x:Class="SMSTimetable.UserChangerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SMSTimetable"
+        mc:Ignorable="d"
+        Title="Изменение" Height="264.756" Width="418.229" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Button x:Name="ChangeEmailButton" Content="Email" HorizontalAlignment="Left" Margin="100,34,0,0" VerticalAlignment="Top" Width="216" Height="42"/>
+        <Button x:Name="ChangePhoneButton" Content="Телефон" HorizontalAlignment="Left" Margin="100,128,0,0" VerticalAlignment="Top" Width="215" Height="42"/>
+        <Button x:Name="ChangePasswordButton" Content="Пароль" HorizontalAlignment="Left" Margin="100,81,0,0" VerticalAlignment="Top" Width="215" Height="42"/>
+        <GroupBox Header="Изменение данных пользователя [email]" HorizontalAlignment="Left" Height="185" Margin="10,10,0,0" VerticalAlignment="Top" Width="390"/>
+
+    </Grid>
+</Window>

@@ -32,7 +32,7 @@ namespace SMSTimetable
         
         public static async Task<Boolean> AdminCheckerAsync(string id)
         {
-            string admins  = await DatabaseLogicClass.GetSQLAsync("SELECT AdminTG FROM TGAdmins");
+            string admins  = await DatabaseLogicClass.MySQLGetAsync("SELECT AdminTG FROM TGAdmins");
             string[] AdminArr = admins.Split(',');
             for (int i = 0; i < AdminArr.Length;i++)
                 if (AdminArr[i] == id)
@@ -173,7 +173,7 @@ namespace SMSTimetable
                         break;
 
                     case "Добавление":
-                        if (await DatabaseLogicClass.ExecuteSQLAsync("INSERT INTO TGAdmins(AdminTG) VALUES('" + SMS_User + "')") == true)
+                        if (await DatabaseLogicClass.MySQLExecuteAsync("INSERT INTO TGAdmins(AdminTG) VALUES('" + SMS_User + "')") == true)
                         {
                             await Bot.SendTextMessageAsync(
                                   message.Chat.Id,
@@ -184,7 +184,7 @@ namespace SMSTimetable
                         break;
 
                     case "Удаление":
-                        if (await DatabaseLogicClass.ExecuteSQLAsync("DELETE FROM TGAdmins WHERE AdminTG = '" + SMS_User + "'") == true)
+                        if (await DatabaseLogicClass.MySQLExecuteAsync("DELETE FROM TGAdmins WHERE AdminTG = '" + SMS_User + "'") == true)
                         {
                             await Bot.SendTextMessageAsync(
                                   message.Chat.Id,
