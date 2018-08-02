@@ -14,10 +14,18 @@ namespace SMSTimetable
 
         public static string MySQLGet(string sql)
         {
+            string name;
             MySqlConnection conn = new MySqlConnection(JustTokenClass.SQL_ConnectionString);
             conn.Open();
-            MySqlCommand command = new MySqlCommand(sql, conn);
-            string name = command.ExecuteScalar().ToString();
+            try
+            {
+                MySqlCommand command = new MySqlCommand(sql, conn);
+                name = command.ExecuteScalar().ToString();
+            }
+            catch (NullReferenceException)
+            {
+                name = ""; 
+            }
             conn.Close();
             return name;
         }
@@ -52,7 +60,7 @@ namespace SMSTimetable
                 using (var cmd = new MySqlCommand(SQL, conn))
                 using (var reader = await cmd.ExecuteReaderAsync())
                     while (await reader.ReadAsync())
-                        return_str += (reader.GetString(0)+",");
+                        return_str += (reader.GetString(0) + ",");
             }
             return return_str;
         }

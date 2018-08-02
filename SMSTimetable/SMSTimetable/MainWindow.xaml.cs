@@ -26,15 +26,37 @@ namespace SMSTimetable
             InitializeComponent();
         }
 
+        private bool CheckEmailLogin(string EmailString,string PasswordString)
+        {
+            if (DatabaseLogicClass.MySQLGet("SELECT Password FROM Users WHERE Email='"+CryptoClass.MD5Hash(EmailString) +"'") == CryptoClass.MD5Hash(PasswordString))
+                return true;
+            return false;
+        }
+
+        private bool CheckPhoneLogin(string PhoneString, string PasswordString)
+        {
+            if (DatabaseLogicClass.MySQLGet("SELECT Password FROM Users WHERE Phone='" + CryptoClass.MD5Hash(PhoneString) + "'") == CryptoClass.MD5Hash(PasswordString))
+                return true;
+            return false;
+        }
+
         private void EnterButton_Click(object sender, RoutedEventArgs e)
         {
-     
-            //DEMKAInputBox demka_obj = new DEMKAInputBox("Ввведите код резко");
-            //string test = demka_obj.ShowDialog();
-            //MessageBox.Show(test);
-
-            SenderWindow SenderWindow_obj = new SenderWindow();
-            SenderWindow_obj.Show();
+            if ((LoginTextBox.Text != "") && (PasswordBox.Password != ""))
+            {
+                if ((CheckPhoneLogin(LoginTextBox.Text, PasswordBox.Password) == true) || (CheckEmailLogin(LoginTextBox.Text, PasswordBox.Password) == true))
+                {
+                    SenderWindow SenderWindow_obj = new SenderWindow();
+                    SenderWindow_obj.Show();
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка аутентификации");
+                    LoginTextBox.Text = "";
+                    PasswordBox.Password = "";
+                }
+            }
         }
 
         private void Window_Initialized(object sender, EventArgs e)

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
-        mc:Ignorable="d" Title="Добавление" Height="255" Width="584">
+        mc:Ignorable="d" Title="Добавление" Height="255" Width="584" WindowStartupLocation="CenterScreen">
     <Grid>
         <TextBox x:Name="EmalTextBox" HorizontalAlignment="Left" Height="23" Margin="113,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="228" TextChanged="EmalTextBox_TextChanged"/>
         <Label x:Name="EmailLabel" Content="E-mail:" HorizontalAlignment="Left" Margin="14,12,0,0" VerticalAlignment="Top"/>

@@ -12,7 +12,7 @@
         <TextBox x:Name="LoginTextBox" HorizontalAlignment="Left" Height="23" Margin="91,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <GroupBox x:Name="LoginGroupBox" Header="Авторизация пользователя" HorizontalAlignment="Left" Height="163" Margin="21,9,0,0" VerticalAlignment="Top" Width="242"/>
         <Label x:Name="PasswordLabel" Content="Пароль:" HorizontalAlignment="Left" Margin="21,88,0,0" VerticalAlignment="Top" Height="25" Width="65"/>
-        <TextBox x:Name="PasswordTextBox" HorizontalAlignment="Left" Height="23" Margin="91,88,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Height="23" Margin="91,88,0,0" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>

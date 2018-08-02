@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="ConfirmAllWindow" Height="270.443" Width="457.26" Initialized="Window_Initialized">
+        Title="Подтверждение" Height="270.443" Width="457.26" Initialized="Window_Initialized" WindowStartupLocation="CenterScreen">
     <Grid>
         <TextBox x:Name="EmalTextBox" HorizontalAlignment="Left" Height="23" Margin="18,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="EmalTextBox_TextChanged"/>
         <Label x:Name="EmailCodeLabel" Content="Введите код, отправленный на e-mail [email]" HorizontalAlignment="Left" Margin="14,12,0,0" VerticalAlignment="Top"/>

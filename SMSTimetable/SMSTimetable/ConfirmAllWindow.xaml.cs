@@ -45,8 +45,10 @@ namespace SMSTimetable
                 ValidSMSCode = false;
             }
 
-            if (ValidEmailCode == ValidSMSCode == true)
+            if ((ValidEmailCode == true) && (ValidSMSCode == true))
                 FinalConfirmButton.IsEnabled = true;
+            else
+                FinalConfirmButton.IsEnabled = false;
         }
 
         public ConfirmAllWindow(string Email, string SMS, string UPassword) 
@@ -82,8 +84,10 @@ namespace SMSTimetable
                 ValidEmailCode = false;
             }
 
-            if (ValidEmailCode == ValidSMSCode == true)
+            if ((ValidEmailCode == true) && (ValidSMSCode == true))
                 FinalConfirmButton.IsEnabled = true;
+            else
+                FinalConfirmButton.IsEnabled = false;
 
         }
     }

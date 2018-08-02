@@ -15,7 +15,7 @@ namespace SMSTimetable
         private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
           
-            if (ValidEmail == ValidPhone == ValidPassword == ValidMasterPassword == true)
+            if ((ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true))
             {
                 //Отправка Email
                 string EmailCode = CryptoClass.GetRandomNumber();
@@ -45,19 +45,60 @@ namespace SMSTimetable
 
         }
 
-        private void PhoneTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void PhoneTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+          
             if (ValidatorClass.IsPhoneNumber(PhoneTextBox.Text) == true)
             {
-                Phonecomments.Content = "-> валидный телефон";
-                PhoneTextBox.Foreground = Brushes.Black;
-                ValidPhone = true;
+                string PhoneCheckAsync = await DatabaseLogicClass.MySQLGetAsync("SELECT Password FROM Users WHERE Phone='" +CryptoClass.MD5Hash(PhoneTextBox.Text)+ "'");
+
+                if (PhoneCheckAsync == "")
+                {
+                    Phonecomments.Content = "-> валидный телефон";
+                    PhoneTextBox.Foreground = Brushes.Black;
+                    ValidPhone = true;
+                }
+
+                else
+                {
+                    Phonecomments.Content = "-> телефон уже зарегистрирован!";
+                    ValidPhone = false;
+                }
             }
             else
             {
                 Phonecomments.Content = "-> некорректный телефон";
                 PhoneTextBox.Foreground = Brushes.Red;
                 ValidPhone = false;
+            }
+
+        }
+
+        private async void EmalTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (ValidatorClass.IsValidEmail(EmalTextBox.Text) == true)
+            {
+                string EmailCheckAsync = await DatabaseLogicClass.MySQLGetAsync("SELECT Password FROM Users WHERE Email='" + CryptoClass.MD5Hash(EmalTextBox.Text) + "'");
+
+                if (EmailCheckAsync == "")
+                {
+                    Emailcomments.Content = "-> валидный e-mail";
+                    EmalTextBox.Foreground = Brushes.Black;
+                    ValidEmail = true;
+                }
+                else
+                {
+                    Emailcomments.Content = "-> e-mail уже зарегистрирован!";
+                    EmalTextBox.Foreground = Brushes.Black;
+                    ValidEmail = false;
+                }
+            }
+
+            else
+            {
+                Emailcomments.Content = "-> некорректный e-mail";
+                EmalTextBox.Foreground = Brushes.Red;
+                ValidEmail = false;
             }
         }
 
@@ -99,21 +140,5 @@ namespace SMSTimetable
             InitializeComponent();
         }
 
-        private void EmalTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (ValidatorClass.IsValidEmail(EmalTextBox.Text) == true)
-            {
-                Emailcomments.Content = "-> валидный e-mail";
-                EmalTextBox.Foreground = Brushes.Black;
-                ValidEmail = true;
-            }
-
-            else
-            {
-                Emailcomments.Content = "-> некорректный e-mail";
-                EmalTextBox.Foreground = Brushes.Red;
-                ValidEmail = false;
-            }
-        }
     }
 }
