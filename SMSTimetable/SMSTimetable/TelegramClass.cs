@@ -8,6 +8,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 using MihaZupan;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace SMSTimetable
 {
@@ -46,7 +47,7 @@ namespace SMSTimetable
             #if DEBUG
                 MessageBox.Show("Telegram успешно запущен -> @"+me.Username);
             #endif
-
+            
             Bot.OnMessage += BotOnMessageReceived;
             Bot.OnMessageEdited += BotOnMessageReceived;
             Bot.OnReceiveError += BotOnReceiveError;
@@ -107,9 +108,28 @@ namespace SMSTimetable
                     //Доделать
                     case "/history":
 
+                        var FormatDictionary = new Dictionary<string, string>
+                        {
+                            {"1", "1️⃣"},
+                            {"2", "2️⃣"},
+                            {"3", "3️⃣"},
+                            {"4", "4️⃣"},
+                            {"5", "5️⃣"}
+                        };
+
+                        string OutString = "Последние 5 отправленных сообщений:\n";
+                        SMSSenderClass SMSHistory_obj = new SMSSenderClass();
+                        dynamic HistoryJSON = JObject.Parse(SMSHistory_obj.sms_list(new Request { page = 1}));
+
+                        for (int i = 0; i < 5; i++)
+                        {
+                            JObject ThisSMS = HistoryJSON.data[i.ToString()];
+                            OutString += FormatDictionary[(i + 1).ToString()]+" +"+ThisSMS["number"] + " \""+ ThisSMS["text"]+"\"\n\n";
+                        }
+
                         await Bot.SendTextMessageAsync(
                             message.Chat.Id,
-                            "Тут история сообщений,  но пока не доделал");
+                            OutString);
                         break;
 
                     case "Да":
