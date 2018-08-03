@@ -69,6 +69,27 @@ namespace SMSTimetable
             window_obj.Show();
         }
 
+
+        private void TelegramServerLabel_MouseLeftButtonUp(object sender, RoutedEventArgs e)
+        {
+
+            if (DatabaseLogicClass.SQLiteGet("SELECT boolvalue FROM servicetable WHERE service='TelegramService'") == "1")
+            {
+                DatabaseLogicClass.SQLiteExecute("UPDATE servicetable SET boolvalue = 0 WHERE service='TelegramService'");
+                TelegramServerLabel.Content = "Сервер Telegram: выключен";
+                //TelegramClass.TelegramInit();
+                //Выключаем Telegram-серверо4ек
+            }
+            else
+            {
+                DatabaseLogicClass.SQLiteExecute("UPDATE servicetable SET boolvalue = 1 WHERE service='TelegramService'");
+                TelegramServerLabel.Content = "Сервер Telegram: включен";
+                //TelegramClass.TelegramInit();
+                //Включаем Telegram-серверо4ек
+            }
+           
+        }
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
         }

@@ -17,9 +17,9 @@
         <RadioButton x:Name="NumbersFirstRadioButton" Content="Получатели из БД" HorizontalAlignment="Left" Margin="288,74,0,0" VerticalAlignment="Top" GroupName="SMSNumber"/>
         <Button x:Name="FinalSendButton" Content="Отправить" HorizontalAlignment="Left" Margin="188,230,0,0" VerticalAlignment="Top" Width="135" Height="29" Click="FinalSendButton_Click"/>
         <Label x:Name="BalanceLabel" Content="Текущий баланс: ₽" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="SMSStatusButton" Content="Сообщения" HorizontalAlignment="Left" Margin="398,6,0,0" VerticalAlignment="Top" Width="69" Height="26" Click="SMSStatusButton_Click"/>
-        <Button x:Name="SMSContactsButton" Content="CON" HorizontalAlignment="Left" Margin="472,6,0,0" VerticalAlignment="Top" Width="31" Height="30"/>
-        <Button x:Name="UsersButton" Content="Пользователи" HorizontalAlignment="Left" Margin="306,6,0,0" VerticalAlignment="Top" Width="87" Height="26" Click="UsersButton_Click"/>
+        <Button x:Name="SMSStatusButton" Content="Сообщения" HorizontalAlignment="Left" Margin="414,6,0,0" VerticalAlignment="Top" Width="87" Height="26" Click="SMSStatusButton_Click"/>
+        <Button x:Name="UsersButton" Content="Пользователи" HorizontalAlignment="Left" Margin="319,6,0,0" VerticalAlignment="Top" Width="87" Height="26" Click="UsersButton_Click"/>
+        <Label x:Name="TelegramServerLabel" MouseLeftButtonUp="TelegramServerLabel_MouseLeftButtonUp" Content="Сервер Telegram: включен" HorizontalAlignment="Left" Margin="359,259,0,0" VerticalAlignment="Top" FontSize="10"/>
 
     </Grid>
 </Window>
