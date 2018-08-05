@@ -19,8 +19,10 @@ namespace SMSTimetable
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
+    
     public partial class MainWindow : Window
     {
+        TelegramClass TG_obj;
         public MainWindow()
         {
             InitializeComponent();
@@ -46,7 +48,7 @@ namespace SMSTimetable
             {
                 if ((CheckPhoneLogin(LoginTextBox.Text, PasswordBox.Password) == true) || (CheckEmailLogin(LoginTextBox.Text, PasswordBox.Password) == true))
                 {
-                    SenderWindow SenderWindow_obj = new SenderWindow();
+                    SenderWindow SenderWindow_obj = new SenderWindow(TG_obj);
                     SenderWindow_obj.Show();
                     Close();
                 }
@@ -61,7 +63,11 @@ namespace SMSTimetable
 
         private void Window_Initialized(object sender, EventArgs e)
         {
-            TelegramClass.TelegramInit();
+            TG_obj = new TelegramClass();
+
+            if (DatabaseLogicClass.SQLiteGet("SELECT boolvalue FROM servicetable WHERE service='TelegramService'") == "1")
+                TG_obj.TelegramInit(1);
+
         }
     }
 }

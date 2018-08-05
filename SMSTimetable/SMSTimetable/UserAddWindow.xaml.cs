@@ -21,9 +21,9 @@ namespace SMSTimetable
                 string EmailCode = CryptoClass.GetRandomNumber();
                 DatabaseLogicClass.SQLiteExecute("INSERT INTO codes(code_source,code) VALUES ('" + CryptoClass.MD5Hash(EmalTextBox.Text) + "','"+CryptoClass.MD5Hash(EmailCode)+"')");
                 
-                //await EmailSenderClass.SendEmailAsync("Ваш код для подтверждения e-mail: " + EmailCode,EmalTextBox.Text);
+                await EmailSenderClass.SendEmailAsync("Ваш код для подтверждения e-mail: " + EmailCode,EmalTextBox.Text);
                 ////////
-                MessageBox.Show("Email code: " + EmailCode);
+                //MessageBox.Show("Email code: " + EmailCode);
                 ////////
 
                 //Отпрвка SMS
@@ -33,9 +33,9 @@ namespace SMSTimetable
                 string[] numbers = new string[] { PhoneTextBox.Text };
                 var request = new Request { numbers = numbers, text = SMSCode, channel = "DIRECT" };
 
-                //ConfirmSMS_obj.sms_send(request);
+                ConfirmSMS_obj.sms_send(request);
                 ////////////
-                MessageBox.Show("Тук тук халявная SMS: "+SMSCode);
+                //MessageBox.Show("Тук тук халявная SMS: "+SMSCode);
                 ////////////
 
                 ConfirmAllWindow ConfirmWindow_obj = new ConfirmAllWindow(EmalTextBox.Text,PhoneTextBox.Text, CryptoClass.MD5Hash(PasswordBox.Password));

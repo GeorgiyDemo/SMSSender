@@ -14,11 +14,11 @@ namespace SMSTimetable
 {
     public class TelegramClass
     {
-        public static string SMS_number, SMS_message, SMS_User;
-        private static HttpToSocks5Proxy TG_Proxy = new HttpToSocks5Proxy(JustTokenClass.TGProxy_ServerIP, Convert.ToInt32(JustTokenClass.TGProxy_ServerPort),JustTokenClass.TGProxy_User,JustTokenClass.TGProxy_Pass);
-        private static TelegramBotClient Bot = new TelegramBotClient(JustTokenClass.TG_APIKey, TG_Proxy);
+        public   string SMS_number, SMS_message, SMS_User;
+        private  static HttpToSocks5Proxy TG_Proxy = new HttpToSocks5Proxy(JustTokenClass.TGProxy_ServerIP, Convert.ToInt32(JustTokenClass.TGProxy_ServerPort),JustTokenClass.TGProxy_User,JustTokenClass.TGProxy_Pass);
+        private  TelegramBotClient Bot = new TelegramBotClient(JustTokenClass.TG_APIKey, TG_Proxy);
     
-        public static bool IntChecker(string CheckInt)
+        public  bool IntChecker(string CheckInt)
         {
             try
             {
@@ -31,7 +31,7 @@ namespace SMSTimetable
             }
         }
         
-        public static async Task<Boolean> AdminCheckerAsync(string id)
+        public  async Task<Boolean> AdminCheckerAsync(string id)
         {
             string admins  = await DatabaseLogicClass.MySQLGetAsync("SELECT AdminTG FROM TGAdmins");
             string[] AdminArr = admins.Split(',');
@@ -41,22 +41,36 @@ namespace SMSTimetable
             return false;
         }
 
-        public static void TelegramInit()
+        public void TelegramInit(int intvalue)
         {
-            var me = Bot.GetMeAsync().Result;
-            #if DEBUG
-                MessageBox.Show("Telegram успешно запущен -> @"+me.Username);
-            #endif
-            
-            Bot.OnMessage += BotOnMessageReceived;
-            Bot.OnMessageEdited += BotOnMessageReceived;
-            Bot.OnReceiveError += BotOnReceiveError;
+            if (intvalue == 1)
+            {
+                var me = Bot.GetMeAsync().Result;
+#if DEBUG
+                MessageBox.Show("Telegram успешно запущен -> @" + me.Username);
+#endif
 
-            Bot.StartReceiving(Array.Empty<UpdateType>());
-            //Bot.StopReceiving();
+                Bot.OnMessage += BotOnMessageReceived;
+                Bot.OnMessageEdited += BotOnMessageReceived;
+                Bot.OnReceiveError += BotOnReceiveError;
+
+                Bot.StartReceiving(Array.Empty<UpdateType>());
+            }
+            else if (intvalue == 2)
+            {
+#if DEBUG
+                MessageBox.Show("Отключаем бота Telegram");
+#endif
+                Bot.StopReceiving();
+            }
+            else if (intvalue == 3)
+            {
+                Bot.StartReceiving(Array.Empty<UpdateType>());
+            }
+               
         }
 
-        private static async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        private  async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
             var message = messageEventArgs.Message;
 
@@ -233,7 +247,7 @@ namespace SMSTimetable
                 }
         }
 
-        private static void BotOnReceiveError(object sender, ReceiveErrorEventArgs receiveErrorEventArgs)
+        private void BotOnReceiveError(object sender, ReceiveErrorEventArgs receiveErrorEventArgs)
         {
             Console.WriteLine("Received error: {0} — {1}",
                 receiveErrorEventArgs.ApiRequestException.ErrorCode,

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SMSTimetable
+﻿namespace SMSTimetable
 {
-    class JustTokenClass
+    static class JustTokenClass
     {
 
         //не стреляй в меня, я просто тень
