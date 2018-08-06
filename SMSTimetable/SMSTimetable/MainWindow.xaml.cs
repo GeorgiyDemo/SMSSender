@@ -22,13 +22,14 @@ namespace SMSTimetable
     
     public partial class MainWindow : Window
     {
+        bool TelegramEnabled = false;
         TelegramClass TG_obj;
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private bool CheckEmailLogin(string EmailString,string PasswordString)
+        private bool CheckEmailLogin(string EmailString, string PasswordString)
         {
             if (DatabaseLogicClass.MySQLGet("SELECT Password FROM Users WHERE Email='"+CryptoClass.MD5Hash(EmailString) +"'") == CryptoClass.MD5Hash(PasswordString))
                 return true;
@@ -48,7 +49,9 @@ namespace SMSTimetable
             {
                 if ((CheckPhoneLogin(LoginTextBox.Text, PasswordBox.Password) == true) || (CheckEmailLogin(LoginTextBox.Text, PasswordBox.Password) == true))
                 {
-                    SenderWindow SenderWindow_obj = new SenderWindow(TG_obj);
+                    DatabaseLogicClass.SQLiteExecute("UPDATE logins SET authenticated = 0");
+                    DatabaseLogicClass.SQLiteExecute("INSERT INTO logins(login,authenticated) VALUES ('" + CryptoClass.MD5Hash(LoginTextBox.Text) + "',1)");
+                    SenderWindow SenderWindow_obj = new SenderWindow(TG_obj, TelegramEnabled);
                     SenderWindow_obj.Show();
                     Close();
                 }
@@ -66,7 +69,10 @@ namespace SMSTimetable
             TG_obj = new TelegramClass();
 
             if (DatabaseLogicClass.SQLiteGet("SELECT boolvalue FROM servicetable WHERE service='TelegramService'") == "1")
+            {
+                TelegramEnabled = true;
                 TG_obj.TelegramInit(1);
+            }
 
         }
     }

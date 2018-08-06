@@ -23,5 +23,12 @@ namespace SMSTimetable
         {
             InitializeComponent();
         }
+
+        private void ChangeEmailButton_Click(object sender, RoutedEventArgs e)
+        {
+            UserChangeEmailWindow EmailChanger_obj = new UserChangeEmailWindow();
+            EmailChanger_obj.Show();
+            Close();
+        }
     }
 }

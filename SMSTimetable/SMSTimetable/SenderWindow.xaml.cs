@@ -11,9 +11,12 @@ namespace SMSTimetable
     /// </summary>
     public partial class SenderWindow : Window
     {
+        bool TelegramEnabledForm;
         TelegramClass TG_obj;
-        public SenderWindow(TelegramClass recieved)
+
+        public SenderWindow(TelegramClass recieved, bool TelegramEnabled)
         {
+            TelegramEnabledForm = TelegramEnabled;
             TG_obj = recieved;
             InitializeComponent();
         }
@@ -50,6 +53,9 @@ namespace SMSTimetable
             SMSTimer.Tick += new EventHandler(SMSTimer_Tick);
             SMSTimer.Interval = new TimeSpan(0, 0, 60);
             SMSTimer.Start();
+
+            TelegramServerLabel.Content = (TelegramEnabledForm == true) ? "Сервер Telegram: включен": "Сервер Telegram: выключен";
+
         }
 
         private void SMSTimer_Tick(object sender, EventArgs e)
