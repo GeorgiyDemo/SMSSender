@@ -16,9 +16,13 @@ grouplesoncounter = 1
 
 newthisgroupline = ""
 for line in text.splitlines():
+
+    #Список групп с изменениями 
     if (line!="") and (groupflag == False):
         groups_list = line.split(" ")
         groupflag = True
+    
+    #Получаем индекс группы
     elif (line.isdigit() == True):
         thisgroupflag = True
         thisgroupnumper = int(line)
@@ -32,29 +36,29 @@ for line in text.splitlines():
                                    
 
             }
-    elif (line!="") and (thisgroupflag == True) and (line in teacher_list):
-        output[thisgroupnumper][str(grouplesoncounter)]["teacher"] = line 
 
-    elif (line!="") and (thisgroupflag == True) and (line in subjects_list):
+    #Если предмет в одну линию
+    elif (line!="") and (thisgroupflag == True) and (line in subjects_list): 
         output[thisgroupnumper][str(grouplesoncounter)]["subject"] = line.replace("  ","")
         newthisgroupline = ""
-        grouplesoncounter += 1
 
-    elif (line!="") and (thisgroupflag == True) and (line in teacher_list == False) :
-
-        if newthisgroupline in subjects_list:
+    #Проверка на сопоставление созданной строки с предметами/если предмет в несколько линий
+    elif newthisgroupline in subjects_list:
             output[thisgroupnumper][str(grouplesoncounter)]["subject"] = line.replace("  ","")
             newthisgroupline = ""
-            grouplesoncounter += 1
-        else:
+
+    #Генерация строки/если предмет в несколько линий
+    elif (line!="") and (thisgroupflag == True) and not (line in teacher_list):
             newthisgroupline += line.replace(" ","").replace("     ","")
-            if newthisgroupline in subjects_list:
-                output[thisgroupnumper][str(grouplesoncounter)]["subject"] = line.replace("  ","")
-                newthisgroupline = ""
-                grouplesoncounter += 1
-            print(repr(newthisgroupline))
-            print("Русский" in subjects_list)
-            
+    
+    
+    #Проверка на учителей
+    elif (line!="") and (thisgroupflag == True) and (line in teacher_list):
+        output[thisgroupnumper][str(grouplesoncounter)]["teacher"] = line
+        grouplesoncounter += 1
+
+    print(newthisgroupline)
+
 
 print(groups_list)
 print(output)
