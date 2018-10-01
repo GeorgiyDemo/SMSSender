@@ -1,6 +1,26 @@
 import cv2, numpy
 from collections import Counter
+from scipy.spatial import distance
 
+
+circle_store_list = [(0,0)]
+def circle_checker(circle):
+    Xcircle = []
+    Ycircle = []
+    circle_store_list.append(circle)
+    for i in range(0,(len(circle_store_list))-1):
+        for j in range(1,len(circle_store_list)):
+            Xcircle.append(abs(circle_store_list[i][0]-circle_store_list[j][0]))
+            Ycircle.append(abs(circle_store_list[i][1]-circle_store_list[j][1]))
+
+    if Xcircle        
+    print(Xcircle)
+    #print(Ycircle)
+
+        
+
+    
+#Функция для погрешности центров кругов
 def centers_checker(a,b):
     boolflag0 = False
     boolflag1 = False
@@ -37,7 +57,7 @@ for c in cnts:
     center = (int(rect[0][0]),int(rect[0][1]))
     area = int(rect[1][0]*rect[1][1])
     if (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False):
-        print(rect)
+        circle_checker(center)
         old_center = center
         cv2.drawContours(image,[box],0,color_blue,2)
         cv2.circle(image, center, 5, color_red, 2)
