@@ -2,12 +2,16 @@ import cv2, numpy, random
 from collections import Counter
 from scipy.spatial import distance
 
-
 circle_store_list = [(0,0)]
 Xcircle = []
 Ycircle = []
 
-#Процедура проверки расстояния между кругами
+#Процедура для того, чтоб контур не был огромным
+def check_res(firstflag, old, new):
+    if firstflag == True:
+        return True
+    else:
+        return new[1][0]<(old[1][0]+(old[1][0]/100)*80)
 
 #Процедура дополнительной дорисовки кругов
 def circle_checker(rows,columns):
@@ -26,8 +30,6 @@ def circle_checker(rows,columns):
 
     print("\nКол-во строк: "+str(rows))
     print("Кол-во колонок: "+str(columns))
-
-
     #print(Ycircle)
     
 #Функция для погрешности центров кругов
@@ -47,6 +49,7 @@ color_red = (0,0,128)
 
 RowCheckerList=[]
 ColumnCheckerList=[]
+firstflag = True
 
 image = cv2.imread("example.jpg")
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -67,8 +70,9 @@ for c in cnts:
     center = (int(rect[0][0]),int(rect[0][1]))
     area = int(rect[1][0]*rect[1][1])
     
-    if ((old_rect[1][0]>(rect[1][0]*2)) == False) and (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False):
+    if (check_res(firstflag,old_rect,rect) == True) and (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False):
         
+        firstflag = False
         circle_store_list.append(center)
         old_rect = rect
         old_center = center
@@ -77,7 +81,7 @@ for c in cnts:
         cv2.circle(image, center, 5, color_red, 2)
         print(rect)
         print("center: "+str(center))
-        #Закидываем center на проверку
+        #Закидываем центры на проверку для подсчета кол-ва повторений
         ColumnCheckerList.append(center[0])
         RowCheckerList.append(center[1])
 
@@ -86,24 +90,21 @@ for c in cnts:
         cv2.waitKey(100000)
         global_counter +=1
 
-#Считаем кол-во повторений
+#Считаем кол-во повторений 
 RowCounter = Counter(RowCheckerList)
 ColumnCounter = Counter(ColumnCheckerList)
 
-#Ищем максимальные элементы
+#Ищем максимальные элементы в структурированных объектах
 MaxRow = 0
 MaxColumn = 0
 for item in list(RowCounter):
     if (RowCounter[item]>MaxRow):
         MaxRow=RowCounter[item]
-
 for item in list(ColumnCounter):
     if (ColumnCounter[item]>MaxColumn):
         MaxColumn=ColumnCounter[item]
-
-
 circle_checker(MaxRow,MaxColumn)
 
 #Итоги
-print("Я нашёл {0} ужс".format(global_counter))
+print("{0} предметов".format(global_counter))
 cv2.imwrite("output.jpg", image)
