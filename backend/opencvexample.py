@@ -1,4 +1,4 @@
-import cv2, numpy
+import cv2, numpy, random
 from collections import Counter
 from scipy.spatial import distance
 
@@ -6,26 +6,26 @@ from scipy.spatial import distance
 circle_store_list = [(0,0)]
 Xcircle = []
 Ycircle = []
-def circle_checker(circle,flag,rows,columns):
-    if flag==0:
-        circle_store_list.append(circle)
 
-    elif flag==1:
-        
-        for i in range(rows-1):
-            bufcheck = abs(circle_store_list[i][0]-circle_store_list[i+1][0])
-            if not (bufcheck in Xcircle):
-                Xcircle.append(bufcheck)
-                #Ycircle.append(abs(circle_store_list[i][1]-circle_store_list[j][1]))
-        
-        print(circle_store_list)
-        print(Xcircle)
+#Процедура проверки расстояния между кругами
 
-        for j in range(len(Xcircle)):
-            print(Xcircle[j],end=' ')
+#Процедура дополнительной дорисовки кругов
+def circle_checker(rows,columns):
+    circle_store_list.sort()
+    for i in range(len(circle_store_list)-1):
+        bufcheck = abs(circle_store_list[i][0]-circle_store_list[i+1][0])
+        Xcircle.append(bufcheck)
+            #Ycircle.append(abs(circle_store_list[i][1]-circle_store_list[j][1]))
 
-        print("\nКол-во строк: "+str(rows))
-        print("Кол-во колонок: "+str(columns))
+    #Поиск кратчайшего пути от одной точки до другой (Алгоритм Дейкстры)    
+    print(circle_store_list)
+    print(Xcircle)
+
+    for j in range(len(Xcircle)):
+        print(Xcircle[j],end=' ')
+
+    print("\nКол-во строк: "+str(rows))
+    print("Кол-во колонок: "+str(columns))
 
 
     #print(Ycircle)
@@ -43,7 +43,6 @@ def centers_checker(a,b):
     return False
 
 
-color_blue = (255,0,0)
 color_red = (0,0,128)
 
 RowCheckerList=[]
@@ -59,6 +58,7 @@ cnts = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
 #Едем по контурам
 global_counter = 0
 old_center = (0, 0)
+old_rect = ((0.0, 0.0), (0.0, 0.0), -0.0)
 for c in cnts:
 
     rect = cv2.minAreaRect(c) # пытаемся вписать прямоугольник
@@ -66,11 +66,16 @@ for c in cnts:
     box = numpy.int0(box)
     center = (int(rect[0][0]),int(rect[0][1]))
     area = int(rect[1][0]*rect[1][1])
-    if (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False):
-        circle_checker(center,0,0,0)
+    
+    if ((old_rect[1][0]>(rect[1][0]*2)) == False) and (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False):
+        
+        circle_store_list.append(center)
+        old_rect = rect
         old_center = center
-        cv2.drawContours(image,[box],0,color_blue,2)
+
+        cv2.drawContours(image,[box],0,(random.randint(0,255),random.randint(0,255),random.randint(0,255)),2)
         cv2.circle(image, center, 5, color_red, 2)
+        print(rect)
         print("center: "+str(center))
         #Закидываем center на проверку
         ColumnCheckerList.append(center[0])
@@ -97,7 +102,7 @@ for item in list(ColumnCounter):
         MaxColumn=ColumnCounter[item]
 
 
-circle_checker(center,1,MaxRow,MaxColumn)
+circle_checker(MaxRow,MaxColumn)
 
 #Итоги
 print("Я нашёл {0} ужс".format(global_counter))
