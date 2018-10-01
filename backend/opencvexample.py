@@ -4,21 +4,31 @@ from scipy.spatial import distance
 
 
 circle_store_list = [(0,0)]
-def circle_checker(circle):
-    Xcircle = []
-    Ycircle = []
-    circle_store_list.append(circle)
-    for i in range(0,(len(circle_store_list))-1):
-        for j in range(1,len(circle_store_list)):
-            Xcircle.append(abs(circle_store_list[i][0]-circle_store_list[j][0]))
-            Ycircle.append(abs(circle_store_list[i][1]-circle_store_list[j][1]))
+Xcircle = []
+Ycircle = []
+def circle_checker(circle,flag,rows,columns):
+    if flag==0:
+        circle_store_list.append(circle)
 
-    if Xcircle        
-    print(Xcircle)
-    #print(Ycircle)
-
+    elif flag==1:
         
+        for i in range(rows-1):
+            bufcheck = abs(circle_store_list[i][0]-circle_store_list[i+1][0])
+            if not (bufcheck in Xcircle):
+                Xcircle.append(bufcheck)
+                #Ycircle.append(abs(circle_store_list[i][1]-circle_store_list[j][1]))
+        
+        print(circle_store_list)
+        print(Xcircle)
 
+        for j in range(len(Xcircle)):
+            print(Xcircle[j],end=' ')
+
+        print("\nКол-во строк: "+str(rows))
+        print("Кол-во колонок: "+str(columns))
+
+
+    #print(Ycircle)
     
 #Функция для погрешности центров кругов
 def centers_checker(a,b):
@@ -57,7 +67,7 @@ for c in cnts:
     center = (int(rect[0][0]),int(rect[0][1]))
     area = int(rect[1][0]*rect[1][1])
     if (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False):
-        circle_checker(center)
+        circle_checker(center,0,0,0)
         old_center = center
         cv2.drawContours(image,[box],0,color_blue,2)
         cv2.circle(image, center, 5, color_red, 2)
@@ -86,8 +96,8 @@ for item in list(ColumnCounter):
     if (ColumnCounter[item]>MaxColumn):
         MaxColumn=ColumnCounter[item]
 
-print(MaxRow)
-print(MaxColumn)
+
+circle_checker(center,1,MaxRow,MaxColumn)
 
 #Итоги
 print("Я нашёл {0} ужс".format(global_counter))
