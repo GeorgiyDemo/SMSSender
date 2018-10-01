@@ -2,9 +2,7 @@ import cv2, numpy, random
 from collections import Counter
 from scipy.spatial import distance
 
-circle_store_list = [(0,0)]
-Xcircle = []
-Ycircle = []
+circle_store_list = []
 
 #Процедура для того, чтоб контур не был огромным
 def check_res(firstflag, old, new):
@@ -15,23 +13,29 @@ def check_res(firstflag, old, new):
 
 #Процедура дополнительной дорисовки кругов
 def circle_checker(rows,columns):
-    circle_store_list.sort()
-    for i in range(len(circle_store_list)-1):
-        bufcheck = abs(circle_store_list[i][0]-circle_store_list[i+1][0])
-        Xcircle.append(bufcheck)
+
+    Xcircle = []
+    Ycircle = []
+    nparr = numpy.array([])
+    print("Врубаем дорисовку центров на основе текущих..")
+    print("------")
+    for i in range(1,len(circle_store_list)):
+        bufcheck = abs(circle_store_list[i-1][0]-circle_store_list[i][0])
+        if bufcheck < 250:
+            Xcircle.append(bufcheck)
+        if (i%rows==0):
+            print(Xcircle) #здесь проверяем на макс длинну все Xcircle (как лучше??)
+            nparr = numpy.append(nparr, Xcircle)
+            Xcircle = []
             #Ycircle.append(abs(circle_store_list[i][1]-circle_store_list[j][1]))
-
-    #Поиск кратчайшего пути от одной точки до другой (Алгоритм Дейкстры)    
-    print(circle_store_list)
-    print(Xcircle)
-
-    for j in range(len(Xcircle)):
-        print(Xcircle[j],end=' ')
+    print("-----")
+    print(nparr)
 
     print("\nКол-во строк: "+str(rows))
     print("Кол-во колонок: "+str(columns))
     #print(Ycircle)
-    
+
+
 #Функция для погрешности центров кругов
 def centers_checker(a,b):
     boolflag0 = False
@@ -43,7 +47,6 @@ def centers_checker(a,b):
     if boolflag1 == True and boolflag0 == True:
         return True
     return False
-
 
 color_red = (0,0,128)
 
@@ -103,6 +106,8 @@ for item in list(RowCounter):
 for item in list(ColumnCounter):
     if (ColumnCounter[item]>MaxColumn):
         MaxColumn=ColumnCounter[item]
+
+#if global_counter !=(MaxRow*MaxColumn):
 circle_checker(MaxRow,MaxColumn)
 
 #Итоги
