@@ -7,7 +7,7 @@ finalmatrix = []
 
 def get_document():
 
-    url = 'http://178.128.225.114/PDF/6.pdf'
+    url = 'http://178.128.225.114/PDF/3.pdf'
     r = requests.get(url, stream=True)
     with open('PDF.pdf', 'wb') as fd:
         for chunk in r.iter_content(2000):
@@ -75,6 +75,13 @@ def matrix(rows,columns):
     # [(267, 970), (431, 970), (603, 970), (783, 970), (966, 970), (1146, 970), (1319, 970), (1487, 970)]
     # ]
 
+    #[
+    # [(259, 309), (411, 309), (552, 309), (692, 309), (834, 309)],
+    # [(259, 461), (411, 461), (552, 461), (692, 461), (834, 461)],
+    # [(259, 599), (410, 599), (552, 599), (691, 599), (834, 599)],
+    # [(259, 724), (410, 724), (552, 724), (691, 724), (834, 724)],
+    # [(259, 846), (411, 846), (552, 846), (692, 846), (834, 846)]
+    # ]
 
 #Процедура дополнительной дорисовки кругов (а надо ли?)
 def circle_checker(rows,columns):
@@ -113,6 +120,33 @@ def centers_checker(a,b):
         return True
     return False
 
+def get_null_values(timg,image):
+
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (90, 90))
+    closed = cv2.morphologyEx(timg, cv2.MORPH_CLOSE, kernel)
+    cv2.imwrite("CHECKER.jpg", closed)
+    cnts = cv2.findContours(closed.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
+    
+    firstflag = True
+    old_center = (0, 0)
+    old_rect = ((0.0, 0.0), (0.0, 0.0), -0.0)
+
+    for c in cnts:
+
+        rect = cv2.minAreaRect(c)
+        box = cv2.boxPoints(rect)
+        box = numpy.int0(box)
+        center = (int(rect[0][0]),int(rect[0][1]))
+        area = int(rect[1][0]*rect[1][1])
+        
+        if (check_res(firstflag,old_rect,rect) == True) and (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False):
+            firstflag = False
+            circle_store_list.append(center)
+            old_rect = rect
+            old_center = center
+
+            cv2.drawContours(image,[box],0,(0,0,0),2)
+            cv2.circle(image, center, 5, (0,0,0), 2)
 
 def main():
 
@@ -178,6 +212,7 @@ def main():
     #if global_counter !=(MaxRow*MaxColumn):
     #circle_checker(MaxRow,MaxColumn)
     matrix(MaxRow,MaxColumn)
+    get_null_values(edged.copy(),image)
     #Итоги
     print("{0} предметов".format(global_counter))
     cv2.imwrite("output.jpg", image)
