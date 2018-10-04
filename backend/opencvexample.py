@@ -3,10 +3,11 @@ from collections import Counter
 from pdf2image import convert_from_path
 
 circle_store_list = []
+finalmatrix = []
 
 def get_document():
 
-    url = 'http://178.128.225.114/PDF/4.pdf'
+    url = 'http://178.128.225.114/PDF/6.pdf'
     r = requests.get(url, stream=True)
     with open('PDF.pdf', 'wb') as fd:
         for chunk in r.iter_content(2000):
@@ -24,22 +25,58 @@ def check_res(firstflag, old, new):
 
 #Процедура визаулизации матрицы
 def matrix(rows,columns):
-    matrix = []
 
+    matrix = []
     counter = 0
+    circle_store_list.sort(key=lambda x: (x[1]),reverse=True)
     print(len(circle_store_list))
     for i in range(columns):
         matrix.append([])
         for j in range(rows):
-            matrix[i].append(0)
-            print(counter)
+            matrix[i].append(circle_store_list[counter])
             counter +=1
+
+    print("COUNTER: "+str(counter))
+    print(len(circle_store_list))
     
     print(matrix)
-            
+
+    #[
+    # [(1487, 970), (1319, 970), (1146, 970), (966, 970), (783, 970), (603, 970), (431, 970), (267, 970)],
+    # [(1486, 827), (1319, 827), (1146, 827), (966, 827), (783, 827), (603, 827), (431, 827), (267, 827)],
+    # [(1487, 681), (1319, 681), (1146, 681), (966, 681), (783, 681), (603, 681), (431, 681), (267, 681)],
+    # [(1487, 519), (1319, 519), (1146, 519), (966, 519), (783, 519), (603, 519), (431, 519), (267, 519)],
+    # [(966, 342), (1487, 341), (1319, 341), (1146, 341), (783, 341), (603, 341), (431, 341), (267, 341)]
+    # ]
+
+    for item in matrix:
+        item.sort(key=lambda x: (x[0]))
+
+    #[
+    # [(267, 970), (431, 970), (603, 970), (783, 970), (966, 970), (1146, 970), (1319, 970), (1487, 970)],
+    # [(267, 827), (431, 827), (603, 827), (783, 827), (966, 827), (1146, 827), (1319, 827), (1486, 827)],
+    # [(267, 681), (431, 681), (603, 681), (783, 681), (966, 681), (1146, 681), (1319, 681), (1487, 681)],
+    # [(267, 519), (431, 519), (603, 519), (783, 519), (966, 519), (1146, 519), (1319, 519), (1487, 519)],
+    # [(267, 341), (431, 341), (603, 341), (783, 341), (966, 342), (1146, 341), (1319, 341), (1487, 341)]
+    # ]
+
+    i = len(matrix)-1
+    while i != -1:
+        finalmatrix.append(matrix[i])
+        i -=1
+    
+    print(finalmatrix)
+
+    # [
+    # [(267, 341), (431, 341), (603, 341), (783, 341), (966, 342), (1146, 341), (1319, 341), (1487, 341)],
+    # [(267, 519), (431, 519), (603, 519), (783, 519), (966, 519), (1146, 519), (1319, 519), (1487, 519)],
+    # [(267, 681), (431, 681), (603, 681), (783, 681), (966, 681), (1146, 681), (1319, 681), (1487, 681)],
+    # [(267, 827), (431, 827), (603, 827), (783, 827), (966, 827), (1146, 827), (1319, 827), (1486, 827)],
+    # [(267, 970), (431, 970), (603, 970), (783, 970), (966, 970), (1146, 970), (1319, 970), (1487, 970)]
+    # ]
 
 
-#Процедура дополнительной дорисовки кругов
+#Процедура дополнительной дорисовки кругов (а надо ли?)
 def circle_checker(rows,columns):
 
     Xcircle = []
@@ -53,7 +90,7 @@ def circle_checker(rows,columns):
         if bufcheck < 250:
             Xcircle.append(bufcheck)
         if (i%rows==0):
-            #print(Xcircle) #здесь проверяем на макс длинну все Xcircle (как лучше??)
+            print(Xcircle) #здесь проверяем на макс длинну все Xcircle (как лучше??)
             nparr = numpy.append(nparr, Xcircle)
             Xcircle = []
             #Ycircle.append(abs(circle_store_list[i][1]-circle_store_list[j][1]))
@@ -63,7 +100,6 @@ def circle_checker(rows,columns):
     print("\nКол-во строк: "+str(rows))
     print("Кол-во колонок: "+str(columns))
     #print(Ycircle)
-
 
 #Функция для погрешности центров кругов
 def centers_checker(a,b):
@@ -140,7 +176,7 @@ def main():
             MaxColumn=ColumnCounter[item]
 
     #if global_counter !=(MaxRow*MaxColumn):
-    circle_checker(MaxRow,MaxColumn)
+    #circle_checker(MaxRow,MaxColumn)
     matrix(MaxRow,MaxColumn)
     #Итоги
     print("{0} предметов".format(global_counter))
