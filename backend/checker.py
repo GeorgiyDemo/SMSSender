@@ -51,7 +51,6 @@ for line in text.splitlines():
     elif (line!="") and (thisgroupflag == True) and not (line in teacher_list):
             newthisgroupline += line.replace(" ","").replace("     ","")
     
-    
     #Проверка на учителей
     elif (line!="") and (thisgroupflag == True) and (line in teacher_list):
         output[thisgroupnumper][str(grouplesoncounter)]["teacher"] = line
