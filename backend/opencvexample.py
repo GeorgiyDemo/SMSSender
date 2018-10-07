@@ -7,7 +7,7 @@ finalmatrix = []
 
 def get_document():
 
-    url = 'http://178.128.225.114/PDF/8.pdf'
+    url = 'http://178.128.225.114/PDF/7.pdf'
     r = requests.get(url, stream=True)
     with open('PDF.pdf', 'wb') as fd:
         for chunk in r.iter_content(2000):
@@ -40,6 +40,30 @@ def matrix(rows,columns):
     while i != -1:
         finalmatrix.append(matrix[i])
         i -=1 
+
+
+#Функция для определения всех погрешностей кругов
+def allcenters_checker(center):
+    Xflag = True
+    Yflag = True
+    for item in circle_store_list:
+        if (abs(item[0]-center[0])<4) and (item[0] != center[0]):
+            print(item[0] != center[0])
+            print(abs(item[0]-center[0]))
+            print("Xflag = False")
+            Xflag = False
+        if (abs(item[1]-center[1])<4) and (item[1] != center[1]):
+            print("Yflag = False")
+            Yflag = False
+    if Xflag == True and Yflag == True:
+        return True
+    return False
+
+    #((1520.5, 642.0), (115.0, 106.0), -0.0)
+    #center: (1520, 642)
+
+    #((1521.5, 642.0), (117.0, 118.0), -0.0)
+    #center: (1521, 642)
 
 #Функция для погрешности центров кругов
 def centers_checker(a,b):
@@ -156,9 +180,11 @@ def main():
         center = (int(rect[0][0]),int(rect[0][1]))
         area = int(rect[1][0]*rect[1][1])
         
-        if (check_res(firstflag,old_rect,rect) == True) and (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False):
+        if (check_res(firstflag,old_rect,rect) == True) and (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True):
             
             firstflag = False
+            #Вызов
+            print(allcenters_checker(center))
             circle_store_list.append(center)
             old_rect = rect
             old_center = center
