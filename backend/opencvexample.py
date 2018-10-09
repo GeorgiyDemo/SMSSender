@@ -2,14 +2,15 @@ import cv2, numpy, requests, time
 from collections import Counter
 from pdf2image import convert_from_path
 
-all_circles_xyz = []
+leftnumber_cell_list = []
 group_cell_list = []
 circle_store_list = []
 finalmatrix = []
 
+#Процедура получения PDF и конвертации в JPG
 def get_document():
 
-    url = 'http://178.128.225.114/PDF/4.pdf'
+    url = 'http://178.128.225.114/PDF/9.pdf'
     r = requests.get(url, stream=True)
     with open('PDF.pdf', 'wb') as fd:
         for chunk in r.iter_content(2000):
@@ -43,7 +44,6 @@ def matrix(rows,columns):
         finalmatrix.append(matrix[i])
         i -=1 
 
-
 #Функция для определения всех погрешностей кругов
 def allcenters_checker(center):
     for item in circle_store_list:
@@ -51,34 +51,18 @@ def allcenters_checker(center):
             return False
     return True
 
+#Функция для проверки на то, чтоб контур не включал в себя номера пар
+def leftnumberchecker(box):
+    print("УЖС")
+
+#Функция для проверки на то, чтоб контур не включал в себя названия групп
 def titlechecker(box):
     for item in group_cell_list:
         for boxitem in box:
             for p in range(1,len(item)-1):
-                    pt = (item[p][0],item[p][1])
-                    pm = (boxitem[0], boxitem[1])
-                    if pt == pm:
-                        return False
+                if (item[p][0],item[p][1]) == (boxitem[0], boxitem[1]):
+                    return False
     return True
-
-#((403.5, 307.0), (180.0, 147.0), -90.0)
-#center: (403, 307)
-#[[477 397]
-#[330 397]
-#[330 217]
-#[477 217]]
-
-#[[330 238]
-#[330 217]
-#[477 217]
-#[477 238]]
-
-        #print(res[1][0]>item[1][0])
-        #print(res[0][0]>item[0][0])
-        #print(res[0][1]>item[0][1])
-        #if res[1][0]>item[1][0] and ((res[0][0]>item[0][0]) or (res[0][1]>item[0][1])):
-        #    return True
-    return False
 
 #Функция для погрешности центров кругов
 def centers_checker(a,b):
@@ -92,13 +76,13 @@ def centers_checker(a,b):
         return True
     return False
 
+#Определение null-пар
 def get_null_values(timg,image):
 
     outchecklist = []
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (90, 90))
     closed = cv2.morphologyEx(timg, cv2.MORPH_CLOSE, kernel)
     cnts = cv2.findContours(closed.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
-    cv2.imwrite("CHECK.jpg",closed)
     firstflag = True
     old_center = (0, 0)
     old_rect = ((0.0, 0.0), (0.0, 0.0), -0.0)
@@ -109,10 +93,8 @@ def get_null_values(timg,image):
         box = cv2.boxPoints(rect)
         box = numpy.int0(box)
         center = (int(rect[0][0]),int(rect[0][1]))
-        area = int(rect[1][0]*rect[1][1])
 
-        #Проверка на основные ячейки
-        if (check_res(firstflag,old_rect,rect) == True) and (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False):
+        if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (titlechecker(box) == True):
             firstflag = False
             outchecklist.append(center)
             old_rect = rect
@@ -121,30 +103,30 @@ def get_null_values(timg,image):
             cv2.drawContours(image,[box],0,(0,0,0),2)
             cv2.circle(image, center, 5, (0,0,0), 2)
 
-    #Смещение на 1 пиксель
-    print(outchecklist)
-    for i in range(len(outchecklist)):
-        buftuple = outchecklist[i]
-        outchecklist.remove(outchecklist[i])
-        outchecklist.insert(i,(buftuple[0]-1, buftuple[1]-1))
-
-    #Добавляем 0 там, где есть совпадение
     for nullitem in outchecklist:
         for item in finalmatrix:
             for i in range(len(item)):
-                if nullitem == item[i]:
+                if (abs(nullitem[0]-item[i][0])<5) and (abs(nullitem[1]-item[i][1])<5):
                     item.remove(item[i])
-                    item.insert(i,0)
+                    item.insert(i,(0,0))
     
-    #Где нет нуля, пишем 1
     for item in finalmatrix:
         for i in range(len(item)):
-            if item[i] != 0:
+            if item[i] == (0,0):
+                item.remove(item[i])
+                item.insert(i,0)
+            else:
                 item.remove(item[i])
                 item.insert(i,1)
-
-
+    
     print(finalmatrix)
+
+#Фильтрация периметра
+def AreaChecker(res):
+    area = int(res[1][0]*res[1][1])
+    if (area > 10000) and (area < 60000) and (res[1][0] > 75) and (res[1][1] > 75):
+        return True
+    return False
 
 def main():
 
@@ -171,26 +153,30 @@ def main():
         box = cv2.boxPoints(rect)
         box = numpy.int0(box)
         center = (int(rect[0][0]),int(rect[0][1]))
-        area = int(rect[1][0]*rect[1][1])
         
-        if (rect[1][1] < 50) and (rect[1][1] > 17) and (rect[1][0] > 100):
-
+        #Заголовки групп
+        if (rect[1][1] < 50) and (rect[1][1] > 15) and (rect[1][0] > 60) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]):
             for p in box:
-                pt = (p[0],p[1])
-                cv2.circle(image, pt, 5, (0,0,255), 2)
-                smallimg = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
-                cv2.imshow("CHECK",smallimg)
-                cv2.waitKey(100000)
-                
+                cv2.circle(image, (p[0],p[1]), 5, (0,0,255), 2)
             
             cv2.drawContours(image,[box],0,(0,0,255),2)
             cv2.circle(image, center, 5, (0,0,255), 2)
             group_cell_list.append(box)
-            print(rect)
-            print("center: "+str(center))
+        
+        #Цифры пар (слева)
+        if (rect[1][0] < 100) and (rect[1][0] > 17) and (rect[1][1] < 300) and (rect[1][0] < rect[1][1]) and (rect[0][0] < rect[0][1]):
+            for p in box:
+                cv2.circle(image, (p[0],p[1]), 5, (255,0,255), 2)
+            
+            cv2.drawContours(image,[box],0,(255,0,255),2)
+            cv2.circle(image, center, 5, (255,0,255), 2)
+            leftnumber_cell_list.append(box)
             smallimg = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
             cv2.imshow("CHECK",smallimg)
             cv2.waitKey(100000)
+
+#((158.5, 318.5), (43.0, 157.0), -0.0)
+#center: (158, 318)
 
     for c in cnts:
 
@@ -198,9 +184,8 @@ def main():
         box = cv2.boxPoints(rect)
         box = numpy.int0(box)
         center = (int(rect[0][0]),int(rect[0][1]))
-        area = int(rect[1][0]*rect[1][1])
 
-        if (check_res(firstflag,old_rect,rect) == True) and (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True) and (titlechecker(box) == True):
+        if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True) and (titlechecker(box) == True):
             firstflag = False
             circle_store_list.append(center)
             old_rect = rect
@@ -208,8 +193,7 @@ def main():
 
             cv2.drawContours(image,[box],0,(0,0,128),2)
             cv2.circle(image, center, 5, (0,0,128), 2)
-            print(rect)
-            print("center: "+str(center))
+
             #Закидываем центры на проверку для подсчета кол-ва повторений
             ColumnCheckerList.append(center[0])
             RowCheckerList.append(center[1])
