@@ -1,6 +1,7 @@
 import cv2, numpy, requests, time
 from collections import Counter
-from pdf2image import convert_from_path
+from pdf2image import convert_from_bytes
+import pytesseract
 
 leftnumber_cell_list = []
 group_cell_list = []
@@ -10,14 +11,15 @@ finalmatrix = []
 #Процедура получения PDF и конвертации в JPG
 def get_document():
 
-    url = 'http://178.128.225.114/PDF/9.pdf'
+    url = 'http://178.128.225.114/PDF/6.pdf'
     r = requests.get(url, stream=True)
     with open('PDF.pdf', 'wb') as fd:
         for chunk in r.iter_content(2000):
             fd.write(chunk)
-    pages = convert_from_path('PDF.pdf', 150)
+    
+    pages = convert_from_bytes(open('PDF.pdf', 'rb').read(),300)
     for page in pages:
-        page.save('JPG.jpg', 'JPEG')
+        page.save('PNG.png', 'PNG')
 
 #Процедура для того, чтоб контур не был огромным
 def check_res(firstflag, old, new):
@@ -47,7 +49,7 @@ def matrix(rows,columns):
 #Функция для определения всех погрешностей кругов
 def allcenters_checker(center):
     for item in circle_store_list:
-        if ((item[0] == center[0]) and (abs(item[1]-center[1])<4)) or ((item[1] == center[1]) and (abs(item[0]-center[0])<4)):
+        if ((item[0] == center[0]) and (abs(item[1]-center[1])<8)) or ((item[1] == center[1]) and (abs(item[0]-center[0])<8)):
             return False
     return True
 
@@ -73,9 +75,9 @@ def titlechecker(box):
 def centers_checker(a,b):
     boolflag0 = False
     boolflag1 = False
-    if (abs(a[0]-b[0]) < 5):
+    if (abs(a[0]-b[0]) < 10):
         boolflag0 = True
-    if (abs(a[1]-b[1]) < 5):
+    if (abs(a[1]-b[1]) < 10):
         boolflag1 = True
     if boolflag1 == True and boolflag0 == True:
         return True
@@ -85,7 +87,7 @@ def centers_checker(a,b):
 def get_null_values(timg,image):
 
     outchecklist = []
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (90, 90))
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (180, 180))
     closed = cv2.morphologyEx(timg, cv2.MORPH_CLOSE, kernel)
     cnts = cv2.findContours(closed.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
     firstflag = True
@@ -105,13 +107,13 @@ def get_null_values(timg,image):
             old_rect = rect
             old_center = center
 
-            cv2.drawContours(image,[box],0,(0,0,255),2)
-            cv2.circle(image, center, 5, (0,0,255), 2)
+            cv2.drawContours(image,[box],0,(0,0,255),5)
+            cv2.circle(image, center, 5, (0,0,255), 5)
 
     for nullitem in outchecklist:
         for item in finalmatrix:
             for i in range(len(item)):
-                if (abs(nullitem[0]-item[i][0])<5) and (abs(nullitem[1]-item[i][1])<5):
+                if (abs(nullitem[0]-item[i][0])<10) and (abs(nullitem[1]-item[i][1])<10):
                     item.remove(item[i])
                     item.insert(i,(0,0))
     
@@ -129,7 +131,7 @@ def get_null_values(timg,image):
 #Фильтрация периметра
 def AreaChecker(res):
     area = int(res[1][0]*res[1][1])
-    if (area > 10000) and (area < 60000) and (res[1][0] > 75) and (res[1][1] > 75):
+    if (area > 20000) and (area < 500000) and (res[1][0] > 150) and (res[1][1] > 150):
         return True
     return False
 
@@ -140,7 +142,7 @@ def main():
     ColumnCheckerList=[]
     firstflag = True
 
-    image = cv2.imread("JPG.jpg")
+    image = cv2.imread("PNG.png")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (3, 3), 0)
     edged = cv2.Canny(gray, 10, 250)
@@ -160,21 +162,21 @@ def main():
         center = (int(rect[0][0]),int(rect[0][1]))
         
         #Заголовки групп
-        if (rect[1][1] < 50) and (rect[1][1] > 15) and (rect[1][0] > 60) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]):
+        if (rect[1][1] < 100) and (rect[1][1] > 30) and (rect[1][0] > 120) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]):
             for p in box:
-                cv2.circle(image, (p[0],p[1]), 5, (0,255,0), 2)
+                cv2.circle(image, (p[0],p[1]), 5, (0,255,0), 5)
             
-            cv2.drawContours(image,[box],0,(0,255,0),2)
-            cv2.circle(image, center, 5, (0,255,0), 2)
+            cv2.drawContours(image,[box],0,(0,255,0),5)
+            cv2.circle(image, center, 5, (0,255,0), 5)
             group_cell_list.append(box)
         
         #Цифры пар (слева)
-        if (rect[1][0] < 100) and (rect[1][0] > 17) and (rect[1][1] < 300) and (rect[1][0] < rect[1][1]) and (rect[0][0] < rect[0][1]):
+        if (rect[1][0] < 200) and (rect[1][0] > 34) and (rect[1][1] < 600) and (rect[1][0] < rect[1][1]) and (rect[0][0] < rect[0][1]):
             for p in box:
-                cv2.circle(image, (p[0],p[1]), 5, (255,0,255), 2)
+                cv2.circle(image, (p[0],p[1]), 5, (255,0,255), 5)
             
-            cv2.drawContours(image,[box],0,(255,0,255),2)
-            cv2.circle(image, center, 5, (255,0,255), 2)
+            cv2.drawContours(image,[box],0,(255,0,255),5)
+            cv2.circle(image, center, 5, (255,0,255), 5)
             leftnumber_cell_list.append(box)
 
 #((158.5, 318.5), (43.0, 157.0), -0.0)
@@ -194,9 +196,13 @@ def main():
             old_rect = rect
             old_center = center
 
-            cv2.drawContours(image,[box],0,(128,0,0),2)
-            cv2.circle(image, center, 5, (128,0,0), 2)
-
+            cv2.drawContours(image,[box],0,(128,0,0),5)
+            crop_img = image[box[1][1]:box[0][1], box[1][0]:box[2][0]]
+            text = pytesseract.image_to_string(crop_img, lang='rus')
+            print(text.replace("\n"," ").replace("  "," "))
+            #smallimg = cv2.resize(image, (0,0), fx=0.4, fy=0.4)
+            #cv2.imshow("MAIN",smallimg)
+            #cv2.waitKey(100000)
             #Закидываем центры на проверку для подсчета кол-ва повторений
             ColumnCheckerList.append(center[0])
             RowCheckerList.append(center[1])
@@ -221,6 +227,6 @@ def main():
         matrix(MaxRow,MaxColumn)
         get_null_values(edged.copy(),image)
 
-    cv2.imwrite("output.jpg", image)
+    cv2.imwrite("output.png", image)
 
 main()
