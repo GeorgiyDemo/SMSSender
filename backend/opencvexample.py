@@ -100,8 +100,8 @@ def get_null_values(timg,image):
             old_rect = rect
             old_center = center
 
-            cv2.drawContours(image,[box],0,(0,0,0),2)
-            cv2.circle(image, center, 5, (0,0,0), 2)
+            cv2.drawContours(image,[box],0,(0,0,255),2)
+            cv2.circle(image, center, 5, (0,0,255), 2)
 
     for nullitem in outchecklist:
         for item in finalmatrix:
@@ -157,10 +157,10 @@ def main():
         #Заголовки групп
         if (rect[1][1] < 50) and (rect[1][1] > 15) and (rect[1][0] > 60) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]):
             for p in box:
-                cv2.circle(image, (p[0],p[1]), 5, (0,0,255), 2)
+                cv2.circle(image, (p[0],p[1]), 5, (0,255,0), 2)
             
-            cv2.drawContours(image,[box],0,(0,0,255),2)
-            cv2.circle(image, center, 5, (0,0,255), 2)
+            cv2.drawContours(image,[box],0,(0,255,0),2)
+            cv2.circle(image, center, 5, (0,255,0), 2)
             group_cell_list.append(box)
         
         #Цифры пар (слева)
@@ -191,8 +191,8 @@ def main():
             old_rect = rect
             old_center = center
 
-            cv2.drawContours(image,[box],0,(0,0,128),2)
-            cv2.circle(image, center, 5, (0,0,128), 2)
+            cv2.drawContours(image,[box],0,(128,0,0),2)
+            cv2.circle(image, center, 5, (128,0,0), 2)
 
             #Закидываем центры на проверку для подсчета кол-ва повторений
             ColumnCheckerList.append(center[0])
