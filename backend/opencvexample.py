@@ -53,7 +53,12 @@ def allcenters_checker(center):
 
 #Функция для проверки на то, чтоб контур не включал в себя номера пар
 def leftnumberchecker(box):
-    print("УЖС")
+    for item in leftnumber_cell_list:
+        for boxitem in box:
+            for p in range(0,len(item)-2):
+                if (item[p][0],item[p][1]) == (boxitem[0], boxitem[1]):
+                    return False
+    return True
 
 #Функция для проверки на то, чтоб контур не включал в себя названия групп
 def titlechecker(box):
@@ -171,9 +176,6 @@ def main():
             cv2.drawContours(image,[box],0,(255,0,255),2)
             cv2.circle(image, center, 5, (255,0,255), 2)
             leftnumber_cell_list.append(box)
-            smallimg = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
-            cv2.imshow("CHECK",smallimg)
-            cv2.waitKey(100000)
 
 #((158.5, 318.5), (43.0, 157.0), -0.0)
 #center: (158, 318)
@@ -185,7 +187,8 @@ def main():
         box = numpy.int0(box)
         center = (int(rect[0][0]),int(rect[0][1]))
 
-        if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True) and (titlechecker(box) == True):
+        if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True) and (titlechecker(box) == True) and (leftnumberchecker(box) == True):
+
             firstflag = False
             circle_store_list.append(center)
             old_rect = rect
@@ -198,9 +201,6 @@ def main():
             ColumnCheckerList.append(center[0])
             RowCheckerList.append(center[1])
 
-            smallimg = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
-            cv2.imshow("CHECK",smallimg)
-            cv2.waitKey(100000)
             global_counter +=1
 
     #Считаем кол-во повторений 
@@ -216,9 +216,7 @@ def main():
     for item in list(ColumnCounter):
         if (ColumnCounter[item]>MaxColumn):
             MaxColumn=ColumnCounter[item]
-    
-    print(MaxRow*MaxColumn)
-    print(global_counter)
+
     if global_counter == MaxRow*MaxColumn:
         matrix(MaxRow,MaxColumn)
         get_null_values(edged.copy(),image)
