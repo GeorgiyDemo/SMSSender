@@ -1,18 +1,19 @@
-import cv2, numpy, requests
+import cv2, numpy, requests, time
 from collections import Counter
 from pdf2image import convert_from_path
 
-circle_store_list = []
+all_circles_xyz = []
 group_cell_list = []
+circle_store_list = []
 finalmatrix = []
 
 def get_document():
 
-    #url = 'http://178.128.225.114/PDF/4.pdf'
-    #r = requests.get(url, stream=True)
-    #with open('PDF.pdf', 'wb') as fd:
-    #    for chunk in r.iter_content(2000):
-    #        fd.write(chunk)
+    url = 'http://178.128.225.114/PDF/4.pdf'
+    r = requests.get(url, stream=True)
+    with open('PDF.pdf', 'wb') as fd:
+        for chunk in r.iter_content(2000):
+            fd.write(chunk)
     pages = convert_from_path('PDF.pdf', 150)
     for page in pages:
         page.save('JPG.jpg', 'JPEG')
@@ -50,10 +51,34 @@ def allcenters_checker(center):
             return False
     return True
 
+def titlechecker(box):
+    for item in group_cell_list:
+        for boxitem in box:
+            for p in range(1,len(item)-1):
+                    pt = (item[p][0],item[p][1])
+                    pm = (boxitem[0], boxitem[1])
+                    if pt == pm:
+                        return False
+    return True
+
 #((403.5, 307.0), (180.0, 147.0), -90.0)
 #center: (403, 307)
-#((403.5, 318.5), (147.0, 157.0), -0.0)
-#center: (403, 318)
+#[[477 397]
+#[330 397]
+#[330 217]
+#[477 217]]
+
+#[[330 238]
+#[330 217]
+#[477 217]
+#[477 238]]
+
+        #print(res[1][0]>item[1][0])
+        #print(res[0][0]>item[0][0])
+        #print(res[0][1]>item[0][1])
+        #if res[1][0]>item[1][0] and ((res[0][0]>item[0][0]) or (res[0][1]>item[0][1])):
+        #    return True
+    return False
 
 #Функция для погрешности центров кругов
 def centers_checker(a,b):
@@ -73,7 +98,7 @@ def get_null_values(timg,image):
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (90, 90))
     closed = cv2.morphologyEx(timg, cv2.MORPH_CLOSE, kernel)
     cnts = cv2.findContours(closed.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
-    
+    cv2.imwrite("CHECK.jpg",closed)
     firstflag = True
     old_center = (0, 0)
     old_rect = ((0.0, 0.0), (0.0, 0.0), -0.0)
@@ -97,6 +122,7 @@ def get_null_values(timg,image):
             cv2.circle(image, center, 5, (0,0,0), 2)
 
     #Смещение на 1 пиксель
+    print(outchecklist)
     for i in range(len(outchecklist)):
         buftuple = outchecklist[i]
         outchecklist.remove(outchecklist[i])
@@ -148,15 +174,24 @@ def main():
         area = int(rect[1][0]*rect[1][1])
         
         if (rect[1][1] < 50) and (rect[1][1] > 17) and (rect[1][0] > 100):
+
+            for p in box:
+                pt = (p[0],p[1])
+                cv2.circle(image, pt, 5, (0,0,255), 2)
+                smallimg = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
+                cv2.imshow("CHECK",smallimg)
+                cv2.waitKey(100000)
+                
+            
             cv2.drawContours(image,[box],0,(0,0,255),2)
             cv2.circle(image, center, 5, (0,0,255), 2)
-            group_cell_list.append(rect)
+            group_cell_list.append(box)
             print(rect)
             print("center: "+str(center))
             smallimg = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
             cv2.imshow("CHECK",smallimg)
             cv2.waitKey(100000)
-    
+
     for c in cnts:
 
         rect = cv2.minAreaRect(c)
@@ -165,9 +200,7 @@ def main():
         center = (int(rect[0][0]),int(rect[0][1]))
         area = int(rect[1][0]*rect[1][1])
 
-        if (check_res(firstflag,old_rect,rect) == True) and (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True): #and (abs(rect[2])==0)
-            
-            print(rect[2])
+        if (check_res(firstflag,old_rect,rect) == True) and (area > 10000) and (area < 60000) and (rect[1][0] > 75) and (rect[1][1] > 75) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True) and (titlechecker(box) == True):
             firstflag = False
             circle_store_list.append(center)
             old_rect = rect
@@ -175,8 +208,8 @@ def main():
 
             cv2.drawContours(image,[box],0,(0,0,128),2)
             cv2.circle(image, center, 5, (0,0,128), 2)
-            #print(rect)
-            #print("center: "+str(center))
+            print(rect)
+            print("center: "+str(center))
             #Закидываем центры на проверку для подсчета кол-ва повторений
             ColumnCheckerList.append(center[0])
             RowCheckerList.append(center[1])
