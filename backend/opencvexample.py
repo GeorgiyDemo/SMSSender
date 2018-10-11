@@ -7,15 +7,17 @@ leftnumber_cell_list = []
 group_cell_list = []
 circle_store_list = []
 finalmatrix = []
+group_text_association = {}
+center_and_text = {}
 
 #Процедура получения PDF и конвертации в JPG
 def get_document():
 
-    url = 'http://178.128.225.114/PDF/6.pdf'
-    r = requests.get(url, stream=True)
-    with open('PDF.pdf', 'wb') as fd:
-        for chunk in r.iter_content(2000):
-            fd.write(chunk)
+    #url = 'http://178.128.225.114/PDF/6.pdf'
+    #r = requests.get(url, stream=True)
+    #with open('PDF.pdf', 'wb') as fd:
+    #    for chunk in r.iter_content(2000):
+    #        fd.write(chunk)
     
     pages = convert_from_bytes(open('PDF.pdf', 'rb').read(),300)
     for page in pages:
@@ -123,10 +125,31 @@ def get_null_values(timg,image):
                 item.remove(item[i])
                 item.insert(i,0)
             else:
-                item.remove(item[i])
-                item.insert(i,1)
+                bufitem = item[i]
+                item.remove(bufitem)
+                item.insert(i,center_and_text[bufitem])
     
     print(finalmatrix)
+
+def finalmatrix_to_json(groupcheck):
+    allgroups = []
+    outjson = {}
+    for item in groupcheck:
+        allgroups.append(item[1])
+    
+    print(allgroups)
+
+    for i in range(len(finalmatrix)):
+        outjson[allgroups[i]] = []
+        for j in range(len(finalmatrix)):
+            outjson[allgroups[i]].append(finalmatrix[j][i])
+            print(finalmatrix[j][i])
+        print("----")
+    #print(group_text_association)
+    #print(finalmatrix)
+    print("outjson")
+    print(outjson)
+    print("Сча будем пилить")
 
 #Фильтрация периметра
 def AreaChecker(res):
@@ -136,6 +159,12 @@ def AreaChecker(res):
     return False
 
 def main():
+
+    def grouptextchecker(text):
+        formatedtext = "".join(text.split())
+        while formatedtext[-1:].isnumeric() == False:
+            formatedtext = formatedtext[:-1]
+        return formatedtext
 
     get_document()
     RowCheckerList=[]
@@ -148,12 +177,8 @@ def main():
     edged = cv2.Canny(gray, 10, 250)
     cnts = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
 
-    #Едем по контурам
-    global_counter = 0
     old_center = (0, 0)
-    old_rect = ((0.0, 0.0), (0.0, 0.0), -0.0)
     
-    #Проверка на ячейки названий групп
     for c in cnts:
     
         rect = cv2.minAreaRect(c)
@@ -162,13 +187,19 @@ def main():
         center = (int(rect[0][0]),int(rect[0][1]))
         
         #Заголовки групп
-        if (rect[1][1] < 100) and (rect[1][1] > 30) and (rect[1][0] > 120) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]):
+        if (rect[1][1] < 100) and (rect[1][1] > 30) and (rect[1][0] > 120) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]) and (centers_checker(center,old_center) == False) and (rect[1][0] < 500):
+            print(rect)
+            crop_img = image[box[1][1]:box[0][1], box[1][0]:box[2][0]]
+            text = pytesseract.image_to_string(crop_img, lang='rus')
+            group_text_association[center] = grouptextchecker(text)
+
+            old_center = center
             for p in box:
                 cv2.circle(image, (p[0],p[1]), 5, (0,255,0), 5)
-            
             cv2.drawContours(image,[box],0,(0,255,0),5)
             cv2.circle(image, center, 5, (0,255,0), 5)
             group_cell_list.append(box)
+
         
         #Цифры пар (слева)
         if (rect[1][0] < 200) and (rect[1][0] > 34) and (rect[1][1] < 600) and (rect[1][0] < rect[1][1]) and (rect[0][0] < rect[0][1]):
@@ -179,8 +210,11 @@ def main():
             cv2.circle(image, center, 5, (255,0,255), 5)
             leftnumber_cell_list.append(box)
 
-#((158.5, 318.5), (43.0, 157.0), -0.0)
-#center: (158, 318)
+    #Едем по контурам
+    sorted_by_value = sorted(group_text_association.items(), key=lambda kv: kv[0])
+    global_counter = 0
+    old_center = (0, 0)
+    old_rect = ((0.0, 0.0), (0.0, 0.0), -0.0)
 
     for c in cnts:
 
@@ -198,8 +232,12 @@ def main():
 
             cv2.drawContours(image,[box],0,(128,0,0),5)
             crop_img = image[box[1][1]:box[0][1], box[1][0]:box[2][0]]
-            text = pytesseract.image_to_string(crop_img, lang='rus')
-            print(text.replace("\n"," ").replace("  "," "))
+            try:
+                text = pytesseract.image_to_string(crop_img, lang='rus')
+            except:
+                pass
+            center_and_text[center] = text.replace("\n"," ").replace("  "," ").replace("\n\n"," ")
+
             #smallimg = cv2.resize(image, (0,0), fx=0.4, fy=0.4)
             #cv2.imshow("MAIN",smallimg)
             #cv2.waitKey(100000)
@@ -226,7 +264,8 @@ def main():
     if global_counter == MaxRow*MaxColumn:
         matrix(MaxRow,MaxColumn)
         get_null_values(edged.copy(),image)
-
+        finalmatrix_to_json(sorted_by_value)
+    
     cv2.imwrite("output.png", image)
 
 main()
