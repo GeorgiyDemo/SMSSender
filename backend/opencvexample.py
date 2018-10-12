@@ -1,8 +1,7 @@
-import cv2, numpy, requests, time, pytesseract
+import cv2, numpy, requests, time, pytesseract, json
 from collections import Counter
 from pdf2image import convert_from_bytes
 
-def allinput():
 leftnumber_cell_list = []
 group_cell_list = []
 circle_store_list = []
@@ -13,11 +12,11 @@ center_and_text = {}
 #Процедура получения PDF и конвертации в JPG
 def get_document():
 
-    url = 'http://178.128.225.114/PDF/6.pdf'
-    r = requests.get(url, stream=True)
-    with open('PDF.pdf', 'wb') as fd:
-        for chunk in r.iter_content(2000):
-            fd.write(chunk)
+    #url = 'http://178.128.225.114/PDF/6.pdf'
+    #r = requests.get(url, stream=True)
+    #with open('PDF.pdf', 'wb') as fd:
+    #    for chunk in r.iter_content(2000):
+    #        fd.write(chunk)
     
     pages = convert_from_bytes(open('PDF.pdf', 'rb').read(),300)
     for page in pages:
@@ -128,28 +127,19 @@ def get_null_values(timg,image):
                 bufitem = item[i]
                 item.remove(bufitem)
                 item.insert(i,center_and_text[bufitem])
-    
-    print(finalmatrix)
 
 def finalmatrix_to_json(groupcheck):
     allgroups = []
     outjson = {}
     for item in groupcheck:
         allgroups.append(item[1])
-    
-    print(allgroups)
 
-    for i in range(len(finalmatrix)):
+    for i in range(len(finalmatrix[0])):
         outjson[allgroups[i]] = []
         for j in range(len(finalmatrix)):
             outjson[allgroups[i]].append(finalmatrix[j][i])
-            print(finalmatrix[j][i])
-        print("----")
-    #print(group_text_association)
-    #print(finalmatrix)
-    print("outjson")
-    print(outjson)
-    print("Сча будем пилить")
+
+    print(json.dumps(outjson, ensure_ascii=False))
 
 #Фильтрация периметра
 def AreaChecker(res):
@@ -188,7 +178,6 @@ def main():
         
         #Заголовки групп
         if (rect[1][1] < 100) and (rect[1][1] > 30) and (rect[1][0] > 120) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]) and (centers_checker(center,old_center) == False) and (rect[1][0] < 500):
-            print(rect)
             crop_img = image[box[1][1]:box[0][1], box[1][0]:box[2][0]]
             text = pytesseract.image_to_string(crop_img, lang='rus')
             group_text_association[center] = grouptextchecker(text)

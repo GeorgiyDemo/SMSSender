@@ -1,11 +1,14 @@
-import cv2, numpy, requests, time, pytesseract, flask, os
+import cv2, numpy, requests, time, pytesseract, flask, os, json, threading
+from datetime import datetime
 from collections import Counter
 from pdf2image import convert_from_bytes
 from flask import request, jsonify
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+GLOBAL_RESULT = {}
 
 def ParseKIPTT():
+    global GLOBAL_RESULT
     leftnumber_cell_list = []
     group_cell_list = []
     circle_store_list = []
@@ -16,11 +19,11 @@ def ParseKIPTT():
     #Процедура получения PDF и конвертации в JPG
     def get_document():
 
-        url = 'http://178.128.225.114/PDF/2.pdf'
-        r = requests.get(url, stream=True)
-        with open('PDF.pdf', 'wb') as fd:
-            for chunk in r.iter_content(2000):
-                fd.write(chunk)
+        #url = 'http://178.128.225.114/PDF/2.pdf'
+        #r = requests.get(url, stream=True)
+        #with open('PDF.pdf', 'wb') as fd:
+        #    for chunk in r.iter_content(2000):
+        #        fd.write(chunk)
         
         pages = convert_from_bytes(open('PDF.pdf', 'rb').read(),300)
         for page in pages:
@@ -133,17 +136,18 @@ def ParseKIPTT():
                     item.insert(i,center_and_text[bufitem])
 
     def finalmatrix_to_json(groupcheck):
+        global GLOBAL_RESULT
         allgroups = []
         outjson = {}
         for item in groupcheck:
             allgroups.append(item[1])
-
-        for i in range(len(finalmatrix)): #ТУТ НАДО ЧЕТ МЕНЯТЬ
+        
+        for i in range(len(finalmatrix[0])):
             outjson[allgroups[i]] = []
-            for j in range(len(finalmatrix)): # И ТУТ
+            for j in range(len(finalmatrix)):
                 outjson[allgroups[i]].append(finalmatrix[j][i])
 
-        return outjson
+        GLOBAL_RESULT = outjson
 
     #Фильтрация периметра
     def AreaChecker(res):
@@ -248,20 +252,26 @@ def ParseKIPTT():
         if (ColumnCounter[item]>MaxColumn):
             MaxColumn=ColumnCounter[item]
 
+    if not os.path.exists("outputs"):
+            os.makedirs("outputs")
     if global_counter == MaxRow*MaxColumn:
         matrix(MaxRow,MaxColumn)
-        get_null_values(edged.copy(),image)
-        cv2.imwrite("output.png", image)
-        return str(finalmatrix_to_json(sorted_by_value))
-
-    return "False"
+        get_null_values(edged.copy(),image)   
+        cv2.imwrite("outputs/output"+str(datetime.now())+"_GOOD.png", image)
+        finalmatrix_to_json(sorted_by_value)
+    
+    else:
+        cv2.imwrite("outputs/output"+str(datetime.now())+"_BAD.png", image)
+        GLOBAL_RESULT = {"False"}
 
 @app.route('/api/v1/parsejson/', methods=['GET'])
 def parse_json():
-    return ParseKIPTT()
+    threading.Thread(target=ParseKIPTT).start()
+    return "TRUE"
 
 @app.route('/api/v1/getjson/', methods=['GET'])
 def get_json():
-    return "LOX"
+    global GLOBAL_RESULT
+    return json.dumps(GLOBAL_RESULT, ensure_ascii=False)
 
 app.run(host='127.0.0.1',port=500, threaded=True)
