@@ -1,8 +1,6 @@
-import cv2, numpy, requests, time
+import cv2, numpy, requests, time, pytesseract, flask, os
 from collections import Counter
 from pdf2image import convert_from_bytes
-import pytesseract
-import flask, os
 from flask import request, jsonify
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
@@ -18,7 +16,7 @@ def ParseKIPTT():
     #Процедура получения PDF и конвертации в JPG
     def get_document():
 
-        url = 'http://178.128.225.114/PDF/6.pdf'
+        url = 'http://178.128.225.114/PDF/2.pdf'
         r = requests.get(url, stream=True)
         with open('PDF.pdf', 'wb') as fd:
             for chunk in r.iter_content(2000):
@@ -140,9 +138,9 @@ def ParseKIPTT():
         for item in groupcheck:
             allgroups.append(item[1])
 
-        for i in range(len(finalmatrix)):
+        for i in range(len(finalmatrix)): #ТУТ НАДО ЧЕТ МЕНЯТЬ
             outjson[allgroups[i]] = []
-            for j in range(len(finalmatrix)):
+            for j in range(len(finalmatrix)): # И ТУТ
                 outjson[allgroups[i]].append(finalmatrix[j][i])
 
         return outjson
