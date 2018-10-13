@@ -146,7 +146,9 @@ def ParseKIPTT():
             outjson[allgroups[i]] = []
             for j in range(len(finalmatrix)):
                 outjson[allgroups[i]].append(finalmatrix[j][i])
-
+        
+        print(finalmatrix)
+        print(allgroups)
         GLOBAL_RESULT = outjson
 
     #Фильтрация периметра

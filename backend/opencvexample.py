@@ -148,6 +148,13 @@ def AreaChecker(res):
         return True
     return False
 
+def cropimager(image, rect):
+    TopLeftCoords = (int(abs(rect[0][0] - rect[1][1]/2)), int(abs(rect[0][1] - rect[1][0]/2)))
+    BottomRightCoords = (int(abs(rect[0][0] + rect[1][1]/2)), int(abs(rect[0][1] + rect[1][0]/2)))
+    print("TopLeftCoords"+str(TopLeftCoords))
+    print("BottomRightCoords"+str(BottomRightCoords))
+    return image[TopLeftCoords[1]:BottomRightCoords[1],TopLeftCoords[0]:BottomRightCoords[0]]
+ 
 def main():
 
     def grouptextchecker(text):
@@ -220,16 +227,20 @@ def main():
             old_center = center
 
             cv2.drawContours(image,[box],0,(128,0,0),5)
-            crop_img = image[box[1][1]:box[0][1], box[1][0]:box[2][0]]
-            try:
-                text = pytesseract.image_to_string(crop_img, lang='rus')
-            except:
-                pass
+
+            ###
+            crop_img = cropimager(image,rect)
+            print(rect)
+            for p in box:
+                print(p[0],p[1])
+            
+            text = pytesseract.image_to_string(crop_img, lang='rus')
+            print(text)
+            
             center_and_text[center] = text.replace("\n"," ").replace("  "," ").replace("\n\n"," ")
 
-            #smallimg = cv2.resize(image, (0,0), fx=0.4, fy=0.4)
-            #cv2.imshow("MAIN",smallimg)
-            #cv2.waitKey(100000)
+            cv2.imshow("MAIN",crop_img)
+            cv2.waitKey(100000)
             #Закидываем центры на проверку для подсчета кол-ва повторений
             ColumnCheckerList.append(center[0])
             RowCheckerList.append(center[1])
