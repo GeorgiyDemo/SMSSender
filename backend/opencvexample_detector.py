@@ -159,7 +159,7 @@ def cropimager(image, box):
         if p[0]>=BottomRightCoords[0] and p[1]>=BottomRightCoords[1]:
             BottomRightCoords = (p[0],p[1])
 
-    return image[TopLeftCoords[1]+1:BottomRightCoords[1],TopLeftCoords[0]+1:BottomRightCoords[0]]
+    return image[TopLeftCoords[1]:BottomRightCoords[1],TopLeftCoords[0]:BottomRightCoords[0]]
 
 def grouptextchecker(text):
         formatedtext = "".join(text.split())
@@ -168,7 +168,7 @@ def grouptextchecker(text):
         return formatedtext
 def main():
     
-    get_document()
+    #get_document()
     RowCheckerList=[]
     ColumnCheckerList=[]
     firstflag = True
@@ -188,57 +188,28 @@ def main():
         box = numpy.int0(box)
         center = (int(rect[0][0]),int(rect[0][1]))
         
-        #Цифры пар (слева)
-        if (rect[1][0] < 200) and (rect[1][0] > 34) and (rect[1][1] < 600) and (rect[1][0] < rect[1][1]) and (rect[0][0] < rect[0][1]):
-            for p in box:
-                cv2.circle(image, (p[0],p[1]), 5, (255,0,255), 5)
-            
-            cv2.drawContours(image,[box],0,(255,0,255),5)
-            cv2.circle(image, center, 5, (255,0,255), 5)
-            leftnumber_cell_list.append(box)
-        
         #Заголовки групп
-        elif (rect[1][1] < 100) and (rect[1][1] > 20) and (rect[1][0] > 120) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]) and (centers_checker(center,old_center) == False) and (rect[1][0] < 500):
-            crop_img = cropimager(image, box)
-            text = pytesseract.image_to_string(crop_img, lang='rus')
-            group_text_association[center] = grouptextchecker(text)
+        crop_img = image[box[1][1]:box[0][1], box[1][0]:box[2][0]]
+        #text = pytesseract.image_to_string(crop_img, lang='rus')
+        #group_text_association[center] = grouptextchecker(text)
 
-            old_center = center
-            for p in box:
-                cv2.circle(image, (p[0],p[1]), 5, (0,255,0), 5)
-            cv2.drawContours(image,[box],0,(0,255,0),5)
-            cv2.circle(image, center, 5, (0,255,0), 5)
-            group_cell_list.append(box)
-
-    #Едем по контурам
-    sorted_by_value = sorted(group_text_association.items(), key=lambda kv: kv[0])
-    global_counter = 0
-    old_center = (0, 0)
-    old_rect = ((0.0, 0.0), (0.0, 0.0), -0.0)
-
-    for c in cnts:
-
-        rect = cv2.minAreaRect(c)
-        box = cv2.boxPoints(rect)
-        box = numpy.int0(box)
-        center = (int(rect[0][0]),int(rect[0][1]))
-
-        if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True) and (titlechecker(box) == True) and (leftnumberchecker(box) == True):
-            firstflag = False
-            circle_store_list.append(center)
-            old_rect = rect
-            old_center = center
-
-            cv2.drawContours(image,[box],0,(128,0,0),5)
-            crop_img = cropimager(image, box)
-            text = pytesseract.image_to_string(crop_img, lang='rus')
-            center_and_text[center] = text.replace("\n"," ").replace("  "," ").replace("\n\n"," ")
-
-            #Закидываем центры на проверку для подсчета кол-ва повторений
-            ColumnCheckerList.append(center[0])
-            RowCheckerList.append(center[1])
-
-            global_counter +=1
+        old_center = center
+        for p in box:
+            cv2.circle(image, (p[0],p[1]), 5, (0,255,0), 5)
+        cv2.drawContours(image,[box],0,(0,255,0),5)
+        cv2.circle(image, center, 5, (0,255,0), 5)
+        group_cell_list.append(box)
+        print(rect)
+        print(center)
+        print(rect[1][1] < 100)
+        print(rect[1][1] > 25)
+        print(rect[1][0] > 120)
+        print(rect[1][0] > rect[1][1])
+        print(rect[0][0] > rect[0][1])
+        print(rect[1][0] < 500)
+        smallimg = cv2.resize(image, (0,0), fx=0.4, fy=0.4)
+        cv2.imshow("MAIN",smallimg)
+        cv2.waitKey(1000000)
 
     #Считаем кол-во повторений 
     RowCounter = Counter(RowCheckerList)
@@ -258,6 +229,7 @@ def main():
         matrix(MaxRow,MaxColumn)
         get_null_values(edged.copy(),image)
         finalmatrix_to_json(sorted_by_value)
+
     
     cv2.imwrite("output.png", image)
 

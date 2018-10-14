@@ -163,6 +163,19 @@ def ParseKIPTT():
         while formatedtext[-1:].isnumeric() == False:
             formatedtext = formatedtext[:-1]
         return formatedtext
+    
+    def cropimager(image, box):
+        TopLeftCoords = (box[0][0], box[0][1])
+        BottomRightCoords = TopLeftCoords
+        
+        for p in box:
+            if p[0]<=TopLeftCoords[0] and p[1]<=TopLeftCoords[1]:
+                TopLeftCoords = (p[0],p[1])
+            
+            if p[0]>=BottomRightCoords[0] and p[1]>=BottomRightCoords[1]:
+                BottomRightCoords = (p[0],p[1])
+
+        return image[TopLeftCoords[1]:BottomRightCoords[1],TopLeftCoords[0]:BottomRightCoords[0]]
 
     get_document()
     RowCheckerList=[]
@@ -227,13 +240,10 @@ def ParseKIPTT():
             old_center = center
 
             cv2.drawContours(image,[box],0,(128,0,0),5)
-            crop_img = image[box[1][1]:box[0][1], box[1][0]:box[2][0]]
-            try:
-                text = pytesseract.image_to_string(crop_img, lang='rus')
-            except:
-                pass
-            center_and_text[center] = text.replace("\n"," ").replace("  "," ").replace("\n\n"," ")
 
+            crop_img = cropimager(image, box)
+            text = pytesseract.image_to_string(crop_img, lang='rus')
+            center_and_text[center] = text.replace("\n"," ").replace("  "," ").replace("\n\n"," ")
             #Закидываем центры на проверку для подсчета кол-ва повторений
             ColumnCheckerList.append(center[0])
             RowCheckerList.append(center[1])
@@ -266,7 +276,7 @@ def ParseKIPTT():
         cv2.imwrite("outputs/output"+str(datetime.now())+"_BAD.png", image)
         GLOBAL_RESULT = {"False"}
 
-@app.route('/api/v1/parsejson/', methods=['GET'])
+@app.route('/api/v1/parse_json/', methods=['GET'])
 def parse_json():
     threading.Thread(target=ParseKIPTT).start()
     return "TRUE"
@@ -276,4 +286,4 @@ def get_json():
     global GLOBAL_RESULT
     return json.dumps(GLOBAL_RESULT, ensure_ascii=False)
 
-app.run(host='127.0.0.1',port=500, threaded=True)
+app.run(host='127.0.0.1',port=500, threaded=False)
