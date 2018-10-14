@@ -180,7 +180,8 @@ def main():
     cnts = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
 
     old_center = (0, 0)
-    
+    global_counter = 0
+    old_rect = ((0.0, 0.0), (0.0, 0.0), -0.0)
     for c in cnts:
     
         rect = cv2.minAreaRect(c)
@@ -192,6 +193,15 @@ def main():
         crop_img = image[box[1][1]:box[0][1], box[1][0]:box[2][0]]
         #text = pytesseract.image_to_string(crop_img, lang='rus')
         #group_text_association[center] = grouptextchecker(text)
+        print(check_res(firstflag,old_rect,rect) == True)
+        print(AreaChecker(rect) == True)
+        print(centers_checker(center,old_center) == False)
+        print(allcenters_checker(center) == True)
+        print(titlechecker(box) == True)
+        print(leftnumberchecker(box) == True)
+            
+        print(rect)
+        print(center)
 
         old_center = center
         for p in box:
@@ -199,14 +209,7 @@ def main():
         cv2.drawContours(image,[box],0,(0,255,0),5)
         cv2.circle(image, center, 5, (0,255,0), 5)
         group_cell_list.append(box)
-        print(rect)
-        print(center)
-        print(rect[1][1] < 100)
-        print(rect[1][1] > 25)
-        print(rect[1][0] > 120)
-        print(rect[1][0] > rect[1][1])
-        print(rect[0][0] > rect[0][1])
-        print(rect[1][0] < 500)
+
         smallimg = cv2.resize(image, (0,0), fx=0.4, fy=0.4)
         cv2.imshow("MAIN",smallimg)
         cv2.waitKey(1000000)

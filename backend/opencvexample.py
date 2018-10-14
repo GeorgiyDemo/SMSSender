@@ -88,8 +88,9 @@ def centers_checker(a,b):
 def get_null_values(timg,image):
 
     outchecklist = []
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (180, 180))
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (145, 145)) #МИНИМАЛЬНО, ЧТОБ ПРОХОДИЛО БОЛЬШЕ - 180
     closed = cv2.morphologyEx(timg, cv2.MORPH_CLOSE, kernel)
+    cv2.imwrite("CHECKKK.png",closed)
     cnts = cv2.findContours(closed.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
     firstflag = True
     old_center = (0, 0)
@@ -144,7 +145,7 @@ def finalmatrix_to_json(groupcheck):
 #Фильтрация периметра
 def AreaChecker(res):
     area = int(res[1][0]*res[1][1])
-    if (area > 20000) and (area < 500000) and (res[1][0] > 150) and (res[1][1] > 150):
+    if (area > 20000) and (area < 500000) and (res[1][0] > 130) and (res[1][1] > 130):
         return True
     return False
 
