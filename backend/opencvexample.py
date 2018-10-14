@@ -148,11 +148,25 @@ def AreaChecker(res):
         return True
     return False
 
-def cropimager(image, rect):
-    TopLeftCoords = (int(abs(rect[0][0] - rect[1][1]/2)), int(abs(rect[0][1] - rect[1][0]/2)))
-    BottomRightCoords = (int(abs(rect[0][0] + rect[1][1]/2)), int(abs(rect[0][1] + rect[1][0]/2)))
-    print("TopLeftCoords"+str(TopLeftCoords))
-    print("BottomRightCoords"+str(BottomRightCoords))
+def cropimager(image, rect, box):
+    min = (box[0][0], box[0][1])
+    for p in box:
+        if p[0]<=min[0] and p[1]<=min[1]:
+            min = (p[0],p[1])
+    
+    print("MIN:" +str(min))
+
+    if (rect[1][0]>rect[1][1]):
+        print("УСЛОВИЕ 1")
+        TopLeftCoords = (int(abs(rect[0][0] - rect[1][0]/2)), int(abs(rect[0][1] - rect[1][1]/2)))
+        BottomRightCoords = (int(abs(rect[0][0] + rect[1][0]/2)), int(abs(rect[0][1] + rect[1][1]/2)))
+    else:
+        print("УСЛОВИЕ 2")
+        TopLeftCoords = (int(abs(rect[0][0] - rect[1][1]/2)), int(abs(rect[0][1] - rect[1][0]/2)))
+        BottomRightCoords = (int(abs(rect[0][0] + rect[1][1]/2)), int(abs(rect[0][1] + rect[1][0]/2)))
+    
+    print(TopLeftCoords)
+
     return image[TopLeftCoords[1]:BottomRightCoords[1],TopLeftCoords[0]:BottomRightCoords[0]]
  
 def main():
@@ -229,7 +243,7 @@ def main():
             cv2.drawContours(image,[box],0,(128,0,0),5)
 
             ###
-            crop_img = cropimager(image,rect)
+            crop_img = cropimager(image, rect, box)
             print(rect)
             for p in box:
                 print(p[0],p[1])
