@@ -90,7 +90,6 @@ def get_null_values(timg,image):
     outchecklist = []
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (145, 145)) #МИНИМАЛЬНО, ЧТОБ ПРОХОДИЛО БОЛЬШЕ - 180
     closed = cv2.morphologyEx(timg, cv2.MORPH_CLOSE, kernel)
-    cv2.imwrite("CHECKKK.png",closed)
     cnts = cv2.findContours(closed.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
     firstflag = True
     old_center = (0, 0)
@@ -239,6 +238,9 @@ def main():
             ColumnCheckerList.append(center[0])
             RowCheckerList.append(center[1])
 
+            smallimg = cv2.resize(image, (0,0), fx=0.4, fy=0.4)
+            cv2.imshow("MAIN",smallimg)
+            cv2.waitKey(1)
             global_counter +=1
 
     #Считаем кол-во повторений 

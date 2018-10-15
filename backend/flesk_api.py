@@ -114,7 +114,10 @@ def ParseKIPTT():
                 outchecklist.append(center)
                 old_rect = rect
                 old_center = center
-
+                
+                #Проверка на то, чтоб текст был нулевой
+                print(center_and_text)
+                
                 cv2.drawContours(image,[box],0,(0,0,255),5)
                 cv2.circle(image, center, 5, (0,0,255), 5)
 
