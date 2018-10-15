@@ -19,7 +19,7 @@ def ParseKIPTT():
     #Процедура получения PDF и конвертации в JPG
     def get_document():
 
-        #url = 'http://178.128.225.114/PDF/2.pdf'
+        #url = 'http://46.101.17.171/PDF/2.pdf'
         #r = requests.get(url, stream=True)
         #with open('PDF.pdf', 'wb') as fd:
         #    for chunk in r.iter_content(2000):

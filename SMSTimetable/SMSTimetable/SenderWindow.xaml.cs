@@ -29,7 +29,6 @@ namespace SMSTimetable
         private void FinalSendButton_Click(object sender, RoutedEventArgs e)
         {
             if ((TextSecondRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true))
-    
                 if (MessageBox.Show("Вы действительно хотите отправить сообщение '"+ TextToSend.Text+"' на номер "+NumbersToSend.Text+"?", "Отправка сообщения", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     SMSSenderClass sms_obj = new SMSSenderClass();
@@ -38,11 +37,11 @@ namespace SMSTimetable
                     sms_obj.sms_send(request);
                     MessageBox.Show("Успешная отправка сообщения!");
                 }
+            //if 
 
             GetSMSBalance();
             TextToSend.Text = "";
             NumbersToSend.Text = "";
-
 
         }
 
@@ -115,5 +114,7 @@ namespace SMSTimetable
             UserManagmentWindow UserWindow_obj = new UserManagmentWindow();
             UserWindow_obj.Show();
         }
+
+
     }
 }

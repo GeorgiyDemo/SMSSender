@@ -5,6 +5,7 @@ from pdf2image import convert_from_bytes
 leftnumber_cell_list = []
 group_cell_list = []
 circle_store_list = []
+box_store_list = []
 finalmatrix = []
 group_text_association = {}
 center_and_text = {}
@@ -12,7 +13,7 @@ center_and_text = {}
 #Процедура получения PDF и конвертации в JPG
 def get_document():
 
-    #url = 'http://178.128.225.114/PDF/6.pdf'
+    #url = 'http://46.101.17.171/PDF/6.pdf'
     #r = requests.get(url, stream=True)
     #with open('PDF.pdf', 'wb') as fd:
     #    for chunk in r.iter_content(2000):
@@ -103,13 +104,24 @@ def get_null_values(timg,image):
         center = (int(rect[0][0]),int(rect[0][1]))
 
         if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (titlechecker(box) == True):
-            firstflag = False
-            outchecklist.append(center)
-            old_rect = rect
-            old_center = center
+            
+            #print(box_store_list)
+            #print(box)
+            for item in box_store_list:
+                locale_counter = 0 
+                for p in item:
+                
+                    for insidep in box:
+                        if (abs(insidep[0]-p[0])<10) and (abs(insidep[1]-p[1])<10):
+                            locale_counter +=1
+                if locale_counter == 4:
+                    firstflag = False
+                    outchecklist.append(center)
+                    old_rect = rect
+                    old_center = center
 
-            cv2.drawContours(image,[box],0,(0,0,255),5)
-            cv2.circle(image, center, 5, (0,0,255), 5)
+                    cv2.drawContours(image,[box],0,(0,0,255),5)
+                    cv2.circle(image, center, 5, (0,0,255), 5)
 
     for nullitem in outchecklist:
         for item in finalmatrix:
@@ -162,10 +174,15 @@ def cropimager(image, box):
     return image[TopLeftCoords[1]+1:BottomRightCoords[1],TopLeftCoords[0]+1:BottomRightCoords[0]]
 
 def grouptextchecker(text):
-        formatedtext = "".join(text.split())
-        while formatedtext[-1:].isnumeric() == False:
-            formatedtext = formatedtext[:-1]
-        return formatedtext
+    
+    formatedtext = "".join(text.split())
+    while formatedtext[-1:].isnumeric() == False:
+        formatedtext = formatedtext[:-1]
+    formatedtext = formatedtext[::-1]
+    while formatedtext[-1:].isnumeric() == False:
+        formatedtext = formatedtext[:-1]
+    return formatedtext[::-1]
+
 def main():
     
     get_document()
@@ -226,6 +243,7 @@ def main():
         if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True) and (titlechecker(box) == True) and (leftnumberchecker(box) == True):
             firstflag = False
             circle_store_list.append(center)
+            box_store_list.append(box)
             old_rect = rect
             old_center = center
 
@@ -238,9 +256,9 @@ def main():
             ColumnCheckerList.append(center[0])
             RowCheckerList.append(center[1])
 
-            smallimg = cv2.resize(image, (0,0), fx=0.4, fy=0.4)
-            cv2.imshow("MAIN",smallimg)
-            cv2.waitKey(1)
+            #smallimg = cv2.resize(image, (0,0), fx=0.4, fy=0.4)
+            #cv2.imshow("MAIN",smallimg)
+            #cv2.waitKey(1)
             global_counter +=1
 
     #Считаем кол-во повторений 
