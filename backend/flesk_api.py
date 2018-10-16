@@ -1,29 +1,59 @@
-import cv2, numpy, requests, time, pytesseract, flask, os, json, threading
+import cv2, numpy, requests, time, pytesseract, flask, os, json, threading, pymysql.cursors
 from datetime import datetime
 from collections import Counter
 from pdf2image import convert_from_bytes
 from flask import request, jsonify
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-GLOBAL_RESULT = {}
+
+#####Параметры MySQL######
+HOST = "HOST"   #
+USER = "USER"           #
+PASSWORD = "PASSWORD"    #
+DB = "DB"  #
+##########################
+
+#Функция для взаимодействия со всеми элементами БД
+def MySQLFetchAll(SQLString):
+
+    connection = pymysql.connect(host=HOST,user=USER,password=PASSWORD,db=DB,cursorclass=pymysql.cursors.DictCursor)
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(SQLString)
+            result = cursor.fetchall()
+    finally:
+        connection.close()
+    return result
 
 def ParseKIPTT():
-    global GLOBAL_RESULT
+    
     leftnumber_cell_list = []
     group_cell_list = []
     circle_store_list = []
+    box_store_list = []
     finalmatrix = []
     group_text_association = {}
     center_and_text = {}
 
-    #Процедура получения PDF и конвертации в JPG
+    #Функция для записи в БД
+    def MySQLWriter(insertjson):
+        
+        cnx = pymysql.connect(host=HOST,user=USER,password=PASSWORD,db=DB,cursorclass=pymysql.cursors.DictCursor)
+        cur = cnx.cursor()
+        insert = "UPDATE Outtable SET localvalue = %s WHERE shortname=\"outjson\";"
+        try:
+            cur.execute(insert, (json.dumps(insertjson,ensure_ascii=False),))
+            cnx.commit()
+        finally:
+	        cnx.close()
+
     def get_document():
 
-        #url = 'http://46.101.17.171/PDF/2.pdf'
-        #r = requests.get(url, stream=True)
-        #with open('PDF.pdf', 'wb') as fd:
-        #    for chunk in r.iter_content(2000):
-        #        fd.write(chunk)
+        url = 'http://46.101.17.171/PDF/8.pdf'
+        r = requests.get(url, stream=True)
+        with open('PDF.pdf', 'wb') as fd:
+            for chunk in r.iter_content(2000):
+                fd.write(chunk)
         
         pages = convert_from_bytes(open('PDF.pdf', 'rb').read(),300)
         for page in pages:
@@ -95,7 +125,7 @@ def ParseKIPTT():
     def get_null_values(timg,image):
 
         outchecklist = []
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (180, 180))
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (145, 145)) #МИНИМАЛЬНО, ЧТОБ ПРОХОДИЛО БОЛЬШЕ - 180
         closed = cv2.morphologyEx(timg, cv2.MORPH_CLOSE, kernel)
         cnts = cv2.findContours(closed.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
         firstflag = True
@@ -110,16 +140,22 @@ def ParseKIPTT():
             center = (int(rect[0][0]),int(rect[0][1]))
 
             if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (titlechecker(box) == True):
-                firstflag = False
-                outchecklist.append(center)
-                old_rect = rect
-                old_center = center
                 
-                #Проверка на то, чтоб текст был нулевой
-                print(center_and_text)
-                
-                cv2.drawContours(image,[box],0,(0,0,255),5)
-                cv2.circle(image, center, 5, (0,0,255), 5)
+                for item in box_store_list:
+                    locale_counter = 0 
+                    for p in item:
+                    
+                        for insidep in box:
+                            if (abs(insidep[0]-p[0])<10) and (abs(insidep[1]-p[1])<10):
+                                locale_counter +=1
+                    if locale_counter == 4:
+                        firstflag = False
+                        outchecklist.append(center)
+                        old_rect = rect
+                        old_center = center
+
+                        cv2.drawContours(image,[box],0,(0,0,255),5)
+                        cv2.circle(image, center, 5, (0,0,255), 5)
 
         for nullitem in outchecklist:
             for item in finalmatrix:
@@ -139,34 +175,25 @@ def ParseKIPTT():
                     item.insert(i,center_and_text[bufitem])
 
     def finalmatrix_to_json(groupcheck):
-        global GLOBAL_RESULT
         allgroups = []
         outjson = {}
         for item in groupcheck:
             allgroups.append(item[1])
-        
+
         for i in range(len(finalmatrix[0])):
             outjson[allgroups[i]] = []
             for j in range(len(finalmatrix)):
                 outjson[allgroups[i]].append(finalmatrix[j][i])
-        
-        print(finalmatrix)
-        print(allgroups)
-        GLOBAL_RESULT = outjson
+
+        return outjson
 
     #Фильтрация периметра
     def AreaChecker(res):
         area = int(res[1][0]*res[1][1])
-        if (area > 20000) and (area < 500000) and (res[1][0] > 150) and (res[1][1] > 150):
+        if (area > 20000) and (area < 500000) and (res[1][0] > 130) and (res[1][1] > 130):
             return True
         return False
 
-    def grouptextchecker(text):
-        formatedtext = "".join(text.split())
-        while formatedtext[-1:].isnumeric() == False:
-            formatedtext = formatedtext[:-1]
-        return formatedtext
-    
     def cropimager(image, box):
         TopLeftCoords = (box[0][0], box[0][1])
         BottomRightCoords = TopLeftCoords
@@ -178,115 +205,130 @@ def ParseKIPTT():
             if p[0]>=BottomRightCoords[0] and p[1]>=BottomRightCoords[1]:
                 BottomRightCoords = (p[0],p[1])
 
-        return image[TopLeftCoords[1]:BottomRightCoords[1],TopLeftCoords[0]:BottomRightCoords[0]]
+        return image[TopLeftCoords[1]+1:BottomRightCoords[1],TopLeftCoords[0]+1:BottomRightCoords[0]]
 
-    get_document()
-    RowCheckerList=[]
-    ColumnCheckerList=[]
-    firstflag = True
-
-    image = cv2.imread("PNG.png")
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    gray = cv2.GaussianBlur(gray, (3, 3), 0)
-    edged = cv2.Canny(gray, 10, 250)
-    cnts = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
-    old_center = (0, 0)
+    def grouptextchecker(text):
         
-    for c in cnts:
+        formatedtext = "".join(text.split())
+        while formatedtext[-1:].isnumeric() == False:
+            formatedtext = formatedtext[:-1]
+        formatedtext = formatedtext[::-1]
+        while formatedtext[-1:].isnumeric() == False:
+            formatedtext = formatedtext[:-1]
+        return formatedtext[::-1]
+
+    def main():
         
-        rect = cv2.minAreaRect(c)
-        box = cv2.boxPoints(rect)
-        box = numpy.int0(box)
-        center = (int(rect[0][0]),int(rect[0][1]))
-            
-        #Заголовки групп
-        if (rect[1][1] < 100) and (rect[1][1] > 30) and (rect[1][0] > 120) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]) and (centers_checker(center,old_center) == False) and (rect[1][0] < 500):
-            crop_img = image[box[1][1]:box[0][1], box[1][0]:box[2][0]]
-            text = pytesseract.image_to_string(crop_img, lang='rus')
-            group_text_association[center] = grouptextchecker(text)
+        get_document()
+        RowCheckerList=[]
+        ColumnCheckerList=[]
+        firstflag = True
 
-            old_center = center
-            for p in box:
-                cv2.circle(image, (p[0],p[1]), 5, (0,255,0), 5)
-            cv2.drawContours(image,[box],0,(0,255,0),5)
-            cv2.circle(image, center, 5, (0,255,0), 5)
-            group_cell_list.append(box)
+        image = cv2.imread("PNG.png")
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        gray = cv2.GaussianBlur(gray, (3, 3), 0)
+        edged = cv2.Canny(gray, 10, 250)
+        cnts = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
 
+        old_center = (0, 0)
+        
+        for c in cnts:
+        
+            rect = cv2.minAreaRect(c)
+            box = cv2.boxPoints(rect)
+            box = numpy.int0(box)
+            center = (int(rect[0][0]),int(rect[0][1]))
             
-        #Цифры пар (слева)
-        if (rect[1][0] < 200) and (rect[1][0] > 34) and (rect[1][1] < 600) and (rect[1][0] < rect[1][1]) and (rect[0][0] < rect[0][1]):
-            for p in box:
-                cv2.circle(image, (p[0],p[1]), 5, (255,0,255), 5)
+            #Цифры пар (слева)
+            if (rect[1][0] < 200) and (rect[1][0] > 34) and (rect[1][1] < 600) and (rect[1][0] < rect[1][1]) and (rect[0][0] < rect[0][1]):
+                for p in box:
+                    cv2.circle(image, (p[0],p[1]), 5, (255,0,255), 5)
                 
-            cv2.drawContours(image,[box],0,(255,0,255),5)
-            cv2.circle(image, center, 5, (255,0,255), 5)
-            leftnumber_cell_list.append(box)
+                cv2.drawContours(image,[box],0,(255,0,255),5)
+                cv2.circle(image, center, 5, (255,0,255), 5)
+                leftnumber_cell_list.append(box)
+            
+            #Заголовки групп
+            elif (rect[1][1] < 100) and (rect[1][1] > 20) and (rect[1][0] > 120) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]) and (centers_checker(center,old_center) == False) and (rect[1][0] < 500):
+                crop_img = cropimager(image, box)
+                text = pytesseract.image_to_string(crop_img, lang='rus')
+                group_text_association[center] = grouptextchecker(text)
 
-    #Едем по контурам
-    sorted_by_value = sorted(group_text_association.items(), key=lambda kv: kv[0])
-    global_counter = 0
-    old_center = (0, 0)
-    old_rect = ((0.0, 0.0), (0.0, 0.0), -0.0)
+                old_center = center
+                for p in box:
+                    cv2.circle(image, (p[0],p[1]), 5, (0,255,0), 5)
+                cv2.drawContours(image,[box],0,(0,255,0),5)
+                cv2.circle(image, center, 5, (0,255,0), 5)
+                group_cell_list.append(box)
 
-    for c in cnts:
+        #Едем по контурам
+        sorted_by_value = sorted(group_text_association.items(), key=lambda kv: kv[0])
+        global_counter = 0
+        old_center = (0, 0)
+        old_rect = ((0.0, 0.0), (0.0, 0.0), -0.0)
 
-        rect = cv2.minAreaRect(c)
-        box = cv2.boxPoints(rect)
-        box = numpy.int0(box)
-        center = (int(rect[0][0]),int(rect[0][1]))
+        for c in cnts:
 
-        if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True) and (titlechecker(box) == True) and (leftnumberchecker(box) == True):
+            rect = cv2.minAreaRect(c)
+            box = cv2.boxPoints(rect)
+            box = numpy.int0(box)
+            center = (int(rect[0][0]),int(rect[0][1]))
 
-            firstflag = False
-            circle_store_list.append(center)
-            old_rect = rect
-            old_center = center
+            if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (allcenters_checker(center) == True) and (titlechecker(box) == True) and (leftnumberchecker(box) == True):
+                firstflag = False
+                circle_store_list.append(center)
+                box_store_list.append(box)
+                old_rect = rect
+                old_center = center
 
-            cv2.drawContours(image,[box],0,(128,0,0),5)
+                cv2.drawContours(image,[box],0,(128,0,0),5)
+                crop_img = cropimager(image, box)
+                text = pytesseract.image_to_string(crop_img, lang='rus')
+                center_and_text[center] = text.replace("\n"," ").replace("  "," ").replace("\n\n"," ")
 
-            crop_img = cropimager(image, box)
-            text = pytesseract.image_to_string(crop_img, lang='rus')
-            center_and_text[center] = text.replace("\n"," ").replace("  "," ").replace("\n\n"," ")
-            #Закидываем центры на проверку для подсчета кол-ва повторений
-            ColumnCheckerList.append(center[0])
-            RowCheckerList.append(center[1])
+                #Закидываем центры на проверку для подсчета кол-ва повторений
+                ColumnCheckerList.append(center[0])
+                RowCheckerList.append(center[1])
 
-            global_counter +=1
+                global_counter +=1
 
-    #Считаем кол-во повторений 
-    RowCounter = Counter(RowCheckerList)
-    ColumnCounter = Counter(ColumnCheckerList)
+        #Считаем кол-во повторений 
+        RowCounter = Counter(RowCheckerList)
+        ColumnCounter = Counter(ColumnCheckerList)
 
-    #Ищем максимальные элементы в структурированных объектах
-    MaxRow = 0
-    MaxColumn = 0
-    for item in list(RowCounter):
-        if (RowCounter[item]>MaxRow):
-            MaxRow=RowCounter[item]
-    for item in list(ColumnCounter):
-        if (ColumnCounter[item]>MaxColumn):
-            MaxColumn=ColumnCounter[item]
-
-    if not os.path.exists("outputs"):
+        #Ищем максимальные элементы в структурированных объектах
+        MaxRow = 0
+        MaxColumn = 0
+        for item in list(RowCounter):
+            if (RowCounter[item]>MaxRow):
+                MaxRow=RowCounter[item]
+        for item in list(ColumnCounter):
+            if (ColumnCounter[item]>MaxColumn):
+                MaxColumn=ColumnCounter[item]
+        
+        if not os.path.exists("outputs"):
             os.makedirs("outputs")
-    if global_counter == MaxRow*MaxColumn:
-        matrix(MaxRow,MaxColumn)
-        get_null_values(edged.copy(),image)   
-        cv2.imwrite("outputs/output"+str(datetime.now())+"_GOOD.png", image)
-        finalmatrix_to_json(sorted_by_value)
+
+        if global_counter == MaxRow*MaxColumn:
+            matrix(MaxRow,MaxColumn)
+            get_null_values(edged.copy(),image)
+            cv2.imwrite("outputs/output"+str(datetime.now())+"_GOOD.png", image)
+            MySQLWriter(finalmatrix_to_json(sorted_by_value))
+        else:
+            cv2.imwrite("outputs/output"+str(datetime.now())+"_BAD.png", image)
     
-    else:
-        cv2.imwrite("outputs/output"+str(datetime.now())+"_BAD.png", image)
-        GLOBAL_RESULT = {"False"}
+    main()
 
 @app.route('/api/v1/parse_json/', methods=['GET'])
 def parse_json():
-    threading.Thread(target=ParseKIPTT).start()
-    return "TRUE"
+    try:
+        threading.Thread(target=ParseKIPTT).start()
+        return "True"
+    except:
+        return "False"
 
-@app.route('/api/v1/getjson/', methods=['GET'])
+@app.route('/api/v1/get_json/', methods=['GET'])
 def get_json():
-    global GLOBAL_RESULT
-    return json.dumps(GLOBAL_RESULT, ensure_ascii=False)
+    return (MySQLFetchAll("SELECT localvalue FROM Outtable WHERE shortname='outjson'")[0]["localvalue"])
 
 app.run(host='127.0.0.1',port=500, threaded=False)
