@@ -29,7 +29,8 @@ namespace SMSTimetable
         private void FinalSendButton_Click(object sender, RoutedEventArgs e)
         {
             if ((TextSecondRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true))
-                if (MessageBox.Show("Вы действительно хотите отправить сообщение '"+ TextToSend.Text+"' на номер "+NumbersToSend.Text+"?", "Отправка сообщения", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                if (MessageBox.Show("Вы действительно хотите отправить сообщение '" + TextToSend.Text + "' на номер " + NumbersToSend.Text + "?", "Отправка сообщения", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     SMSSenderClass sms_obj = new SMSSenderClass();
                     string[] numbers = new string[] { NumbersToSend.Text };
@@ -37,7 +38,19 @@ namespace SMSTimetable
                     sms_obj.sms_send(request);
                     MessageBox.Show("Успешная отправка сообщения!");
                 }
-            //if 
+            }
+            else if ((TextFirstRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true))
+            {
+                MessageBox.Show("ВОШЛИ");
+                string OutText = ParseJSONLogicClass.GetTimetableJSON();
+                //SMSSenderClass sms_obj = new SMSSenderClass();
+                //string[] numbers = new string[] { NumbersToSend.Text };
+                //var request = new Request { numbers = numbers, text = OutText, channel = "DIRECT" };
+                //sms_obj.sms_send(request);
+                MessageBox.Show("Успешная отправка сообщения!");
+
+            }
+
 
             GetSMSBalance();
             TextToSend.Text = "";

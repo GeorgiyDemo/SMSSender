@@ -260,6 +260,7 @@
     <Compile Include="DEMKAInputBox.cs" />
     <Compile Include="EmailSenderClass.cs" />
     <Compile Include="JustTokenClass.cs" />
+    <Compile Include="ParseJSONLogicClass.cs" />
     <Compile Include="SenderWindow.xaml.cs">
       <DependentUpon>SenderWindow.xaml</DependentUpon>
     </Compile>
