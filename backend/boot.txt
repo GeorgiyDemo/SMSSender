@@ -1,0 +1,21 @@
+sudo apt update
+sudo apt install tesseract-ocr
+sudo apt install libtesseract-dev
+
+УСТАНАВЛИВАЕМ СЧИТЫВАЛКУ PDF->PNG
+https://gist.github.com/GeorgiyDemo/5dc3518aa531cfba35406540fbfdf953
+
+КАЧАЕМ РУЗЗКИЙ ФАЙЛ
+https://github.com/tesseract-ocr/tessdata/blob/master/rus.traineddata
+И КИДАЕМ ЕГО В 
+/usr/share/tesseract-ocr/4.00/tessdata
+
+apt install -y libsm6 libxext6
+sudo apt-get install python3-pymysql
+sudo ufw allow 500
+pip3.7 install opencv-python flask pdf2image requests pytesseract
+
+
+в /etc/apache2/apache2.conf добавить строчку
+AddDefaultCharset utf-8
+далее /etc/init.d/apache2 restart

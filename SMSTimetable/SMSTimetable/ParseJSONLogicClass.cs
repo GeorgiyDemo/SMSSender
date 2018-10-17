@@ -15,7 +15,7 @@ namespace SMSTimetable
             string json;
             using (WebClient wc = new WebClient())
             {
-                json = wc.DownloadString("http://127.0.0.1:500/api/v1/get_json/");
+                json = wc.DownloadString("http://46.101.17.171:500/api/v1/get_json/");
             }
 
             MessageBox.Show(json);
