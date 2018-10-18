@@ -123,6 +123,10 @@ def get_null_values(timg,image):
                     cv2.drawContours(image,[box],0,(0,0,255),5)
                     cv2.circle(image, center, 5, (0,0,255), 5)
 
+                    smallimg = cv2.resize(image, (0,0), fx=0.45, fy=0.45)
+                    cv2.imshow("OpenCV Image",smallimg)
+                    cv2.waitKey(500)
+
     for nullitem in outchecklist:
         for item in finalmatrix:
             for i in range(len(item)):
@@ -213,6 +217,10 @@ def main():
             cv2.drawContours(image,[box],0,(255,0,255),5)
             cv2.circle(image, center, 5, (255,0,255), 5)
             leftnumber_cell_list.append(box)
+
+            smallimg = cv2.resize(image, (0,0), fx=0.45, fy=0.45)
+            cv2.imshow("OpenCV Image",smallimg)
+            cv2.waitKey(500)
         
         #Заголовки групп
         elif (rect[1][1] < 100) and (rect[1][1] > 20) and (rect[1][0] > 120) and (rect[1][0] > rect[1][1]) and (rect[0][0] > rect[0][1]) and (centers_checker(center,old_center) == False) and (rect[1][0] < 500):
@@ -226,6 +234,10 @@ def main():
             cv2.drawContours(image,[box],0,(0,255,0),5)
             cv2.circle(image, center, 5, (0,255,0), 5)
             group_cell_list.append(box)
+
+            smallimg = cv2.resize(image, (0,0), fx=0.45, fy=0.45)
+            cv2.imshow("OpenCV Image",smallimg)
+            cv2.waitKey(500)
 
     #Едем по контурам
     sorted_by_value = sorted(group_text_association.items(), key=lambda kv: kv[0])
@@ -256,9 +268,9 @@ def main():
             ColumnCheckerList.append(center[0])
             RowCheckerList.append(center[1])
 
-            #smallimg = cv2.resize(image, (0,0), fx=0.4, fy=0.4)
-            #cv2.imshow("MAIN",smallimg)
-            #cv2.waitKey(1)
+            smallimg = cv2.resize(image, (0,0), fx=0.45, fy=0.45)
+            cv2.imshow("OpenCV Image",smallimg)
+            cv2.waitKey(1)
             global_counter +=1
 
     #Считаем кол-во повторений 

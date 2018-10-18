@@ -8,3 +8,5 @@
 Бэкенд:
 * [Docker MySQL server](https://github.com/docker-library/mysql)
 * [Danted Socks5 proxy](https://github.com/Lozy/danted)
+
+![OpenCV](opencv.gif)
