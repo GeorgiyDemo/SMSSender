@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Threading;
 using System.Windows.Input;
 using Newtonsoft.Json.Linq;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace SMSTimetable
 {
@@ -19,11 +21,6 @@ namespace SMSTimetable
             TelegramEnabledForm = TelegramEnabled;
             TG_obj = recieved;
             InitializeComponent();
-        }
-
-        private void TextSecondRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void FinalSendButton_Click(object sender, RoutedEventArgs e)
@@ -58,15 +55,26 @@ namespace SMSTimetable
 
         }
 
-        private void Window_Initialized(object sender, EventArgs e)
+        private async Task AddGroupListBoxAsync()
         {
+            string bufgroupsstr = await DatabaseLogicClass.MySQLGetAsync("SELECT name FROM SMSSender_schema.GroupsTable");
+            string[] groupsarr = bufgroupsstr.Split(',');
+            for (int i = 0; i< groupsarr.Length-1; i++)
+                GroupsComboBox.Items.Add(groupsarr[i]);
+        }
+
+        private async void Window_Initialized(object sender, EventArgs e)
+        {
+
             GetSMSBalance();
+            OpenCloseChooseOptions();
             DispatcherTimer SMSTimer = new DispatcherTimer();
             SMSTimer.Tick += new EventHandler(SMSTimer_Tick);
             SMSTimer.Interval = new TimeSpan(0, 0, 60);
             SMSTimer.Start();
 
             TelegramServerLabel.Content = (TelegramEnabledForm == true) ? "Сервер Telegram: включен": "Сервер Telegram: выключен";
+            await AddGroupListBoxAsync();
 
         }
 
@@ -118,6 +126,22 @@ namespace SMSTimetable
            
         }
 
+        private void OpenCloseChooseOptions()
+        {
+            if ((NumbersSecondRadioButton.IsChecked == true) && (TextFirstRadioButton.IsChecked == true))
+            {
+                GroupLabel.Visibility = Visibility.Visible;
+                GroupsComboBox.Visibility = Visibility.Visible;
+                SaveDatabaseCheckBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                GroupLabel.Visibility = Visibility.Hidden;
+                GroupsComboBox.Visibility = Visibility.Hidden;
+                SaveDatabaseCheckBox.Visibility = Visibility.Hidden;
+            }
+        }
+
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
         }
@@ -128,6 +152,24 @@ namespace SMSTimetable
             UserWindow_obj.Show();
         }
 
+        private void NumbersSecondRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            OpenCloseChooseOptions();
+        }
 
+        private void TextFirstRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            OpenCloseChooseOptions();
+        }
+
+        private void TextSecondRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            OpenCloseChooseOptions();
+        }
+
+        private void NumbersFirstRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            OpenCloseChooseOptions();
+        }
     }
 }

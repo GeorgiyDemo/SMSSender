@@ -5,21 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="SenderWindow" Height="323" Width="519" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized" Closing="Window_Closing">
+        Title="SenderWindow" Height="350" Width="519" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized" Closing="Window_Closing">
     <Grid>
         <TextBox x:Name="TextToSend" HorizontalAlignment="Left" Height="66" Margin="46,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
         <TextBox x:Name="NumbersToSend" HorizontalAlignment="Left" Height="66" Margin="288,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
-        <GroupBox x:Name="Textgroupbox" Header="Текст:" HorizontalAlignment="Left" Height="162" Margin="30,47,0,0" VerticalAlignment="Top" Width="214"/>
-        <RadioButton x:Name="TextSecondRadioButton" Content="Произвольный текст" HorizontalAlignment="Left" Margin="46,94,0,0" VerticalAlignment="Top" GroupName="SMSText"/>
-        <RadioButton x:Name="TextFirstRadioButton" Content="Текст из БД" HorizontalAlignment="Left" Margin="46,74,0,0" VerticalAlignment="Top" GroupName="SMSText"/>
-        <GroupBox x:Name="NumbersGroupBox" Header="Получатели:" HorizontalAlignment="Left" Height="162" Margin="269,47,0,0" VerticalAlignment="Top" Width="214"/>
-        <RadioButton x:Name="NumbersSecondRadioButton" Content="Произвольный получатель" HorizontalAlignment="Left" Margin="288,94,0,0" VerticalAlignment="Top" GroupName="SMSNumber"/>
-        <RadioButton x:Name="NumbersFirstRadioButton" Content="Получатели из БД" HorizontalAlignment="Left" Margin="288,74,0,0" VerticalAlignment="Top" GroupName="SMSNumber"/>
-        <Button x:Name="FinalSendButton" Content="Отправить" HorizontalAlignment="Left" Margin="188,230,0,0" VerticalAlignment="Top" Width="135" Height="29" Click="FinalSendButton_Click"/>
+        <GroupBox x:Name="Textgroupbox" Header="Текст:" HorizontalAlignment="Left" Height="193" Margin="30,47,0,0" VerticalAlignment="Top" Width="214"/>
+        <RadioButton x:Name="TextSecondRadioButton" Content="Произвольный текст" HorizontalAlignment="Left" Margin="46,94,0,0" VerticalAlignment="Top" GroupName="SMSText" Checked="TextSecondRadioButton_Checked"/>
+        <RadioButton x:Name="TextFirstRadioButton" Content="Текст из БД" HorizontalAlignment="Left" Margin="46,74,0,0" VerticalAlignment="Top" GroupName="SMSText" Checked="TextFirstRadioButton_Checked"/>
+        <GroupBox x:Name="NumbersGroupBox" Header="Получатели:" HorizontalAlignment="Left" Height="193" Margin="269,47,0,0" VerticalAlignment="Top" Width="214">
+            <ComboBox x:Name="GroupsComboBox" HorizontalAlignment="Left" Margin="96,128,0,0" VerticalAlignment="Top" Width="96"/>
+        </GroupBox>
+        <RadioButton x:Name="NumbersSecondRadioButton" Content="Произвольный получатель" HorizontalAlignment="Left" Margin="288,94,0,0" VerticalAlignment="Top" GroupName="SMSNumber" Checked="NumbersSecondRadioButton_Checked"/>
+        <RadioButton x:Name="NumbersFirstRadioButton" Content="Получатели из БД" HorizontalAlignment="Left" Margin="288,74,0,0" VerticalAlignment="Top" GroupName="SMSNumber" Checked="NumbersFirstRadioButton_Checked"/>
+        <Button x:Name="FinalSendButton" Content="Отправить" HorizontalAlignment="Left" Margin="188,258,0,0" VerticalAlignment="Top" Width="135" Height="29" Click="FinalSendButton_Click"/>
         <Label x:Name="BalanceLabel" Content="Текущий баланс: ₽" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top"/>
         <Button x:Name="SMSStatusButton" Content="Сообщения" HorizontalAlignment="Left" Margin="414,6,0,0" VerticalAlignment="Top" Width="87" Height="26" Click="SMSStatusButton_Click"/>
         <Button x:Name="UsersButton" Content="Пользователи" HorizontalAlignment="Left" Margin="319,6,0,0" VerticalAlignment="Top" Width="87" Height="26" Click="UsersButton_Click"/>
-        <Label x:Name="TelegramServerLabel" MouseLeftButtonUp="TelegramServerLabel_MouseLeftButtonUp" Content="Сервер Telegram: включен" HorizontalAlignment="Left" Margin="359,259,0,0" VerticalAlignment="Top" FontSize="10"/>
+        <Label x:Name="TelegramServerLabel" MouseLeftButtonUp="TelegramServerLabel_MouseLeftButtonUp" Content="Сервер Telegram: включен" HorizontalAlignment="Left" Margin="359,287,0,0" VerticalAlignment="Top" FontSize="10"/>
+        <Label x:Name="GroupLabel" Content="Группа:" HorizontalAlignment="Left" Margin="319,185,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="SaveDatabaseCheckBox" Content="Сохранить в БД" HorizontalAlignment="Left" Margin="361,216,0,0" VerticalAlignment="Top" IsChecked="True"/>
 
     </Grid>
 </Window>
