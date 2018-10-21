@@ -23,7 +23,7 @@ namespace SMSTimetable
             InitializeComponent();
         }
 
-        private void FinalSendButton_Click(object sender, RoutedEventArgs e)
+        private async void FinalSendButton_Click(object sender, RoutedEventArgs e)
         {
             if ((TextSecondRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true))
             {
@@ -32,22 +32,66 @@ namespace SMSTimetable
                     SMSSenderClass sms_obj = new SMSSenderClass();
                     string[] numbers = new string[] { NumbersToSend.Text };
                     var request = new Request { numbers = numbers, text = TextToSend.Text, channel = "DIRECT" };
-                    sms_obj.sms_send(request);
-                    MessageBox.Show("Успешная отправка сообщения!");
+                    if (sms_obj.sms_send(request) != "false")
+                        MessageBox.Show("Успешная отправка сообщения");
                 }
             }
-            else if ((TextFirstRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true))
+
+            else if ((TextSecondRadioButton.IsChecked == true) && (NumbersFirstRadioButton.IsChecked == true))
             {
-                MessageBox.Show("ВОШЛИ");
-                string OutText = ParseJSONLogicClass.GetTimetableJSON();
-                //SMSSenderClass sms_obj = new SMSSenderClass();
-                //string[] numbers = new string[] { NumbersToSend.Text };
-                //var request = new Request { numbers = numbers, text = OutText, channel = "DIRECT" };
-                //sms_obj.sms_send(request);
-                MessageBox.Show("Успешная отправка сообщения!");
+                SMSSenderClass sms_obj = new SMSSenderClass();
+                string bufnumberstr = await DatabaseLogicClass.MySQLGetAsync("SELECT phone FROM Phones");
+                string[] numbers = bufnumberstr.Split(',');
+                Array.Resize(ref numbers, numbers.Length - 1);
+                var request = new Request { numbers = numbers, text = TextToSend.Text, channel = "DIRECT" };
+                if (sms_obj.sms_send(request) != "false")
+                    MessageBox.Show("Успешная отправка сообщения всем получателям из БД!");
+            }
+
+            else if ((TextFirstRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true) && (GroupsComboBox.SelectedIndex != -1))
+            {
+                if (SaveDatabaseCheckBox.IsChecked == true)
+                    await DatabaseLogicClass.MySQLExecuteAsync("INSERT INTO Phones(phone,groups) VALUES (\"" + NumbersToSend.Text + "\",\""+ GroupsComboBox.SelectedValue.ToString() + "\");");
+
+                if (SendSMSCheckBox.IsChecked == true)
+                {
+                    ParseJSONLogicClass thisjson_obj = new ParseJSONLogicClass();
+                    thisjson_obj.GetTimetableJSON();
+                    string selectedgroup = GroupsComboBox.SelectedValue.ToString();
+                    string thisgroupresult = thisjson_obj.GetTimetableByGroup(selectedgroup);
+
+                    SMSSenderClass sms_obj = new SMSSenderClass();
+                    if (thisgroupresult  == "false")
+                    {
+                        if (MessageBox.Show("Нет изменений в расписании для группы "+ selectedgroup+"\nХотите отправить оповещение об этом?", "Нет изменений", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        {
+                            string[] numbers = new string[] { NumbersToSend.Text };
+                            var request = new Request { numbers = numbers, text = "Нет изменений в расписании группы "+ selectedgroup, channel = "DIRECT" };
+                            if (sms_obj.sms_send(request) != "false")
+                                MessageBox.Show("Успешная отправка сообщения");
+                        }
+                    }
+                    else
+                    {
+                            string[] numbers = new string[] { NumbersToSend.Text };
+                            var request = new Request { numbers = numbers, text = thisgroupresult, channel = "DIRECT" };
+                            if (sms_obj.sms_send(request) != "false")
+                                MessageBox.Show("Успешная отправка сообщения");
+                    }
+                    
+                }
+                
 
             }
 
+            else if ((TextFirstRadioButton.IsChecked == true) && (NumbersFirstRadioButton.IsChecked == true))
+            {
+
+                /*
+                 * Тут берем json по группе, из бд берем группу и номер телефона,
+                 * из json вытягиваем расписание по номеру группы и отсылаем все это дело по sms
+                 */
+            }
 
             GetSMSBalance();
             TextToSend.Text = "";
@@ -106,9 +150,8 @@ namespace SMSTimetable
                 DatabaseLogicClass.SQLiteExecute("UPDATE servicetable SET boolvalue = 0 WHERE service='TelegramService'");
                 TelegramServerLabel.Content = "Сервер Telegram: выключен";
                 TG_obj.TelegramInit(2);
-
-
             }
+
             else
             {
                 DatabaseLogicClass.SQLiteExecute("UPDATE servicetable SET boolvalue = 1 WHERE service='TelegramService'");
@@ -133,12 +176,14 @@ namespace SMSTimetable
                 GroupLabel.Visibility = Visibility.Visible;
                 GroupsComboBox.Visibility = Visibility.Visible;
                 SaveDatabaseCheckBox.Visibility = Visibility.Visible;
+                SendSMSCheckBox.Visibility = Visibility.Visible;
             }
             else
             {
                 GroupLabel.Visibility = Visibility.Hidden;
                 GroupsComboBox.Visibility = Visibility.Hidden;
                 SaveDatabaseCheckBox.Visibility = Visibility.Hidden;
+                SendSMSCheckBox.Visibility = Visibility.Hidden;
             }
         }
 

@@ -354,11 +354,20 @@ namespace SMSTimetable
 
             WebRequest req = WebRequest.Create(url + "?" + Data);
             req.Headers.Add("Authorization", "Basic " + basic_auth_data);
-            WebResponse resp = req.GetResponse();
-            Stream stream = resp.GetResponseStream();
-            StreamReader sr = new StreamReader(stream);
-            string Out = sr.ReadToEnd();
-            sr.Close();
+            string Out;
+            try
+            {
+                WebResponse resp = req.GetResponse();
+                Stream stream = resp.GetResponseStream();
+                StreamReader sr = new StreamReader(stream);
+                Out = sr.ReadToEnd();
+                sr.Close();
+            }
+            catch (System.Net.WebException)
+            {
+                MessageBox.Show("Ошибка отправки сообщения через смс, возможно не хватает денег");
+                Out = "false";
+            }
 
             return Out;
 
