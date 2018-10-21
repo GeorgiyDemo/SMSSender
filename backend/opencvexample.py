@@ -105,8 +105,6 @@ def get_null_values(timg,image):
 
         if (check_res(firstflag,old_rect,rect) == True) and (AreaChecker(rect) == True) and (centers_checker(center,old_center) == False) and (titlechecker(box) == True):
             
-            #print(box_store_list)
-            #print(box)
             for item in box_store_list:
                 locale_counter = 0 
                 for p in item:
@@ -138,7 +136,7 @@ def get_null_values(timg,image):
         for i in range(len(item)):
             if item[i] == (0,0):
                 item.remove(item[i])
-                item.insert(i,0)
+                item.insert(i,"-")
             else:
                 bufitem = item[i]
                 item.remove(bufitem)

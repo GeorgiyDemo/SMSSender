@@ -16,7 +16,7 @@ DB = "DB"  #
 #Функция для взаимодействия со всеми элементами БД
 def MySQLFetchAll(SQLString):
 
-    connection = pymysql.connect(host=HOST,user=USER,password=PASSWORD,db=DB,cursorclass=pymysql.cursors.DictCursor)
+    connection = pymysql.connect(host=HOST,user=USER,password=PASSWORD,db=DB,cursorclass=pymysql.cursors.DictCursor,charset="utf8")
     try:
         with connection.cursor() as cursor:
             cursor.execute(SQLString)
@@ -25,7 +25,7 @@ def MySQLFetchAll(SQLString):
         connection.close()
     return result
 
-def ParseKIPTT():
+def ParseKIPTT(pdfid):
     
     leftnumber_cell_list = []
     group_cell_list = []
@@ -38,7 +38,7 @@ def ParseKIPTT():
     #Функция для записи в БД
     def MySQLWriter(insertjson):
         
-        cnx = pymysql.connect(host=HOST,user=USER,password=PASSWORD,db=DB,cursorclass=pymysql.cursors.DictCursor)
+        cnx = pymysql.connect(host=HOST,user=USER,password=PASSWORD,db=DB,cursorclass=pymysql.cursors.DictCursor,charset="utf8")
         cur = cnx.cursor()
         insert = "UPDATE Outtable SET localvalue = %s WHERE shortname=\"outjson\";"
         try:
@@ -48,8 +48,7 @@ def ParseKIPTT():
 	        cnx.close()
 
     def get_document():
-
-        url = 'http://46.101.17.171/PDF/8.pdf'
+        url = "http://46.101.17.171/PDF/"+pdfid+".pdf"
         r = requests.get(url, stream=True)
         with open('PDF.pdf', 'wb') as fd:
             for chunk in r.iter_content(2000):
@@ -168,7 +167,7 @@ def ParseKIPTT():
             for i in range(len(item)):
                 if item[i] == (0,0):
                     item.remove(item[i])
-                    item.insert(i,0)
+                    item.insert(i,"-")
                 else:
                     bufitem = item[i]
                     item.remove(bufitem)
@@ -322,7 +321,8 @@ def ParseKIPTT():
 @app.route('/api/v1/parse_json/', methods=['GET'])
 def parse_json():
     try:
-        threading.Thread(target=ParseKIPTT).start()
+        pdf_id = request.args.get('pdfid', '')
+        threading.Thread(target=ParseKIPTT, args=(pdf_id)).start()
         return "True"
     except:
         return "False"
