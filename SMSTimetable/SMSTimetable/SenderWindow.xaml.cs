@@ -200,20 +200,63 @@ namespace SMSTimetable
 
         private void OpenCloseChooseOptions()
         {
-            if ((NumbersSecondRadioButton.IsChecked == true) && (TextFirstRadioButton.IsChecked == true))
+
+            if ((NumbersSecondRadioButton.IsChecked == true) && (TextFirstRadioButton.IsChecked == true) && (TextSecondRadioButton.IsChecked == false) && NumbersFirstRadioButton.IsChecked == false)
             {
+
+                NumbersGroupBox.Height = 225;
+                Textgroupbox.Height = 97;
+                NumbersToSend.Visibility = Visibility.Visible;
+                TextToSend.Visibility = Visibility.Hidden;
                 GroupLabel.Visibility = Visibility.Visible;
                 GroupsComboBox.Visibility = Visibility.Visible;
                 SaveDatabaseCheckBox.Visibility = Visibility.Visible;
                 SendSMSCheckBox.Visibility = Visibility.Visible;
+
             }
-            else
+
+            if ((NumbersSecondRadioButton.IsChecked == false) && (TextFirstRadioButton.IsChecked == true) && (TextSecondRadioButton.IsChecked == false) && NumbersFirstRadioButton.IsChecked == true)
             {
+              
                 GroupLabel.Visibility = Visibility.Hidden;
                 GroupsComboBox.Visibility = Visibility.Hidden;
                 SaveDatabaseCheckBox.Visibility = Visibility.Hidden;
                 SendSMSCheckBox.Visibility = Visibility.Hidden;
+                Textgroupbox.Height = 97;
+                NumbersGroupBox.Height = 97;
+                TextToSend.Visibility = Visibility.Hidden;
+                NumbersToSend.Visibility = Visibility.Hidden;
+ 
             }
+         
+            if ((NumbersSecondRadioButton.IsChecked == false) && (TextFirstRadioButton.IsChecked == false) && (TextSecondRadioButton.IsChecked == true) && NumbersFirstRadioButton.IsChecked == true)
+            {
+
+                GroupLabel.Visibility = Visibility.Hidden;
+                GroupsComboBox.Visibility = Visibility.Hidden;
+                SaveDatabaseCheckBox.Visibility = Visibility.Hidden;
+                SendSMSCheckBox.Visibility = Visibility.Hidden;
+                NumbersGroupBox.Height = 97;
+                Textgroupbox.Height = 225;
+                NumbersToSend.Visibility = Visibility.Hidden;
+                TextToSend.Visibility = Visibility.Visible;
+
+            }
+
+            if ((NumbersSecondRadioButton.IsChecked == true) && (TextFirstRadioButton.IsChecked == false) && (TextSecondRadioButton.IsChecked == true) && NumbersFirstRadioButton.IsChecked == false)
+            {
+
+                GroupLabel.Visibility = Visibility.Hidden;
+                GroupsComboBox.Visibility = Visibility.Hidden;
+                SaveDatabaseCheckBox.Visibility = Visibility.Hidden;
+                SendSMSCheckBox.Visibility = Visibility.Hidden;
+                NumbersGroupBox.Height = 225;
+                Textgroupbox.Height = 225;
+                NumbersToSend.Visibility = Visibility.Visible;
+                TextToSend.Visibility = Visibility.Visible;
+
+            }
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
