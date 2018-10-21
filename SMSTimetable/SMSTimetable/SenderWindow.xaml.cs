@@ -86,11 +86,40 @@ namespace SMSTimetable
 
             else if ((TextFirstRadioButton.IsChecked == true) && (NumbersFirstRadioButton.IsChecked == true))
             {
-
                 /*
                  * Тут берем json по группе, из бд берем группу и номер телефона,
                  * из json вытягиваем расписание по номеру группы и отсылаем все это дело по sms
                  */
+
+                ParseJSONLogicClass mainjson_obj = new ParseJSONLogicClass();
+                mainjson_obj.GetTimetableJSON();
+
+                string phonesbufresult = await DatabaseLogicClass.MySQLGetAsync("SELECT phone FROM Phones");
+                string groupsbufresult = await DatabaseLogicClass.MySQLGetAsync("SELECT groups FROM Phones");
+
+                string[] phonesarr = phonesbufresult.Split(',');
+                Array.Resize(ref phonesarr, phonesarr.Length - 1);
+
+                string[] groupsarr = groupsbufresult.Split(',');
+                Array.Resize(ref groupsarr, groupsarr.Length - 1);
+
+                int globalcounter = 0;
+                for (int i = 0; i < phonesarr.Length; i++) {
+                    string thisgroupresult = mainjson_obj.GetTimetableByGroup(groupsarr[i]);
+                    if (thisgroupresult != "false")
+                    {
+                        SMSSenderClass sms_obj = new SMSSenderClass();
+
+                        string[] numbers = new string[] { phonesarr[i] };
+                        var request = new Request { numbers = numbers, text = thisgroupresult, channel = "DIRECT" };
+                        if (sms_obj.sms_send(request) != "false")
+                            globalcounter++;
+                        
+                    }
+
+                }
+                MessageBox.Show("Отправлено " + globalcounter.ToString() + " сообщений из " + phonesarr.Length.ToString());
+
             }
 
             GetSMSBalance();

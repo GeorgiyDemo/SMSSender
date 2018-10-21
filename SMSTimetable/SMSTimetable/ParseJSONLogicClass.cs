@@ -18,7 +18,6 @@ namespace SMSTimetable
         public string GetTimetableByGroup(string groupstr)
         {
             json = json.Replace("—", "-");
-            MessageBox.Show(json);
             string outstr = "Расписание "+groupstr+"\n";
             JToken itemtoken;
             JObject.Parse(json).TryGetValue(groupstr, out itemtoken);
