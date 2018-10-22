@@ -23,32 +23,53 @@ namespace SMSTimetable
     public partial class MainWindow : Window
     {
         bool TelegramEnabled = false;
+        bool AutoLoginEnabled = false;
         TelegramClass TG_obj;
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private bool CheckEmailLogin(string EmailString, string PasswordString)
+        private bool CheckEmailLogin(string EmailString, string PasswordString, bool AutoLogin)
         {
-            if (DatabaseLogicClass.MySQLGet("SELECT Password FROM Users WHERE Email='"+CryptoClass.MD5Hash(EmailString) +"'") == CryptoClass.MD5Hash(PasswordString))
+            string OutPasswordString;
+            if (AutoLogin == true)
+                OutPasswordString = PasswordString;
+            else
+                OutPasswordString = CryptoClass.MD5Hash(PasswordString);
+             
+            if (DatabaseLogicClass.MySQLGet("SELECT Password FROM Users WHERE Email='"+CryptoClass.MD5Hash(EmailString) +"'") == OutPasswordString)
                 return true;
             return false;
         }
 
-        private bool CheckPhoneLogin(string PhoneString, string PasswordString)
+        private bool CheckPhoneLogin(string PhoneString, string PasswordString, bool AutoLogin)
         {
-            if (DatabaseLogicClass.MySQLGet("SELECT Password FROM Users WHERE Phone='" + CryptoClass.MD5Hash(PhoneString) + "'") == CryptoClass.MD5Hash(PasswordString))
+            string OutPasswordString;
+            if (AutoLogin == true)
+                OutPasswordString = PasswordString;
+            else
+                OutPasswordString = CryptoClass.MD5Hash(PasswordString);
+
+            if (DatabaseLogicClass.MySQLGet("SELECT Password FROM Users WHERE Phone='" + CryptoClass.MD5Hash(PhoneString) + "'") == OutPasswordString)
                 return true;
             return false;
         }
 
         private void EnterButton_Click(object sender, RoutedEventArgs e)
         {
+
             if ((LoginTextBox.Text != "") && (PasswordBox.Password != ""))
             {
-                if ((CheckPhoneLogin(LoginTextBox.Text, PasswordBox.Password) == true) || (CheckEmailLogin(LoginTextBox.Text, PasswordBox.Password) == true))
+                if ((CheckPhoneLogin(LoginTextBox.Text, PasswordBox.Password, AutoLoginEnabled) == true) || (CheckEmailLogin(LoginTextBox.Text, PasswordBox.Password, AutoLoginEnabled) == true))
                 {
+                     
+                    //Проверка на Checkbox
+                    if (SaveLoginCheckBox.IsChecked == true)
+                        DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 1, login = '"+LoginTextBox.Text+"', pass = '"+ CryptoClass.MD5Hash(PasswordBox.Password) + "' WHERE id = 1");
+                    else
+                        DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 0, login = '-', pass = '-' WHERE id = 1");
+                    
                     DatabaseLogicClass.SQLiteExecute("UPDATE logins SET authenticated = 0");
                     DatabaseLogicClass.SQLiteExecute("INSERT INTO logins(login,authenticated) VALUES ('" + CryptoClass.MD5Hash(LoginTextBox.Text) + "',1)");
                     SenderWindow SenderWindow_obj = new SenderWindow(TG_obj, TelegramEnabled);
@@ -72,6 +93,14 @@ namespace SMSTimetable
             {
                 TelegramEnabled = true;
                 TG_obj.TelegramInit(1);
+            }
+
+            if (DatabaseLogicClass.SQLiteGet("SELECT savedbool FROM savedlogin WHERE id=1") == "1")
+            {
+                LoginTextBox.Text = DatabaseLogicClass.SQLiteGet("SELECT login FROM savedlogin WHERE id=1");
+                PasswordBox.Password = DatabaseLogicClass.SQLiteGet("SELECT pass FROM savedlogin WHERE id=1");
+                AutoLoginEnabled = true;
+                SaveLoginCheckBox.IsChecked = true;
             }
 
         }

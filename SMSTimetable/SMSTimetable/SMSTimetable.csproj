@@ -292,7 +292,6 @@
       <DependentUpon>UserManagmentWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ValidatorClass.cs" />
-    <Compile Include="VKClass.cs" />
     <Page Include="ConfirmAllWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
