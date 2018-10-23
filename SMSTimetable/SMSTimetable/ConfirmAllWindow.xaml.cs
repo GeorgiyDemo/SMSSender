@@ -19,8 +19,8 @@ namespace SMSTimetable
     /// </summary>
     public partial class ConfirmAllWindow : Window
     {
-       
-        private static string EmailString, SMSString, EmailCode, SMSCode, UserPassword;
+
+        private static string EmailString, SMSString, EmailCode, SMSCode, UserPassword, salt;
         private static bool ValidSMSCode, ValidEmailCode = false;
 
         private async void FinalConfirmButton_Click(object sender, RoutedEventArgs e)
@@ -74,11 +74,12 @@ namespace SMSTimetable
                 FinalConfirmButton.IsEnabled = false;
         }
 
-        public ConfirmAllWindow(string Email, string SMS, string UPassword) 
+        public ConfirmAllWindow(string Email, string SMS, string UPassword, string inputsalt) 
         {
             EmailString = Email;
             SMSString = SMS;
             UserPassword = UPassword;
+            salt = inputsalt;
             InitializeComponent();
         }
 
@@ -88,8 +89,8 @@ namespace SMSTimetable
             EmailCodeLabel.Content = "Введите код, отправленный на e-mail " + EmailString;
             PhoneCodeLabel.Content = "Введите код, отправленный на " + SMSString;
 
-            EmailCode = DatabaseLogicClass.SQLiteGet("SELECT code FROM codes WHERE code_source='"+CryptoClass.MD5Hash(EmailString)+"'");
-            SMSCode = DatabaseLogicClass.SQLiteGet("SELECT code FROM codes WHERE code_source='" + CryptoClass.MD5Hash(SMSString)+"'");
+            EmailCode = DatabaseLogicClass.SQLiteGet("SELECT code FROM codes WHERE code_source='"+CryptoClass.MD5Hash(EmailString+salt) +"'");
+            SMSCode = DatabaseLogicClass.SQLiteGet("SELECT code FROM codes WHERE code_source='" + CryptoClass.MD5Hash(SMSString+salt) +"'");
 
         }
     }

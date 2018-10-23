@@ -17,28 +17,29 @@ namespace SMSTimetable
           
             if ((ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true))
             {
+                string salt = CryptoClass.GetRandomNumber();
                 //Отправка Email
                 string EmailCode = CryptoClass.GetRandomNumber();
-                DatabaseLogicClass.SQLiteExecute("INSERT INTO codes(code_source,code) VALUES ('" + CryptoClass.MD5Hash(EmalTextBox.Text) + "','"+CryptoClass.MD5Hash(EmailCode)+"')");
+                DatabaseLogicClass.SQLiteExecute("INSERT INTO codes(code_source,code) VALUES ('" + CryptoClass.MD5Hash(EmalTextBox.Text+salt) + "','"+CryptoClass.MD5Hash(EmailCode)+"')");
                 
-                //await EmailSenderClass.SendEmailAsync("Ваш код для подтверждения e-mail: " + EmailCode,EmalTextBox.Text);
+                await EmailSenderClass.SendEmailAsync("Ваш код для подтверждения e-mail: " + EmailCode,EmalTextBox.Text);
                 ////////
-                MessageBox.Show("Email code: " + EmailCode);
+                //MessageBox.Show("Email code: " + EmailCode);
                 ////////
 
                 //Отпрвка SMS
                 string SMSCode = CryptoClass.GetRandomNumber();
-                DatabaseLogicClass.SQLiteExecute("INSERT INTO codes(code_source,code) VALUES ('" + CryptoClass.MD5Hash(PhoneTextBox.Text) + "','" + CryptoClass.MD5Hash(SMSCode) + "')");
-                //SMSSenderClass ConfirmSMS_obj = new SMSSenderClass();
-                //string[] numbers = new string[] { PhoneTextBox.Text };
-                //var request = new Request { numbers = numbers, text = SMSCode, channel = "DIRECT" };
+                DatabaseLogicClass.SQLiteExecute("INSERT INTO codes(code_source,code) VALUES ('" + CryptoClass.MD5Hash(PhoneTextBox.Text+salt) + "','" + CryptoClass.MD5Hash(SMSCode) + "')");
+                SMSSenderClass ConfirmSMS_obj = new SMSSenderClass();
+                string[] numbers = new string[] { PhoneTextBox.Text };
+                var request = new Request { numbers = numbers, text = SMSCode, channel = "DIRECT" };
 
-                //ConfirmSMS_obj.sms_send(request);
+                ConfirmSMS_obj.sms_send(request);
                 ////////////
-                MessageBox.Show("Тук тук халявная SMS: "+SMSCode);
+                //MessageBox.Show("Тук тук халявная SMS: "+SMSCode);
                 ////////////
 
-                ConfirmAllWindow ConfirmWindow_obj = new ConfirmAllWindow(EmalTextBox.Text,PhoneTextBox.Text, CryptoClass.MD5Hash(PasswordBox.Password));
+                ConfirmAllWindow ConfirmWindow_obj = new ConfirmAllWindow(EmalTextBox.Text,PhoneTextBox.Text, CryptoClass.MD5Hash(PasswordBox.Password), salt);
                 ConfirmWindow_obj.Show();
                 Close();
             }
