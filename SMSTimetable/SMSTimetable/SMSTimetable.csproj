@@ -275,6 +275,7 @@
       <DependentUpon>SenderWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="SMSSenderClass.cs" />
+    <Compile Include="SMSStatusClass.cs" />
     <Compile Include="SMSStatusWindow.xaml.cs">
       <DependentUpon>SMSStatusWindow.xaml</DependentUpon>
     </Compile>

@@ -68,9 +68,10 @@ namespace SMSTimetable
                     DatabaseLogicClass.SQLiteExecute("UPDATE logins SET authenticated = 0");
                     DatabaseLogicClass.SQLiteExecute("INSERT INTO logins(login,authenticated) VALUES ('" + CryptoClass.MD5Hash(LoginTextBox.Text) + "',1)");
                     SenderWindow SenderWindow_obj = new SenderWindow(TG_obj, TelegramEnabled);
-                    if (SaveLoginCheckBox.IsChecked == true)
+
+                    if ((SaveLoginCheckBox.IsChecked == true) && (ThisAutoLoginEnabled == false))
                         DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 1, login = '" + LoginTextBox.Text + "', pass = '" + CryptoClass.MD5Hash(PasswordBox.Password) + "' WHERE id = 1");
-                    else
+                    else if (SaveLoginCheckBox.IsChecked == false)
                         DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 0, login = '-', pass = '-' WHERE id = 1");
 
                     SenderWindow_obj.Show();
