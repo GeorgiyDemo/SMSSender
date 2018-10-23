@@ -30,9 +30,32 @@ namespace SMSTimetable
             Close();
         }
 
-        private void PhoneTextBox_TextChanged(object sender, TextChangedEventArgs e)
+
+        private void EmalTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+            if (CryptoClass.MD5Hash(EmalTextBox.Text) == EmailCode)
+            {
+                EmailComments.Content = "-> верный код";
+                ValidEmailCode = true;
+            }
+            else
+            {
+                EmailComments.Content = "-> неверный код";
+                ValidEmailCode = false;
+            }
+
+            if ((ValidEmailCode == true) && (ValidSMSCode == true))
+                FinalConfirmButton.IsEnabled = true;
+            else
+                FinalConfirmButton.IsEnabled = false;
+
+        }
+
+        private void PhoneTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            MessageBox.Show(CryptoClass.MD5Hash(PhoneTextBox.Text));
+            MessageBox.Show("SMSCODE FROM BD:" + SMSCode);
             if (CryptoClass.MD5Hash(PhoneTextBox.Text) == SMSCode)
             {
                 PhoneComments.Content = "-> верный код";
@@ -67,27 +90,6 @@ namespace SMSTimetable
 
             EmailCode = DatabaseLogicClass.SQLiteGet("SELECT code FROM codes WHERE code_source='"+CryptoClass.MD5Hash(EmailString)+"'");
             SMSCode = DatabaseLogicClass.SQLiteGet("SELECT code FROM codes WHERE code_source='" + CryptoClass.MD5Hash(SMSString)+"'");
-
-        }
-
-        private void EmalTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-  
-            if (CryptoClass.MD5Hash(EmalTextBox.Text) == EmailCode)
-            {
-                EmailComments.Content = "-> верный код";
-                ValidEmailCode = true;
-            }
-            else
-            {
-                EmailComments.Content = "-> неверный код";
-                ValidEmailCode = false;
-            }
-
-            if ((ValidEmailCode == true) && (ValidSMSCode == true))
-                FinalConfirmButton.IsEnabled = true;
-            else
-                FinalConfirmButton.IsEnabled = false;
 
         }
     }

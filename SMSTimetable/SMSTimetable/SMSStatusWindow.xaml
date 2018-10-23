@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="SMSStatusWindow" Height="450" Width="800" Initialized="Window_Initialized">
+        Title="Информация об SMS-сообщениях" Height="399" Width="684.5" Initialized="Window_Initialized" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Button x:Name="ExitButton" Content="&lt;=" HorizontalAlignment="Left" Margin="95,338,0,0" VerticalAlignment="Top" Width="157" Height="51" Click="ExitButton_Click"/>
-        <DataGrid x:Name="SMSStatusDataGrid" HorizontalAlignment="Left" Height="249" Margin="10,37,0,0" VerticalAlignment="Top" Width="664"/>
+        <Button x:Name="ExitButton" Content="&lt;=" HorizontalAlignment="Left" Margin="10,302,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="ExitButton_Click"/>
+        <DataGrid x:Name="SMSStatusDataGrid" HorizontalAlignment="Left" Height="273" Margin="10,10,0,0" VerticalAlignment="Top" Width="664"/>
 
     </Grid>
 </Window>
