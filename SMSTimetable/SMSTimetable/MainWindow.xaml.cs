@@ -23,17 +23,18 @@ namespace SMSTimetable
     public partial class MainWindow : Window
     {
         bool TelegramEnabled = false;
-        bool AutoLoginEnabled = false;
+        bool ThisAutoLoginEnabled = false;
         TelegramClass TG_obj;
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private bool CheckEmailLogin(string EmailString, string PasswordString, bool AutoLogin)
+        private bool CheckEmailLogin(string EmailString, string PasswordString, bool Login)
         {
+         
             string OutPasswordString;
-            if (AutoLogin == true)
+            if (Login == true)
                 OutPasswordString = PasswordString;
             else
                 OutPasswordString = CryptoClass.MD5Hash(PasswordString);
@@ -43,10 +44,10 @@ namespace SMSTimetable
             return false;
         }
 
-        private bool CheckPhoneLogin(string PhoneString, string PasswordString, bool AutoLogin)
+        private bool CheckPhoneLogin(string PhoneString, string PasswordString, bool Login)
         {
             string OutPasswordString;
-            if (AutoLogin == true)
+            if (Login == true)
                 OutPasswordString = PasswordString;
             else
                 OutPasswordString = CryptoClass.MD5Hash(PasswordString);
@@ -61,24 +62,25 @@ namespace SMSTimetable
 
             if ((LoginTextBox.Text != "") && (PasswordBox.Password != ""))
             {
-                if ((CheckPhoneLogin(LoginTextBox.Text, PasswordBox.Password, AutoLoginEnabled) == true) || (CheckEmailLogin(LoginTextBox.Text, PasswordBox.Password, AutoLoginEnabled) == true))
+                if ((CheckPhoneLogin(LoginTextBox.Text, PasswordBox.Password, ThisAutoLoginEnabled) == true) || (CheckEmailLogin(LoginTextBox.Text, PasswordBox.Password, ThisAutoLoginEnabled) == true))
                 {
-                     
-                    //Проверка на Checkbox
-                    if (SaveLoginCheckBox.IsChecked == true)
-                        DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 1, login = '"+LoginTextBox.Text+"', pass = '"+ CryptoClass.MD5Hash(PasswordBox.Password) + "' WHERE id = 1");
-                    else
-                        DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 0, login = '-', pass = '-' WHERE id = 1");
-                    
+   
                     DatabaseLogicClass.SQLiteExecute("UPDATE logins SET authenticated = 0");
                     DatabaseLogicClass.SQLiteExecute("INSERT INTO logins(login,authenticated) VALUES ('" + CryptoClass.MD5Hash(LoginTextBox.Text) + "',1)");
                     SenderWindow SenderWindow_obj = new SenderWindow(TG_obj, TelegramEnabled);
+                    if (SaveLoginCheckBox.IsChecked == true)
+                        DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 1, login = '" + LoginTextBox.Text + "', pass = '" + CryptoClass.MD5Hash(PasswordBox.Password) + "' WHERE id = 1");
+                    else
+                        DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 0, login = '-', pass = '-' WHERE id = 1");
+
                     SenderWindow_obj.Show();
                     Close();
                 }
                 else
                 {
                     MessageBox.Show("Ошибка аутентификации");
+                    DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 0, login = '-', pass = '-' WHERE id = 1");
+                    ThisAutoLoginEnabled = false;
                     LoginTextBox.Text = "";
                     PasswordBox.Password = "";
                 }
@@ -99,10 +101,11 @@ namespace SMSTimetable
             {
                 LoginTextBox.Text = DatabaseLogicClass.SQLiteGet("SELECT login FROM savedlogin WHERE id=1");
                 PasswordBox.Password = DatabaseLogicClass.SQLiteGet("SELECT pass FROM savedlogin WHERE id=1");
-                AutoLoginEnabled = true;
+                ThisAutoLoginEnabled = true;
                 SaveLoginCheckBox.IsChecked = true;
             }
 
         }
+
     }
 }

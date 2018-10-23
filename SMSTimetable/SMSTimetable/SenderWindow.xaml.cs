@@ -288,5 +288,11 @@ namespace SMSTimetable
         {
             OpenCloseChooseOptions();
         }
+
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 0, login = '-', pass = '-' WHERE id = 1");
+            Close();
+        }
     }
 }
