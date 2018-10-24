@@ -292,6 +292,9 @@
     <Compile Include="UserManagmentWindow.xaml.cs">
       <DependentUpon>UserManagmentWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserRemoveWindow.xaml.cs">
+      <DependentUpon>UserRemoveWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValidatorClass.cs" />
     <Page Include="ConfirmAllWindow.xaml">
       <SubType>Designer</SubType>
@@ -330,6 +333,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserManagmentWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserRemoveWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -37,5 +37,12 @@ namespace SMSTimetable
             UserAdd_obj.Show();
             Close();
         }
+
+        private void RemoveUserButton_Click(object sender, RoutedEventArgs e)
+        {
+            UserRemoveWindow UserRemove_obj = new UserRemoveWindow();
+            UserRemove_obj.Show();
+            Close();
+        }
     }
 }
