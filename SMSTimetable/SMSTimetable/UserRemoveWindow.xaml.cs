@@ -19,24 +19,60 @@ namespace SMSTimetable
     /// </summary>
     public partial class UserRemoveWindow : Window
     {
+        bool ValidLogin, ValidMasterPassword = false;
         public UserRemoveWindow()
         {
             InitializeComponent();
         }
 
-        private void LoginTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private static async Task<bool> CheckUserLogin(string InputLogin)
         {
+            string ThisResult = await DatabaseLogicClass.MySQLGetAsync("SELECT Password FROM Users WHERE Email='" + CryptoClass.MD5Hash(InputLogin) + "' OR Phone='"+ CryptoClass.MD5Hash(InputLogin) + "'");
+            if (ThisResult != "")
+                return true;
+            return false;
+        }
 
+        private async void LoginTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if ((ValidatorClass.IsPhoneNumber(LoginTextBox.Text) == true) || (ValidatorClass.IsValidEmail(LoginTextBox.Text) == true))
+            {
+                bool FlagResult = await CheckUserLogin(LoginTextBox.Text);
+                if (FlagResult == true)
+                {
+                    Logincomments.Content = "-> валидный";
+                    ValidLogin = true;
+                }
+                else
+                {
+                    Logincomments.Content = "-> невалидный";
+                    ValidLogin = false;
+                }
+            }
         }
 
         private void MasterPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-
+            if (ValidatorClass.ValidateMasterPassword(MasterPasswordBox.Password) == true)
+            {
+                MasterPasswordcomments.Content = "-> валидный";
+                ValidMasterPassword = true;
+            }
+            else
+            {
+                MasterPasswordcomments.Content = "-> невалидный";
+                ValidMasterPassword = false;
+            }
         }
 
-        private void NextButton_Click(object sender, RoutedEventArgs e)
+        private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if ((ValidLogin == true) && (ValidMasterPassword == true))
+            {
+                await DatabaseLogicClass.MySQLExecuteAsync("DELETE FROM Users WHERE (Phone = '" + CryptoClass.MD5Hash(LoginTextBox.Text) + "' OR Email =  '" + CryptoClass.MD5Hash(LoginTextBox.Text) + "');");
+                MessageBox.Show("Пользователь с логином " + LoginTextBox.Text + " был успешно удален из системы");
+                Close();
+            }
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
