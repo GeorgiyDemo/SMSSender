@@ -33,7 +33,7 @@ namespace SMSTimetable
 
                 string MD5Login = DatabaseLogicClass.SQLiteGet("SELECT login FROM logins WHERE authenticated=1");
 
-                string result = await DatabaseLogicClass.MySQLGetAsync("SELECT Email FROM Users WHERE Phone='" + MD5Login + "'");
+                string result = await DatabaseLogicClass.MySQLGetAsync("SELECT Email FROM Users WHERE (Phone='" + MD5Login + "' OR Email='"+ MD5Login + "')");
                 result = result.Remove(result.Length - 1);
 
                 if (CryptoClass.MD5Hash(OldEmailText) == MD5Login)

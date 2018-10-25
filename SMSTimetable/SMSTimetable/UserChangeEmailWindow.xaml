@@ -13,7 +13,7 @@
         <Label x:Name="NewEmailLabel" Content="Введите ваш новый e-mail:" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
         <Label x:Name="NewEmailComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,155,0,0" VerticalAlignment="Top"/>
         <Label x:Name="OldEmailComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,65,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="EmailConfirmButton" Content="Подтверждение e-mail" HorizontalAlignment="Left" Margin="141,187,-1,0" VerticalAlignment="Top" Width="167" Height="29" Click="EmailConfirmButton_Click"/>
+        <Button x:Name="EmailConfirmButton" Content="Подтверждение e-mail" HorizontalAlignment="Left" Margin="156,187,0,0" VerticalAlignment="Top" Width="152" Height="29" Click="EmailConfirmButton_Click"/>
 
     </Grid>
 </Window>

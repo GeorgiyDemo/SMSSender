@@ -9,7 +9,7 @@
     <Grid>
         <Button x:Name="ChangeEmailButton" Content="Email" HorizontalAlignment="Left" Margin="30,34,0,0" VerticalAlignment="Top" Width="216" Height="42" Click="ChangeEmailButton_Click"/>
         <Button x:Name="ChangePhoneButton" Content="Телефон" HorizontalAlignment="Left" Margin="30,128,0,0" VerticalAlignment="Top" Width="215" Height="42"/>
-        <Button x:Name="ChangePasswordButton" Content="Пароль" HorizontalAlignment="Left" Margin="30,81,0,0" VerticalAlignment="Top" Width="215" Height="42"/>
+        <Button x:Name="ChangePasswordButton" Content="Пароль" HorizontalAlignment="Left" Margin="30,81,0,0" VerticalAlignment="Top" Width="215" Height="42" Click="ChangePasswordButton_Click"/>
         <GroupBox Header="Изменение данных текущего пользователя" HorizontalAlignment="Left" Height="185" Margin="10,10,0,0" VerticalAlignment="Top" Width="258"/>
 
     </Grid>
