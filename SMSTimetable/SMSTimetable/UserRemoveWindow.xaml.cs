@@ -49,6 +49,8 @@ namespace SMSTimetable
                     ValidLogin = false;
                 }
             }
+
+            NextButton.IsEnabled = (ValidLogin == true) && (ValidMasterPassword == true);
         }
 
         private void MasterPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
@@ -63,6 +65,8 @@ namespace SMSTimetable
                 MasterPasswordcomments.Content = "-> невалидный";
                 ValidMasterPassword = false;
             }
+
+            NextButton.IsEnabled = (ValidLogin == true) && (ValidMasterPassword == true);
         }
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
