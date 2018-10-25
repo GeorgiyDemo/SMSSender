@@ -51,12 +51,15 @@ namespace SMSTimetable
 
         }
 
-        private void EmailConfirmButton_Click(object sender, RoutedEventArgs e)
+        private async void PasswordConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            if ((ValidOldPassword == true) && (ValidNewPassword == true) && (ValidNewRepeatPassword == true))
+            if ((ValidOldPassword == true) && (ValidNewPassword == true) && (ValidNewRepeatPassword == true)) {
+
+                string MD5Login = DatabaseLogicClass.SQLiteGet("SELECT login FROM logins WHERE authenticated=1");
+                await DatabaseLogicClass.MySQLExecuteAsync("UPDATE Users SET Password = '" + CryptoClass.MD5Hash(NewPassword.Password) + "' WHERE (Phone='" + MD5Login + "' OR Email='" + MD5Login + "')");
                 MessageBox.Show("Программируем");
-            else
-                MessageBox.Show("Не программируем");
+            }
+          
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
