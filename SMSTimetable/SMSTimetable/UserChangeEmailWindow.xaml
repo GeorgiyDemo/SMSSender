@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="Обновление e-mail" Height="263.494" Width="341.325" Initialized="Window_Initialized" WindowStartupLocation="CenterScreen">
+        Title="Обновление e-mail" Height="278.494" Width="341.325" WindowStartupLocation="CenterScreen">
     <Grid>
         <TextBox x:Name="OldEmailTextBox" HorizontalAlignment="Left" Height="23" Margin="18,38,-14,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="OldEmailTextBox_TextChangedAsync"/>
         <Label x:Name="OldEmailLabel" Content="Введите ваш старый e-mail:" HorizontalAlignment="Left" Margin="14,12,0,0" VerticalAlignment="Top"/>
@@ -13,7 +13,8 @@
         <Label x:Name="NewEmailLabel" Content="Введите ваш новый e-mail:" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
         <Label x:Name="NewEmailComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,155,0,0" VerticalAlignment="Top"/>
         <Label x:Name="OldEmailComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,65,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="EmailConfirmButton" Content="Подтверждение e-mail" HorizontalAlignment="Left" Margin="156,187,0,0" VerticalAlignment="Top" Width="152" Height="29" Click="EmailConfirmButton_Click"/>
+        <Button x:Name="EmailConfirmButton" Content="Подтверждение" HorizontalAlignment="Left" Margin="199,193,0,0" VerticalAlignment="Top" Width="122" Height="29" Click="EmailConfirmButton_Click" IsEnabled="False"/>
+        <Button x:Name="ExitButton" Content="&lt;=" HorizontalAlignment="Left" Margin="18,193,0,0" VerticalAlignment="Top" Width="122" Height="29" Click="ExitButton_Click"/>
 
     </Grid>
 </Window>

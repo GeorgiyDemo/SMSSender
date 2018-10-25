@@ -12,6 +12,11 @@ namespace SMSTimetable
     {
         bool ValidEmail, ValidPhone, ValidPassword, ValidMasterPassword = false;
 
+        public UserAddWindow()
+        {
+            InitializeComponent();
+        }
+
         private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
           
@@ -73,6 +78,8 @@ namespace SMSTimetable
                 ValidPhone = false;
             }
 
+            NextButton.IsEnabled = (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
+
         }
 
         private async void EmalTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -101,6 +108,9 @@ namespace SMSTimetable
                 EmalTextBox.Foreground = Brushes.Red;
                 ValidEmail = false;
             }
+
+            NextButton.IsEnabled = (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
+
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
@@ -115,11 +125,9 @@ namespace SMSTimetable
                 Passwordcomments.Content = "-> слабый пароль";
                 ValidPassword = false;
             }
-        }
 
-        private void ExitButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
+            NextButton.IsEnabled = (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
+
         }
 
         private void MasterPasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
@@ -134,11 +142,14 @@ namespace SMSTimetable
                 MasterPasswordcomments.Content = "-> невалидный";
                 ValidMasterPassword = false;
             }
+
+            NextButton.IsEnabled = (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
+
         }
 
-        public UserAddWindow()
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
+            Close();
         }
 
     }

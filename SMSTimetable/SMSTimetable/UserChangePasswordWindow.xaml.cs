@@ -19,14 +19,14 @@ namespace SMSTimetable
     /// </summary>
     public partial class UserChangePasswordWindow : Window
     {
-        bool ValidOldEmail, ValidNewPassword, ValidNewRepeatEmail = false;
+        bool ValidOldPassword, ValidNewPassword, ValidNewRepeatPassword = false;
         public UserChangePasswordWindow()
         {
             InitializeComponent();
         }
 
 
-        private async Task<bool> ValidOldPassword(string OldPassword)
+        private async Task<bool> ValidationOldPassword(string OldPassword)
         {
             if (ValidatorClass.ValidatePassword(OldPassword) == true)
             {
@@ -53,7 +53,10 @@ namespace SMSTimetable
 
         private void EmailConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Программируем");
+            if ((ValidOldPassword == true) && (ValidNewPassword == true) && (ValidNewRepeatPassword == true))
+                MessageBox.Show("Программируем");
+            else
+                MessageBox.Show("Не программируем");
         }
 
         private void StopButton_Click(object sender, RoutedEventArgs e)
@@ -61,27 +64,18 @@ namespace SMSTimetable
             Close();
         }
 
-        private async void OldPasswordTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private async void OldPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            bool OldPasswordResult = await ValidOldPassword(OldPasswordTextBox.Text);
-            if (OldPasswordResult == true)
-            {
-                ValidOldEmail = true;
-            }
-            else
-            {
-                ValidOldEmail = false;
-            }
+            bool OldPasswordResult = await ValidationOldPassword(OldPassword.Password);
+            ValidOldPassword = (OldPasswordResult == true) ? true : false;
 
-            if ((ValidOldEmail == true) && (ValidNewPassword == true) && (ValidNewRepeatEmail == true))
-                PasswordConfirmButton.IsEnabled = true;
-            else
-                PasswordConfirmButton.IsEnabled = false;
+            PasswordConfirmButton.IsEnabled = (ValidOldPassword == true) && (ValidNewPassword == true) && (ValidNewRepeatPassword == true);
+
         }
 
-        private void NewPasswordTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void NewPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            if (ValidatorClass.ValidatePassword(NewPasswordTextBox.Text) == true)
+            if (ValidatorClass.ValidatePassword(NewPassword.Password) == true)
             {
                 ValidNewPassword = true;
                 NewPasswordComments.Content = "-> хороший пароль";
@@ -91,11 +85,25 @@ namespace SMSTimetable
                 ValidNewPassword = false;
                 NewPasswordComments.Content = "-> слабый пароль";
             }
-        }
 
-        private void NewRepeatPasswordTextBox_TextChanged(object sender, TextChangedEventArgs e)
+            PasswordConfirmButton.IsEnabled = (ValidOldPassword == true) && (ValidNewPassword == true) && (ValidNewRepeatPassword == true);
+
+        }
+        private void NewRepeatPassword_PasswordChanged(object sender, RoutedEventArgs e)
         {
- 
+            if (NewPassword.Password == NewRepeatPassword.Password)
+            {
+                ValidNewRepeatPassword = true;
+                NewRepeatPasswordComments.Content = "-> пароли совпадают";
+            }
+            else
+            {
+                ValidNewRepeatPassword = false;
+                NewRepeatPasswordComments.Content = "-> пароли не совпадают";
+            }
+
+            PasswordConfirmButton.IsEnabled = (ValidOldPassword == true) && (ValidNewPassword == true) && (ValidNewRepeatPassword == true);
+
         }
     }
 }

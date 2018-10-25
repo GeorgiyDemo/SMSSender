@@ -80,16 +80,8 @@ namespace SMSTimetable
                 NewValidEmail = false;
             }
 
-            if ((NewValidEmail == true) && (OldValidEmail == true))
-                EmailConfirmButton.IsEnabled = true;
-            else
-                EmailConfirmButton.IsEnabled = false;
+            EmailConfirmButton.IsEnabled = (NewValidEmail == true) && (OldValidEmail == true);
 
-        }
-
-        private void Window_Initialized(object sender, EventArgs e)
-        {
-            EmailConfirmButton.IsEnabled = false;
         }
 
         private async void OldEmailTextBox_TextChangedAsync(object sender, TextChangedEventArgs e)
@@ -103,10 +95,12 @@ namespace SMSTimetable
             else
                 OldValidEmail = false;
 
-            if ((NewValidEmail == true) && (OldValidEmail == true))
-                EmailConfirmButton.IsEnabled = true;
-            else
-                EmailConfirmButton.IsEnabled = false;
+            EmailConfirmButton.IsEnabled = (NewValidEmail == true) && (OldValidEmail == true);
         }
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
     }
 }

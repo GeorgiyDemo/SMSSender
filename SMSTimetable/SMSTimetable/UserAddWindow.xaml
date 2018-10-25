@@ -11,7 +11,7 @@
         <TextBox x:Name="PhoneTextBox" HorizontalAlignment="Left" Height="23" Margin="113,46,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="228" TextChanged="PhoneTextBox_TextChanged"/>
         <Label x:Name="PhoneLabel" Content="Телефон:" HorizontalAlignment="Left" Margin="14,43,0,0" VerticalAlignment="Top"/>
         <Label x:Name="PasswordLabel" Content="Пароль:" HorizontalAlignment="Left" Margin="14,74,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="NextButton" Content="Далее" HorizontalAlignment="Left" Margin="430,148,0,0" VerticalAlignment="Top" Width="107" Height="36" Click="NextButton_Click"/>
+        <Button x:Name="NextButton" Content="Далее" HorizontalAlignment="Left" Margin="430,148,0,0" VerticalAlignment="Top" Width="107" Height="36" Click="NextButton_Click" IsEnabled="False"/>
         <Button x:Name="ExitButton" Content="Отмена" HorizontalAlignment="Left" Margin="33,148,0,0" VerticalAlignment="Top" Width="107" Height="36" Click="ExitButton_Click"/>
         <Label x:Name="Emailcomments" Content="-&gt;" HorizontalAlignment="Left" Margin="346,12,0,0" VerticalAlignment="Top"/>
         <Label x:Name="Phonecomments" Content="-&gt;" HorizontalAlignment="Left" Margin="346,43,0,0" VerticalAlignment="Top"/>
