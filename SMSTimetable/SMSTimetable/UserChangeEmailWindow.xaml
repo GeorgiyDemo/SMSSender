@@ -5,16 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="Обновление e-mail" Height="278.494" Width="341.325" WindowStartupLocation="CenterScreen">
+        Title="Обновление e-mail" Height="295.994" Width="380.825" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized">
     <Grid>
-        <TextBox x:Name="OldEmailTextBox" HorizontalAlignment="Left" Height="23" Margin="18,38,-14,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="OldEmailTextBox_TextChangedAsync"/>
-        <Label x:Name="OldEmailLabel" Content="Введите ваш старый e-mail:" HorizontalAlignment="Left" Margin="14,12,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="NewEmailTextBox" HorizontalAlignment="Left" Height="23" Margin="18,127,-14,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="NewEmailTextBox_TextChanged"/>
-        <Label x:Name="NewEmailLabel" Content="Введите ваш новый e-mail:" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="NewEmailComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,155,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="OldEmailComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,65,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="EmailConfirmButton" Content="Подтверждение" HorizontalAlignment="Left" Margin="199,193,0,0" VerticalAlignment="Top" Width="122" Height="29" Click="EmailConfirmButton_Click" IsEnabled="False"/>
-        <Button x:Name="ExitButton" Content="&lt;=" HorizontalAlignment="Left" Margin="18,193,0,0" VerticalAlignment="Top" Width="122" Height="29" Click="ExitButton_Click"/>
+        <TextBox x:Name="OldEmailTextBox" HorizontalAlignment="Left" Height="32" Margin="26,58,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="302" TextChanged="OldEmailTextBox_TextChangedAsync"/>
+        <Label x:Name="OldEmailLabel" Content="Введите ваш старый e-mail:" HorizontalAlignment="Left" Margin="26,29,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="NewEmailTextBox" HorizontalAlignment="Left" Height="32" Margin="26,147,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="302" TextChanged="NewEmailTextBox_TextChanged"/>
+        <Label x:Name="NewEmailLabel" Content="Введите ваш новый e-mail:" HorizontalAlignment="Left" Margin="26,116,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="NewEmailComments" Content="-&gt;" HorizontalAlignment="Left" Margin="26,175,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="OldEmailComments" Content="-&gt;" HorizontalAlignment="Left" Margin="26,90,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="EmailConfirmButton" Content="Подтверждение" HorizontalAlignment="Left" Margin="206,213,0,0" VerticalAlignment="Top" Width="122" Height="29" Click="EmailConfirmButton_Click" IsEnabled="False"/>
+        <Button x:Name="ExitButton" Content="&lt;=" HorizontalAlignment="Left" Margin="26,213,0,0" VerticalAlignment="Top" Width="122" Height="29" Click="ExitButton_Click"/>
 
     </Grid>
 </Window>

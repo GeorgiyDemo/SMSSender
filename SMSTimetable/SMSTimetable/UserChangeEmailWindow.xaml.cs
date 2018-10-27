@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SMSTimetable
 {
@@ -97,6 +98,11 @@ namespace SMSTimetable
 
             EmailConfirmButton.IsEnabled = (NewValidEmail == true) && (OldValidEmail == true);
         }
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+           
+        }
+
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Close();

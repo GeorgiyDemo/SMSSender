@@ -5,16 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="Изменение телефона" Height="284" Width="346" WindowStartupLocation="CenterScreen">
+        Title="Изменение телефона" Height="294" Width="352" WindowStartupLocation="CenterScreen">
     <Grid>
-        <TextBox x:Name="OldPhoneTextBox" HorizontalAlignment="Left" Height="23" Margin="18,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="OldPhoneTextBox_TextChanged"/>
+        <TextBox x:Name="OldPhoneTextBox" HorizontalAlignment="Left" Height="32" Margin="18,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="OldPhoneTextBox_TextChanged"/>
         <Label x:Name="OldPhoneLabel" Content="Введите ваш старый телефон:" HorizontalAlignment="Left" Margin="14,12,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="NewPhoneTextBox" HorizontalAlignment="Left" Height="23" Margin="18,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="NewPhoneTextBox_TextChanged"/>
-        <Label x:Name="NewPhoneLabel" Content="Введите ваш новый телефон" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="NewPhoneComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,155,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="OldPhoneComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,65,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="PhoneConfirmButton" Content="Подтверждение" HorizontalAlignment="Left" Margin="199,193,0,0" VerticalAlignment="Top" Width="122" Height="29" Click="PhoneConfirmButton_Click" IsEnabled="False"/>
-        <Button x:Name="ExitButton" Content="&lt;=" HorizontalAlignment="Left" Margin="18,193,0,0" VerticalAlignment="Top" Width="122" Height="29" Click="ExitButton_Click"/>
+        <TextBox x:Name="NewPhoneTextBox" HorizontalAlignment="Left" Height="32" Margin="18,133,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="NewPhoneTextBox_TextChanged"/>
+        <Label x:Name="NewPhoneLabel" Content="Введите ваш новый телефон" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="NewPhoneComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,166,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="OldPhoneComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,71,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="PhoneConfirmButton" Content="Подтверждение" HorizontalAlignment="Left" Margin="199,204,0,0" VerticalAlignment="Top" Width="122" Height="29" Click="PhoneConfirmButton_Click" IsEnabled="False"/>
+        <Button x:Name="ExitButton" Content="&lt;=" HorizontalAlignment="Left" Margin="18,204,0,0" VerticalAlignment="Top" Width="122" Height="29" Click="ExitButton_Click"/>
 
     </Grid>
 </Window>

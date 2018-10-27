@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SMSTimetable
 {
@@ -43,6 +44,26 @@ namespace SMSTimetable
             UserChangePhoneWindow userChangePhone_obj = new UserChangePhoneWindow();
             userChangePhone_obj.Show();
             Close();
+        }
+
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+            SetColor();
+            DispatcherTimer ColorTimer = new DispatcherTimer();
+            ColorTimer.Tick += new EventHandler(ColorTimer_Tick);
+            ColorTimer.Interval = new TimeSpan(0, 0, 0, 3);
+            ColorTimer.Start();
+        }
+
+        private void ColorTimer_Tick(object sender, EventArgs e)
+        {
+            SetColor();
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void SetColor()
+        {
+            ChangeGroupBox.BorderBrush = SystemParameters.WindowGlassBrush;
         }
     }
 }

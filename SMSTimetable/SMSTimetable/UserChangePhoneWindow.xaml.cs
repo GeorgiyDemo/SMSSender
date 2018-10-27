@@ -105,6 +105,8 @@ namespace SMSTimetable
                     MessageBox.Show("Успешно обновили телефон с " + OldPhoneTextBox.Text + " на " + NewPhoneTextBox.Text);
                     Close();
                 }
+                else
+                    MessageBox.Show("Неверный код, попробуйте снова");
             }
         }
 

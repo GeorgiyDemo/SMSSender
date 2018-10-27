@@ -146,7 +146,7 @@ namespace SMSTimetable
 
             DispatcherTimer SMSTimer = new DispatcherTimer();
             SMSTimer.Tick += new EventHandler(SMSTimer_Tick);
-            SMSTimer.Interval = new TimeSpan(0, 0, 0, 3);
+            SMSTimer.Interval = new TimeSpan(0, 0, 0, 30);
             SMSTimer.Start();
 
             DispatcherTimer ColorTimer = new DispatcherTimer();

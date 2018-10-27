@@ -91,6 +91,7 @@ namespace SMSTimetable
 
         private void Window_Initialized(object sender, EventArgs e)
         {
+            SetColor();
             DispatcherTimer ColorTimer = new DispatcherTimer();
             ColorTimer.Tick += new EventHandler(ColorTimer_Tick);
             ColorTimer.Interval = new TimeSpan(0, 0, 0, 3);
