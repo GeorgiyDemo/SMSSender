@@ -4,12 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
-        mc:Ignorable="d" Title="" Height="238.21" Width="244.202" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d" Title="Действия" Height="237.213" Width="286.063" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Button x:Name="ThisUserInfoButton" Content="Информация о текущем пользователе" HorizontalAlignment="Left" Margin="9,10,0,0" VerticalAlignment="Top" Width="216" Height="42"/>
-        <Button x:Name="AddUserButton" Content="Добавление" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Width="215" Height="42" Click="AddUserButton_Click"/>
-        <Button x:Name="RemoveUserButton" Content="Удаление" HorizontalAlignment="Left" Margin="10,151,0,0" VerticalAlignment="Top" Width="215" Height="42" Click="RemoveUserButton_Click"/>
-        <Button x:Name="ChangeThisUserButton" Content="Изменение текущего пользователя" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top" Width="215" Height="42" Click="ChangeThisUserButton_Click"/>
+        <Button x:Name="ThisUserInfoButton" Content="Информация о текущем пользователе" HorizontalAlignment="Left" Margin="9,10,0,0" VerticalAlignment="Top" Width="251" Height="42"/>
+        <Button x:Name="AddUserButton" Content="Добавление" HorizontalAlignment="Left" Margin="10,104,0,0" VerticalAlignment="Top" Width="250" Height="42" Click="AddUserButton_Click"/>
+        <Button x:Name="RemoveUserButton" Content="Удаление" HorizontalAlignment="Left" Margin="10,151,0,0" VerticalAlignment="Top" Width="250" Height="42" Click="RemoveUserButton_Click"/>
+        <Button x:Name="ChangeThisUserButton" Content="Изменение текущего пользователя" HorizontalAlignment="Left" Margin="10,57,0,0" VerticalAlignment="Top" Width="250" Height="42" Click="ChangeThisUserButton_Click"/>
 
     </Grid>
 </Window>
