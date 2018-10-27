@@ -54,8 +54,6 @@ namespace SMSTimetable
 
         private void PhoneTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            MessageBox.Show(CryptoClass.MD5Hash(PhoneTextBox.Text));
-            MessageBox.Show("SMSCODE FROM BD:" + SMSCode);
             if (CryptoClass.MD5Hash(PhoneTextBox.Text) == SMSCode)
             {
                 PhoneComments.Content = "-> верный код";

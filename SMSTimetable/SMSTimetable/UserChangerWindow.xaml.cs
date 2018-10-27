@@ -35,6 +35,14 @@ namespace SMSTimetable
         {
             UserChangePasswordWindow UserChangePassword_obj = new UserChangePasswordWindow();
             UserChangePassword_obj.Show();
+            Close();
+        }
+
+        private void ChangePhoneButton_Click(object sender, RoutedEventArgs e)
+        {
+            UserChangePhoneWindow userChangePhone_obj = new UserChangePhoneWindow();
+            userChangePhone_obj.Show();
+            Close();
         }
     }
 }
