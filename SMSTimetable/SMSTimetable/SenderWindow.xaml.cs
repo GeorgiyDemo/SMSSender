@@ -139,12 +139,20 @@ namespace SMSTimetable
         private async void Window_Initialized(object sender, EventArgs e)
         {
 
+            SetColor();
             GetSMSBalance();
             OpenCloseChooseOptions();
+
+
             DispatcherTimer SMSTimer = new DispatcherTimer();
             SMSTimer.Tick += new EventHandler(SMSTimer_Tick);
-            SMSTimer.Interval = new TimeSpan(0, 0, 60);
+            SMSTimer.Interval = new TimeSpan(0, 0, 0, 3);
             SMSTimer.Start();
+
+            DispatcherTimer ColorTimer = new DispatcherTimer();
+            ColorTimer.Tick += new EventHandler(ColorTimer_Tick);
+            ColorTimer.Interval = new TimeSpan(0, 0, 0, 3);
+            ColorTimer.Start();
 
             TelegramServerLabel.Content = (TelegramEnabledForm == true) ? "Сервер Telegram: включен": "Сервер Telegram: выключен";
             await AddGroupListBoxAsync();
@@ -155,6 +163,18 @@ namespace SMSTimetable
         {
             GetSMSBalance();
             CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void ColorTimer_Tick(object sender, EventArgs e)
+        {
+            SetColor();
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void SetColor()
+        {
+            Textgroupbox.BorderBrush = SystemParameters.WindowGlassBrush;
+            NumbersGroupBox.BorderBrush = SystemParameters.WindowGlassBrush;
         }
 
         private void GetSMSBalance()

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace SMSTimetable
 {
@@ -90,6 +91,11 @@ namespace SMSTimetable
 
         private void Window_Initialized(object sender, EventArgs e)
         {
+            DispatcherTimer ColorTimer = new DispatcherTimer();
+            ColorTimer.Tick += new EventHandler(ColorTimer_Tick);
+            ColorTimer.Interval = new TimeSpan(0, 0, 0, 3);
+            ColorTimer.Start();
+
             TG_obj = new TelegramClass();
 
             if (DatabaseLogicClass.SQLiteGet("SELECT boolvalue FROM servicetable WHERE service='TelegramService'") == "1")
@@ -106,6 +112,16 @@ namespace SMSTimetable
                 SaveLoginCheckBox.IsChecked = true;
             }
 
+        }
+        private void ColorTimer_Tick(object sender, EventArgs e)
+        {
+            SetColor();
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void SetColor()
+        {
+            LoginGroupBox.BorderBrush = SystemParameters.WindowGlassBrush;
         }
 
     }
