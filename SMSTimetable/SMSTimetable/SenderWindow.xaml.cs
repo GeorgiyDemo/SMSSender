@@ -13,13 +13,15 @@ namespace SMSTimetable
     /// </summary>
     public partial class SenderWindow : Window
     {
+        string LocalLoginedName;
         bool TelegramEnabledForm;
         TelegramClass TG_obj;
 
-        public SenderWindow(TelegramClass recieved, bool TelegramEnabled)
+        public SenderWindow(TelegramClass recieved, bool TelegramEnabled, string LoginedName)
         {
             TelegramEnabledForm = TelegramEnabled;
             TG_obj = recieved;
+            LocalLoginedName = "Авторизация: "+CryptoClass.Base64Decode(LoginedName);
             InitializeComponent();
         }
 
@@ -155,7 +157,9 @@ namespace SMSTimetable
             ColorTimer.Start();
 
             TelegramServerLabel.Content = (TelegramEnabledForm == true) ? "Сервер Telegram: включен": "Сервер Telegram: выключен";
+            LoginedNameLabel.Content = LocalLoginedName;
             await AddGroupListBoxAsync();
+
 
         }
 

@@ -21,11 +21,13 @@
         <Label x:Name="BalanceLabel" Content="Текущий баланс: ₽" HorizontalAlignment="Left" Margin="10,6,0,0" VerticalAlignment="Top"/>
         <Button x:Name="SMSStatusButton" Content="Сообщения" HorizontalAlignment="Left" Margin="389,6,0,0" VerticalAlignment="Top" Width="105" Height="36" Click="SMSStatusButton_Click"/>
         <Button x:Name="UsersButton" Content="Пользователи" HorizontalAlignment="Left" Margin="279,6,0,0" VerticalAlignment="Top" Width="105" Height="36" Click="UsersButton_Click"/>
-        <Label x:Name="TelegramServerLabel" MouseLeftButtonUp="TelegramServerLabel_MouseLeftButtonUp" Content="Сервер Telegram: включен" HorizontalAlignment="Left" Margin="361,312,0,0" VerticalAlignment="Top" FontSize="10"/>
+        <Label x:Name="TelegramServerLabel" MouseLeftButtonUp="TelegramServerLabel_MouseLeftButtonUp" Content="Сервер Telegram: включен" HorizontalAlignment="Left" Margin="361,307,0,0" VerticalAlignment="Top" FontSize="10"/>
         <Label x:Name="GroupLabel" Content="Группа:" HorizontalAlignment="Left" Margin="301,194,0,0" VerticalAlignment="Top"/>
         <CheckBox x:Name="SaveDatabaseCheckBox" Content="Сохранить в БД" HorizontalAlignment="Left" Margin="361,225,0,0" VerticalAlignment="Top" IsChecked="True"/>
         <CheckBox x:Name="SendSMSCheckBox" Content="Отправить SMS" HorizontalAlignment="Left" Margin="361,245,0,0" VerticalAlignment="Top" IsChecked="True"/>
         <Button x:Name="ExitButton" Content="Выход" HorizontalAlignment="Left" Margin="30,315,0,0" VerticalAlignment="Top" Width="75" Click="ExitButton_Click"/>
+        <Label x:Name="LoginedNameLabel" Content="[имя пользоателя]" HorizontalAlignment="Left" Margin="342,329,0,0" VerticalAlignment="Top" FontSize="10" Width="151"/>
+        <TextBlock HorizontalAlignment="Left" Margin="146,329,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

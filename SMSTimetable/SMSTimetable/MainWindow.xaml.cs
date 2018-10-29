@@ -31,7 +31,7 @@ namespace SMSTimetable
             InitializeComponent();
         }
 
-        private bool CheckEmailLogin(string EmailString, string PasswordString, bool Login)
+        private string CheckEmailLogin(string EmailString, string PasswordString, bool Login)
         {
          
             string OutPasswordString;
@@ -39,13 +39,13 @@ namespace SMSTimetable
                 OutPasswordString = PasswordString;
             else
                 OutPasswordString = CryptoClass.MD5Hash(PasswordString);
-             
-            if (DatabaseLogicClass.MySQLGet("SELECT Password FROM Users WHERE Email='"+CryptoClass.MD5Hash(EmailString) +"'") == OutPasswordString)
-                return true;
-            return false;
+
+            if (DatabaseLogicClass.MySQLGet("SELECT Password FROM Users WHERE Email='" + CryptoClass.MD5Hash(EmailString) + "'") == OutPasswordString)
+                return DatabaseLogicClass.MySQLGet("SELECT Name FROM Users WHERE Email='" + CryptoClass.MD5Hash(EmailString) + "'");
+            return "";
         }
 
-        private bool CheckPhoneLogin(string PhoneString, string PasswordString, bool Login)
+        private string CheckPhoneLogin(string PhoneString, string PasswordString, bool Login)
         {
             string OutPasswordString;
             if (Login == true)
@@ -54,8 +54,8 @@ namespace SMSTimetable
                 OutPasswordString = CryptoClass.MD5Hash(PasswordString);
 
             if (DatabaseLogicClass.MySQLGet("SELECT Password FROM Users WHERE Phone='" + CryptoClass.MD5Hash(PhoneString) + "'") == OutPasswordString)
-                return true;
-            return false;
+                return DatabaseLogicClass.MySQLGet("SELECT Name FROM Users WHERE Phone='" + CryptoClass.MD5Hash(PhoneString) + "'");
+            return "";
         }
 
         private void EnterButton_Click(object sender, RoutedEventArgs e)
@@ -63,12 +63,15 @@ namespace SMSTimetable
 
             if ((LoginTextBox.Text != "") && (PasswordBox.Password != ""))
             {
-                if ((CheckPhoneLogin(LoginTextBox.Text, PasswordBox.Password, ThisAutoLoginEnabled) == true) || (CheckEmailLogin(LoginTextBox.Text, PasswordBox.Password, ThisAutoLoginEnabled) == true))
+                string CheckPhoneLoginString = CheckPhoneLogin(LoginTextBox.Text, PasswordBox.Password, ThisAutoLoginEnabled);
+                string CheckEmailLoginString = CheckEmailLogin(LoginTextBox.Text, PasswordBox.Password, ThisAutoLoginEnabled);
+                if ((CheckPhoneLoginString !="") || (CheckEmailLoginString != ""))
                 {
    
                     DatabaseLogicClass.SQLiteExecute("UPDATE logins SET authenticated = 0");
                     DatabaseLogicClass.SQLiteExecute("INSERT INTO logins(login,authenticated) VALUES ('" + CryptoClass.MD5Hash(LoginTextBox.Text) + "',1)");
-                    SenderWindow SenderWindow_obj = new SenderWindow(TG_obj, TelegramEnabled);
+                    string outnamestr = (CheckPhoneLoginString != "") ? CheckPhoneLoginString : CheckEmailLoginString;
+                    SenderWindow SenderWindow_obj = new SenderWindow(TG_obj, TelegramEnabled, outnamestr);
 
                     if ((SaveLoginCheckBox.IsChecked == true) && (ThisAutoLoginEnabled == false))
                         DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 1, login = '" + LoginTextBox.Text + "', pass = '" + CryptoClass.MD5Hash(PasswordBox.Password) + "' WHERE id = 1");
