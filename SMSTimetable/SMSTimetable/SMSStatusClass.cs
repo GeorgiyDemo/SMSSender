@@ -31,7 +31,8 @@ namespace SMSTimetable
                 array[i, 1] = ThisSMS["number"].ToString();
                 array[i, 2] = StatusDictionary[ThisSMS["status"].ToString()];
                 array[i, 3] = ThisSMS["cost"].ToString()+" руб.";
-                array[i, 4] = ThisSMS["text"].ToString().Replace("\n"," ");
+                string[] thisarr = ThisSMS["text"].ToString().Replace("\n", " ").Split(' ');
+                array[i, 4] = (thisarr[0] == "Расписание") ? thisarr[0] + " " + thisarr[1] : ThisSMS["text"].ToString().Replace("\n", " ");
 
             }
 

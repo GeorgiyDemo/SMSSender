@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
         mc:Ignorable="d"
-        Title="Информация об SMS-сообщениях" Height="399" Width="684.5" Initialized="Window_Initialized" WindowStartupLocation="CenterScreen">
+        Title="Информация об SMS-сообщениях" Height="384" Width="452" Initialized="Window_Initialized" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Button x:Name="ExitButton" Content="&lt;=" HorizontalAlignment="Left" Margin="10,302,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="ExitButton_Click"/>
-        <DataGrid x:Name="SMSStatusDataGrid" HorizontalAlignment="Left" Height="273" Margin="10,10,0,0" VerticalAlignment="Top" Width="664"/>
+        <Button x:Name="ExitButton" Content="&lt;=" HorizontalAlignment="Left" Margin="10,276,0,0" VerticalAlignment="Top" Width="147" Height="38" Click="ExitButton_Click"/>
+        <DataGrid x:Name="SMSStatusDataGrid" HorizontalAlignment="Left" Height="236" Margin="10,10,0,0" VerticalAlignment="Top" Width="414"/>
 
     </Grid>
 </Window>

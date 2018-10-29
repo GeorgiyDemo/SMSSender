@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
-
+using System.Windows.Threading;
 
 namespace SMSTimetable
 {
@@ -111,6 +113,26 @@ namespace SMSTimetable
 
             NextButton.IsEnabled = (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
 
+        }
+
+        private void Window_Initialized(object sender, System.EventArgs e)
+        {
+            SetColor();
+            DispatcherTimer ColorTimer = new DispatcherTimer();
+            ColorTimer.Tick += new EventHandler(ColorTimer_Tick);
+            ColorTimer.Interval = new TimeSpan(0, 0, 0, 3);
+            ColorTimer.Start();
+        }
+
+        private void ColorTimer_Tick(object sender, EventArgs e)
+        {
+            SetColor();
+            CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void SetColor()
+        {
+            AddGroupBox.BorderBrush = SystemParameters.WindowGlassBrush;
         }
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)

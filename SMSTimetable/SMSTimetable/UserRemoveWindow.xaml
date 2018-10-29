@@ -5,16 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="Удаление пользователя" Height="181.714" Width="545.462" WindowStartupLocation="CenterScreen">
+        Title="Удаление пользователя" Height="229.214" Width="532.462" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized">
     <Grid>
-        <TextBox x:Name="LoginTextBox" HorizontalAlignment="Left" Height="23" Margin="113,15,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="228" TextChanged="LoginTextBox_TextChanged"/>
-        <Label x:Name="LoginLabel" Content="Логин:" HorizontalAlignment="Left" Margin="14,12,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="NextButton" Content="Далее" HorizontalAlignment="Left" Margin="420,86,0,0" VerticalAlignment="Top" Width="107" Height="36" Click="NextButton_Click" IsEnabled="False"/>
-        <Button x:Name="ExitButton" Content="Отмена" HorizontalAlignment="Left" Margin="14,86,0,0" VerticalAlignment="Top" Width="107" Height="36" Click="ExitButton_Click"/>
-        <Label x:Name="Logincomments" Content="-&gt;" HorizontalAlignment="Left" Margin="346,12,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="MasterPasswordLabel" Content="Мастер-пароль:" HorizontalAlignment="Left" Margin="14,43,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="MasterPasswordcomments" Content="-&gt;" HorizontalAlignment="Left" Margin="346,43,0,0" VerticalAlignment="Top"/>
-        <PasswordBox x:Name="MasterPasswordBox" HorizontalAlignment="Left" Margin="113,46,0,0" VerticalAlignment="Top" Width="228" Height="23" PasswordChanged="MasterPasswordBox_PasswordChanged"/>
+        <TextBox x:Name="LoginTextBox" HorizontalAlignment="Left" Height="32" Margin="124,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="228" TextChanged="LoginTextBox_TextChanged"/>
+        <Label x:Name="LoginLabel" Content="Логин:" HorizontalAlignment="Left" Margin="24,25,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="NextButton" Content="Далее" HorizontalAlignment="Left" Margin="396,143,0,0" VerticalAlignment="Top" Width="107" Height="36" Click="NextButton_Click" IsEnabled="False"/>
+        <Button x:Name="ExitButton" Content="Отмена" HorizontalAlignment="Left" Margin="14,143,0,0" VerticalAlignment="Top" Width="107" Height="36" Click="ExitButton_Click"/>
+        <Label x:Name="Logincomments" Content="-&gt;" HorizontalAlignment="Left" Margin="357,25,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="MasterPasswordLabel" Content="Мастер-пароль:" HorizontalAlignment="Left" Margin="24,75,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="MasterPasswordcomments" Content="-&gt;" HorizontalAlignment="Left" Margin="357,75,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="MasterPasswordBox" HorizontalAlignment="Left" Margin="123,75,0,0" VerticalAlignment="Top" Width="228" Height="32" PasswordChanged="MasterPasswordBox_PasswordChanged"/>
+        <GroupBox x:Name="RemoveGroupBox" Header="Ввод" HorizontalAlignment="Left" Height="127" VerticalAlignment="Top" Width="493" Margin="10,0,0,0"/>
 
     </Grid>
 </Window>
