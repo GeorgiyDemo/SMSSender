@@ -157,7 +157,7 @@ namespace SMSTimetable
             ColorTimer.Start();
 
             TelegramServerLabel.Content = (TelegramEnabledForm == true) ? "Сервер Telegram: включен": "Сервер Telegram: выключен";
-            LoginedNameLabel.Content = LocalLoginedName;
+            LoginedNameTextBlock.Text = LocalLoginedName;
             await AddGroupListBoxAsync();
 
 
@@ -318,5 +318,6 @@ namespace SMSTimetable
             DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 0, login = '-', pass = '-' WHERE id = 1");
             Close();
         }
+
     }
 }

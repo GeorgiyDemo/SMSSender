@@ -20,12 +20,20 @@ namespace SMSTimetable
     public partial class ConfirmAllWindow : Window
     {
 
-        private static string EmailString, SMSString, EmailCode, SMSCode, UserPassword, salt;
+        private static string EmailString, SMSString, EmailCode, SMSCode, UserPassword, salt, username;
         private static bool ValidSMSCode, ValidEmailCode = false;
-
+        public ConfirmAllWindow(string Email, string SMS, string UPassword, string inputsalt, string InputUsername)
+        {
+            EmailString = Email;
+            SMSString = SMS;
+            UserPassword = UPassword;
+            salt = inputsalt;
+            username = InputUsername;
+            InitializeComponent();
+        }
         private async void FinalConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            await DatabaseLogicClass.MySQLExecuteAsync("INSERT INTO Users(Phone,Email,Password) VALUES ('" + CryptoClass.MD5Hash(SMSString) + "','" + CryptoClass.MD5Hash(EmailString) + "','" + CryptoClass.MD5Hash(UserPassword) + "')");
+            await DatabaseLogicClass.MySQLExecuteAsync("INSERT INTO Users(Phone,Email,Password,Name) VALUES ('" + CryptoClass.MD5Hash(SMSString) + "','" + CryptoClass.MD5Hash(EmailString) + "','" + CryptoClass.MD5Hash(UserPassword) + "','"+CryptoClass.Base64Encode(username) +"')");
             MessageBox.Show("Новый пользователь с e-mail " + EmailString + " и телефоном " + SMSString + " был успешно добавлен в систему");
             Close();
         }
@@ -70,15 +78,6 @@ namespace SMSTimetable
                 FinalConfirmButton.IsEnabled = true;
             else
                 FinalConfirmButton.IsEnabled = false;
-        }
-
-        public ConfirmAllWindow(string Email, string SMS, string UPassword, string inputsalt) 
-        {
-            EmailString = Email;
-            SMSString = SMS;
-            UserPassword = UPassword;
-            salt = inputsalt;
-            InitializeComponent();
         }
 
         private void Window_Initialized(object sender, EventArgs e)

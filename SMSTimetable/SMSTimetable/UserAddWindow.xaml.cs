@@ -12,7 +12,7 @@ namespace SMSTimetable
     /// </summary>
     public partial class UserAddWindow : Window
     {
-        bool ValidEmail, ValidPhone, ValidPassword, ValidMasterPassword = false;
+        bool ValidUsername, ValidEmail, ValidPhone, ValidPassword, ValidMasterPassword = false;
 
         public UserAddWindow()
         {
@@ -21,8 +21,7 @@ namespace SMSTimetable
 
         private async void NextButton_Click(object sender, RoutedEventArgs e)
         {
-          
-            if ((ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true))
+            if ((ValidUsername == true) && (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true))
             {
                 string salt = CryptoClass.GetRandomNumber();
                 //Отправка Email
@@ -30,9 +29,7 @@ namespace SMSTimetable
                 DatabaseLogicClass.SQLiteExecute("INSERT INTO codes(code_source,code) VALUES ('" + CryptoClass.MD5Hash(EmalTextBox.Text+salt) + "','"+CryptoClass.MD5Hash(EmailCode)+"')");
                 
                 await EmailSenderClass.SendEmailAsync("Ваш код для подтверждения e-mail: " + EmailCode,EmalTextBox.Text);
-                ////////
                 //MessageBox.Show("Email code: " + EmailCode);
-                ////////
 
                 //Отпрвка SMS
                 string SMSCode = CryptoClass.GetRandomNumber();
@@ -42,11 +39,9 @@ namespace SMSTimetable
                 var request = new Request { numbers = numbers, text = SMSCode, channel = "DIRECT" };
 
                 ConfirmSMS_obj.sms_send(request);
-                ////////////
                 //MessageBox.Show("Тук тук халявная SMS: "+SMSCode);
-                ////////////
 
-                ConfirmAllWindow ConfirmWindow_obj = new ConfirmAllWindow(EmalTextBox.Text,PhoneTextBox.Text, CryptoClass.MD5Hash(PasswordBox.Password), salt);
+                ConfirmAllWindow ConfirmWindow_obj = new ConfirmAllWindow(EmalTextBox.Text,PhoneTextBox.Text, CryptoClass.MD5Hash(PasswordBox.Password), salt, UsernameTextBox.Text);
                 ConfirmWindow_obj.Show();
                 Close();
             }
@@ -80,7 +75,7 @@ namespace SMSTimetable
                 ValidPhone = false;
             }
 
-            NextButton.IsEnabled = (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
+            NextButton.IsEnabled = (ValidUsername == true) && (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
 
         }
 
@@ -111,7 +106,7 @@ namespace SMSTimetable
                 ValidEmail = false;
             }
 
-            NextButton.IsEnabled = (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
+            NextButton.IsEnabled = (ValidUsername == true) && (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
 
         }
 
@@ -135,6 +130,21 @@ namespace SMSTimetable
             AddGroupBox.BorderBrush = SystemParameters.WindowGlassBrush;
         }
 
+        private void UsernameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (UsernameTextBox.Text != ""){
+                ValidUsername = true;
+                Usernamecomments.Content = "-> корректное имя";
+            }
+            else
+            {
+                ValidUsername = false;
+                Usernamecomments.Content = "-> некорректное имя";
+            }
+            
+            NextButton.IsEnabled = (ValidUsername == true) && (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
+        }
+
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (ValidatorClass.ValidatePassword(PasswordBox.Password) == true)
@@ -148,7 +158,7 @@ namespace SMSTimetable
                 ValidPassword = false;
             }
 
-            NextButton.IsEnabled = (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
+            NextButton.IsEnabled = (ValidUsername == true) && (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
 
         }
 
@@ -165,8 +175,7 @@ namespace SMSTimetable
                 ValidMasterPassword = false;
             }
 
-            NextButton.IsEnabled = (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
-
+            NextButton.IsEnabled = (ValidUsername == true) && (ValidEmail == true) && (ValidPhone == true) && (ValidPassword == true) && (ValidMasterPassword == true);
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
