@@ -209,6 +209,7 @@ def main():
         
         #Цифры пар (слева)
         if (rect[1][0] < 200) and (rect[1][0] > 34) and (rect[1][1] < 600) and (rect[1][0] < rect[1][1]) and (rect[0][0] < rect[0][1]):
+            print(rect)
             for p in box:
                 cv2.circle(image, (p[0],p[1]), 5, (255,0,255), 5)
             
