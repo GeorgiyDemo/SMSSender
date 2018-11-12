@@ -91,6 +91,7 @@ def get_null_values(timg,image):
     outchecklist = []
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (145, 145)) #МИНИМАЛЬНО, ЧТОБ ПРОХОДИЛО БОЛЬШЕ - 180
     closed = cv2.morphologyEx(timg, cv2.MORPH_CLOSE, kernel)
+    cv2.imwrite("closed_null.png", closed)
     cnts = cv2.findContours(closed.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
     firstflag = True
     old_center = (0, 0)
@@ -121,7 +122,7 @@ def get_null_values(timg,image):
                     cv2.drawContours(image,[box],0,(0,0,255),5)
                     cv2.circle(image, center, 5, (0,0,255), 5)
 
-                    smallimg = cv2.resize(image, (0,0), fx=0.45, fy=0.45)
+                    smallimg = cv2.resize(image, (0,0), fx=0.3, fy=0.3)
                     cv2.imshow("OpenCV Image",smallimg)
                     cv2.waitKey(500)
 
@@ -194,8 +195,11 @@ def main():
 
     image = cv2.imread("PNG.png")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    cv2.imwrite("gray.png", gray)
     gray = cv2.GaussianBlur(gray, (3, 3), 0)
+    cv2.imwrite("gauss.png", gray)
     edged = cv2.Canny(gray, 10, 250)
+    cv2.imwrite("edged.png", edged)
     cnts = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)[1]
 
     old_center = (0, 0)
@@ -209,7 +213,6 @@ def main():
         
         #Цифры пар (слева)
         if (rect[1][0] < 200) and (rect[1][0] > 34) and (rect[1][1] < 600) and (rect[1][0] < rect[1][1]) and (rect[0][0] < rect[0][1]):
-            print(rect)
             for p in box:
                 cv2.circle(image, (p[0],p[1]), 5, (255,0,255), 5)
             
@@ -217,7 +220,7 @@ def main():
             cv2.circle(image, center, 5, (255,0,255), 5)
             leftnumber_cell_list.append(box)
 
-            smallimg = cv2.resize(image, (0,0), fx=0.45, fy=0.45)
+            smallimg = cv2.resize(image, (0,0), fx=0.3, fy=0.3)
             cv2.imshow("OpenCV Image",smallimg)
             cv2.waitKey(500)
         
@@ -234,10 +237,11 @@ def main():
             cv2.circle(image, center, 5, (0,255,0), 5)
             group_cell_list.append(box)
 
-            smallimg = cv2.resize(image, (0,0), fx=0.45, fy=0.45)
+            smallimg = cv2.resize(image, (0,0), fx=0.3, fy=0.3)
             cv2.imshow("OpenCV Image",smallimg)
             cv2.waitKey(500)
 
+    cv2.imwrite("res1.png", image)
     #Едем по контурам
     sorted_by_value = sorted(group_text_association.items(), key=lambda kv: kv[0])
     global_counter = 0
@@ -267,7 +271,7 @@ def main():
             ColumnCheckerList.append(center[0])
             RowCheckerList.append(center[1])
 
-            smallimg = cv2.resize(image, (0,0), fx=0.45, fy=0.45)
+            smallimg = cv2.resize(image, (0,0), fx=0.3, fy=0.3)
             cv2.imshow("OpenCV Image",smallimg)
             cv2.waitKey(1)
             global_counter +=1
@@ -277,6 +281,7 @@ def main():
     ColumnCounter = Counter(ColumnCheckerList)
 
     #Ищем максимальные элементы в структурированных объектах
+    cv2.imwrite("res2.png", image)
     MaxRow = 0
     MaxColumn = 0
     for item in list(RowCounter):
