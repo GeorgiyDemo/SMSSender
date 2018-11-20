@@ -78,6 +78,7 @@ namespace SMSTimetable
                     else if (SaveLoginCheckBox.IsChecked == false)
                         DatabaseLogicClass.SQLiteExecute("UPDATE savedlogin SET savedbool = 0, login = '-', pass = '-' WHERE id = 1");
 
+                    MessageBox.Show("Успешная авторизация");
                     SenderWindow_obj.Show();
                     Close();
                 }
@@ -94,26 +95,34 @@ namespace SMSTimetable
 
         private void Window_Initialized(object sender, EventArgs e)
         {
-            SetColor();
-            DispatcherTimer ColorTimer = new DispatcherTimer();
-            ColorTimer.Tick += new EventHandler(ColorTimer_Tick);
-            ColorTimer.Interval = new TimeSpan(0, 0, 0, 3);
-            ColorTimer.Start();
-
-            TG_obj = new TelegramClass();
-
-            if (DatabaseLogicClass.SQLiteGet("SELECT boolvalue FROM servicetable WHERE service='TelegramService'") == "1")
+            if (PingClass.CheckForInternetConnection() == false)
             {
-                TelegramEnabled = true;
-                TG_obj.TelegramInit(1);
+                MessageBox.Show("Проверьте подключение и повторите попытку");
+                Close();
             }
-
-            if (DatabaseLogicClass.SQLiteGet("SELECT savedbool FROM savedlogin WHERE id=1") == "1")
+            else
             {
-                LoginTextBox.Text = DatabaseLogicClass.SQLiteGet("SELECT login FROM savedlogin WHERE id=1");
-                PasswordBox.Password = DatabaseLogicClass.SQLiteGet("SELECT pass FROM savedlogin WHERE id=1");
-                ThisAutoLoginEnabled = true;
-                SaveLoginCheckBox.IsChecked = true;
+                SetColor();
+                DispatcherTimer ColorTimer = new DispatcherTimer();
+                ColorTimer.Tick += new EventHandler(ColorTimer_Tick);
+                ColorTimer.Interval = new TimeSpan(0, 0, 0, 3);
+                ColorTimer.Start();
+
+                TG_obj = new TelegramClass();
+
+                if (DatabaseLogicClass.SQLiteGet("SELECT boolvalue FROM servicetable WHERE service='TelegramService'") == "1")
+                {
+                    TelegramEnabled = true;
+                    TG_obj.TelegramInit(1);
+                }
+
+                if (DatabaseLogicClass.SQLiteGet("SELECT savedbool FROM savedlogin WHERE id=1") == "1")
+                {
+                    LoginTextBox.Text = DatabaseLogicClass.SQLiteGet("SELECT login FROM savedlogin WHERE id=1");
+                    PasswordBox.Password = DatabaseLogicClass.SQLiteGet("SELECT pass FROM savedlogin WHERE id=1");
+                    ThisAutoLoginEnabled = true;
+                    SaveLoginCheckBox.IsChecked = true;
+                }
             }
 
         }
