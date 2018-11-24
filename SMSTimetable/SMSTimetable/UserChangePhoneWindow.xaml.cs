@@ -60,7 +60,7 @@ namespace SMSTimetable
                 NewPhoneValidation = false;
             }
 
-            PhoneConfirmButton.IsEnabled = (OldPhoneValidation = true) && (NewPhoneValidation = true);
+            PhoneConfirmButton.IsEnabled = (OldPhoneValidation == true) && (NewPhoneValidation == true);
         }
 
         private async void OldPhoneTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -80,14 +80,13 @@ namespace SMSTimetable
                 OldPhoneValidation = false;
             }
 
-            PhoneConfirmButton.IsEnabled = (OldPhoneValidation = true) && (NewPhoneValidation = true);
+            PhoneConfirmButton.IsEnabled = (OldPhoneValidation == true) && (NewPhoneValidation == true);
         }
 
         private async void PhoneConfirmButton_Click(object sender, RoutedEventArgs e)
         {
             if ((OldPhoneValidation == true) && (NewPhoneValidation = true))
             {
-                MessageBox.Show("ВОШЛИ В УСЛОВИЕ");
                 string salt = CryptoClass.GetRandomNumber();
                 string SMSCode = CryptoClass.GetRandomNumber();
                 DatabaseLogicClass.SQLiteExecute("INSERT INTO codes(code_source,code) VALUES ('" + CryptoClass.MD5Hash(NewPhoneTextBox.Text + salt) + "','" + CryptoClass.MD5Hash(SMSCode) + "')");
@@ -96,17 +95,17 @@ namespace SMSTimetable
                 var request = new Request { numbers = numbers, text = SMSCode, channel = "DIRECT" };
                 ConfirmSMS_obj.sms_send(request);
 
-                DEMKAInputBox SMSdemka_obj = new DEMKAInputBox("Ввведите код, отправленный на новый номер телефона");
+                DEMKAInputBox SMSdemka_obj = new DEMKAInputBox("Ввведите код, отправленный на новый номер телефона:");
                 string InputCode = SMSdemka_obj.ShowDialog();
 
                 if (InputCode == SMSCode)
                 {
                     await DatabaseLogicClass.MySQLExecuteAsync("UPDATE Users SET Phone = '" + CryptoClass.MD5Hash(NewPhoneTextBox.Text) + "' WHERE Phone='" + CryptoClass.MD5Hash(OldPhoneTextBox.Text) + "' ");
-                    MessageBox.Show("Успешно обновили телефон с " + OldPhoneTextBox.Text + " на " + NewPhoneTextBox.Text);
-                    Close();
+                    MessageBox.Show("Успешно обновили номер телефона с " + OldPhoneTextBox.Text + " на " + NewPhoneTextBox.Text);
                 }
                 else
-                    MessageBox.Show("Неверный код, попробуйте снова");
+                    MessageBox.Show("Код подтвержения '" + InputCode + "' не является действительным");
+                Close();
             }
         }
 
