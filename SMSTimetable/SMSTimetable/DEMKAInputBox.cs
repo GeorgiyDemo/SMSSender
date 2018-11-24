@@ -112,8 +112,8 @@ namespace SMSTimetable
                 input.MinWidth = 200;
                 input.MouseEnter += input_MouseDown;
                 sp1.Children.Add(input);
-                ok.Width = 35;
-                ok.Height = 25;
+                ok.Width = 45;
+                ok.Height = 35;
                 ok.Click += ok_Click;
                 ok.Content = okbuttontext;
                 ok.HorizontalAlignment = HorizontalAlignment.Center;

@@ -56,7 +56,7 @@ namespace SMSTimetable
         {
             string EmailCode = CryptoClass.GetRandomNumber();
             await EmailSenderClass.SendEmailAsync("Ваш код для подтверждения e-mail: " + EmailCode, NewEmailTextBox.Text);
-            DEMKAInputBox demka_obj = new DEMKAInputBox("Ввведите код, отправленный на новый e-mail");
+            DEMKAInputBox demka_obj = new DEMKAInputBox("Ввведите код, отправленный на новый e-mail:");
             string InputCode = demka_obj.ShowDialog();
 
             if (InputCode == EmailCode)
@@ -65,6 +65,8 @@ namespace SMSTimetable
                 MessageBox.Show("Успешно обновили email с "+OldEmailTextBox.Text+" на "+NewEmailTextBox.Text);
                 Close();
             }
+            else
+                MessageBox.Show("Код подтвержения '" + InputCode + "' не является действительным");
 
         }
 
