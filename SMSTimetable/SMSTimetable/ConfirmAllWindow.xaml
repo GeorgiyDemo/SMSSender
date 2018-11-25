@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="Подтверждение" Height="270.443" Width="457.26" Initialized="Window_Initialized" WindowStartupLocation="CenterScreen">
+        Title="Подтверждение данных" Height="316.735" Width="457.26" Initialized="Window_Initialized" WindowStartupLocation="CenterScreen">
     <Grid>
-        <TextBox x:Name="EmalTextBox" HorizontalAlignment="Left" Height="23" Margin="18,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="EmalTextBox_TextChanged"/>
-        <Label x:Name="EmailCodeLabel" Content="Введите код, отправленный на e-mail [email]" HorizontalAlignment="Left" Margin="14,12,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="PhoneTextBox" HorizontalAlignment="Left" Height="23" Margin="18,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="PhoneTextBox_TextChanged"/>
-        <Label x:Name="PhoneCodeLabel" Content="Введите код, отправленный на [телефон]" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="PhoneComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,155,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="EmailComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,65,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="FinalConfirmButton" Content="Добавление пользователя" HorizontalAlignment="Left" Margin="141,187,0,0" VerticalAlignment="Top" Width="167" Height="29" Click="FinalConfirmButton_Click"/>
+        <TextBox x:Name="EmalTextBox" HorizontalAlignment="Left" Height="32" Margin="18,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="EmalTextBox_TextChanged"/>
+        <Label x:Name="EmailCodeLabel" Content="Введите код, отправленный на e-mail [email]:" HorizontalAlignment="Left" Margin="14,12,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="PhoneTextBox" HorizontalAlignment="Left" Height="32" Margin="18,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" TextChanged="PhoneTextBox_TextChanged"/>
+        <Label x:Name="PhoneCodeLabel" Content="Введите код, отправленный на номер [телефон]:" HorizontalAlignment="Left" Margin="10,120,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="PhoneComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,188,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="EmailComments" Content="-&gt;" HorizontalAlignment="Left" Margin="18,80,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="FinalConfirmButton" Content="Добавление пользователя" HorizontalAlignment="Left" Margin="141,231,0,0" VerticalAlignment="Top" Width="180" Height="33" Click="FinalConfirmButton_Click"/>
 
     </Grid>
 </Window>

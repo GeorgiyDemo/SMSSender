@@ -94,7 +94,7 @@ namespace SMSTimetable
                 else
                 {
                     Emailcomments.Content = "-> e-mail уже зарегистрирован!";
-                    EmalTextBox.Foreground = Brushes.Black;
+                    EmalTextBox.Foreground = Brushes.Red;
                     ValidEmail = false;
                 }
             }

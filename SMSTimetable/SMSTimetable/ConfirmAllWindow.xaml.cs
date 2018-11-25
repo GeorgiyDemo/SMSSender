@@ -83,8 +83,8 @@ namespace SMSTimetable
         private void Window_Initialized(object sender, EventArgs e)
         {
             FinalConfirmButton.IsEnabled = false;
-            EmailCodeLabel.Content = "Введите код, отправленный на e-mail " + EmailString;
-            PhoneCodeLabel.Content = "Введите код, отправленный на " + SMSString;
+            EmailCodeLabel.Content = "Введите код, отправленный на e-mail " + EmailString + ":";
+            PhoneCodeLabel.Content = "Введите код, отправленный на номер " + SMSString + ":";
 
             EmailCode = DatabaseLogicClass.SQLiteGet("SELECT code FROM codes WHERE code_source='"+CryptoClass.MD5Hash(EmailString+salt) +"'");
             SMSCode = DatabaseLogicClass.SQLiteGet("SELECT code FROM codes WHERE code_source='" + CryptoClass.MD5Hash(SMSString+salt) +"'");

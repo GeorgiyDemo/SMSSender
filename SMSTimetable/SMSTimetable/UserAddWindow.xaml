@@ -4,24 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
-        mc:Ignorable="d" Title="Добавление" Height="449" Width="561.5" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized">
+        mc:Ignorable="d" Title="Добавление пользователя" Height="398" Width="582.5" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized">
     <Grid>
         <TextBox x:Name="EmalTextBox" HorizontalAlignment="Left" Height="32" Margin="118,83,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="228" TextChanged="EmalTextBox_TextChanged"/>
-        <Label x:Name="EmailLabel" Content="E-mail:" HorizontalAlignment="Left" Margin="20,81,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="EmailLabel" Content="E-mail:" HorizontalAlignment="Left" Margin="20,88,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="PhoneTextBox" HorizontalAlignment="Left" Height="32" Margin="118,131,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="228" TextChanged="PhoneTextBox_TextChanged"/>
-        <Label x:Name="PhoneLabel" Content="Телефон:" HorizontalAlignment="Left" Margin="20,129,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="PasswordLabel" Content="Пароль:" HorizontalAlignment="Left" Margin="20,173,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="NextButton" Content="Далее" HorizontalAlignment="Left" Margin="390,298,0,0" VerticalAlignment="Top" Width="107" Height="36" Click="NextButton_Click" IsEnabled="False"/>
+        <Label x:Name="PhoneLabel" Content="Телефон:" HorizontalAlignment="Left" Margin="20,134,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="PasswordLabel" Content="Пароль:" HorizontalAlignment="Left" Margin="20,180,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="NextButton" Content="Далее" HorizontalAlignment="Left" Margin="450,298,0,0" VerticalAlignment="Top" Width="107" Height="36" Click="NextButton_Click" IsEnabled="False"/>
         <Button x:Name="ExitButton" Content="Отмена" HorizontalAlignment="Left" Margin="11,298,0,0" VerticalAlignment="Top" Width="107" Height="36" Click="ExitButton_Click"/>
         <Label x:Name="Emailcomments" Content="-&gt;" HorizontalAlignment="Left" Margin="356,89,0,0" VerticalAlignment="Top"/>
         <Label x:Name="Phonecomments" Content="-&gt;" HorizontalAlignment="Left" Margin="356,137,0,0" VerticalAlignment="Top"/>
         <Label x:Name="Passwordcomments" Content="-&gt;" HorizontalAlignment="Left" Margin="356,181,0,0" VerticalAlignment="Top"/>
         <PasswordBox x:Name="PasswordBox" HorizontalAlignment="Left" Margin="118,177,0,0" VerticalAlignment="Top" Width="228" Height="32" PasswordChanged="PasswordBox_PasswordChanged"/>
-        <Label x:Name="MasterPasswordLabel" Content="Мастер-пароль:" HorizontalAlignment="Left" Margin="20,219,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="MasterPasswordLabel" Content="Мастер-пароль:" HorizontalAlignment="Left" Margin="20,225
+               ,0,0" VerticalAlignment="Top"/>
         <Label x:Name="MasterPasswordcomments" Content="-&gt;" HorizontalAlignment="Left" Margin="356,227,0,0" VerticalAlignment="Top"/>
         <PasswordBox x:Name="MasterPasswordBox" HorizontalAlignment="Left" Margin="118,223,0,0" VerticalAlignment="Top" Width="228" Height="32" PasswordChanged="MasterPasswordBox_PasswordChanged"/>
-        <GroupBox x:Name="AddGroupBox" Header="Ввод" HorizontalAlignment="Left" Height="269" Margin="10,10,0,0" VerticalAlignment="Top" Width="519"/>
-        <Label x:Name="UsernameLabel" Content="Имя:" HorizontalAlignment="Left" Margin="30,33,0,0" VerticalAlignment="Top"/>
+        <GroupBox x:Name="AddGroupBox" Header="Ввод" HorizontalAlignment="Left" Height="269" Margin="10,10,0,0" VerticalAlignment="Top" Width="547"/>
+        <Label x:Name="UsernameLabel" Content="Имя:" HorizontalAlignment="Left" Margin="20,36,0,0" VerticalAlignment="Top"/>
         <Label x:Name="Usernamecomments" Content="-&gt;" HorizontalAlignment="Left" Margin="356,37,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="UsernameTextBox" HorizontalAlignment="Left" Margin="118,33,0,0" VerticalAlignment="Top" Width="228" Height="32" TextChanged="UsernameTextBox_TextChanged"/>
 
