@@ -37,9 +37,7 @@ namespace SMSTimetable
                 string result = await DatabaseLogicClass.MySQLGetAsync("SELECT Email FROM Users WHERE (Phone='" + MD5Login + "' OR Email='"+ MD5Login + "')");
                 result = result.Remove(result.Length - 1);
 
-                if (CryptoClass.MD5Hash(OldEmailText) == MD5Login)
-                    return true;
-                else if (CryptoClass.MD5Hash(OldEmailText) == result)
+                if ((CryptoClass.MD5Hash(OldEmailText) == MD5Login) || (CryptoClass.MD5Hash(OldEmailText) == result))
                     return true;
                 else
                     OldEmailComments.Content = "-> не ваш e-mail или его не существует";

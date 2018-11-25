@@ -41,14 +41,22 @@ namespace SMSTimetable
                 bool FlagResult = await CheckUserLogin(LoginTextBox.Text);
                 if (FlagResult == true)
                 {
+                    LoginTextBox.Foreground = Brushes.Black;
                     Logincomments.Content = "-> валидный";
                     ValidLogin = true;
                 }
                 else
                 {
+                    LoginTextBox.Foreground = Brushes.Red;
                     Logincomments.Content = "-> невалидный";
                     ValidLogin = false;
                 }
+            }
+            else
+            {
+                LoginTextBox.Foreground = Brushes.Red;
+                Logincomments.Content = "-> невалидный";
+                ValidLogin = false;
             }
 
             NextButton.IsEnabled = (ValidLogin == true) && (ValidMasterPassword == true);
