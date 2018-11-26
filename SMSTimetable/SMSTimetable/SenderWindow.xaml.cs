@@ -202,7 +202,7 @@ namespace SMSTimetable
             {
                 DatabaseLogicClass.SQLiteExecute("UPDATE servicetable SET boolvalue = 0 WHERE service='TelegramService'");
                 TelegramServerLabel.Content = "Сервер Telegram: выключен";
-                TG_obj.TelegramInit(2);
+                TG_obj.TelegramInit(2, true);
             }
 
             else
@@ -213,10 +213,10 @@ namespace SMSTimetable
                 if (TG_obj == null)
                 {
                     TG_obj = new TelegramClass();
-                    TG_obj.TelegramInit(1);
+                    TG_obj.TelegramInit(1, true);
                 }
 
-                TG_obj.TelegramInit(3);
+                TG_obj.TelegramInit(3, true);
 
             }
            

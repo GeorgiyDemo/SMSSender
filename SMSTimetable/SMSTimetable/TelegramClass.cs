@@ -41,14 +41,13 @@ namespace SMSTimetable
             return false;
         }
 
-        public void TelegramInit(int intvalue)
+        public void TelegramInit(int intvalue, bool showmessages)
         {
             if (intvalue == 1)
             {
                 var me = Bot.GetMeAsync().Result;
-#if DEBUG
-                MessageBox.Show("Telegram успешно запущен -> @" + me.Username);
-#endif
+                if (showmessages == true)
+                    MessageBox.Show("Telegram успешно запущен -> @" + me.Username);
 
                 Bot.OnMessage += BotOnMessageReceived;
                 Bot.OnMessageEdited += BotOnMessageReceived;
@@ -58,14 +57,16 @@ namespace SMSTimetable
             }
             else if (intvalue == 2)
             {
-#if DEBUG
-                MessageBox.Show("Отключаем бота Telegram");
-#endif
+                if (showmessages == true)
+                    MessageBox.Show("Отключение сервера Telegram");
                 Bot.StopReceiving();
             }
             else if (intvalue == 3)
             {
                 Bot.StartReceiving(Array.Empty<UpdateType>());
+                var me = Bot.GetMeAsync().Result;
+                if (showmessages == true)
+                    MessageBox.Show("Telegram успешно запущен -> @" + me.Username);
             }
                
         }

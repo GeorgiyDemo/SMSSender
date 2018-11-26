@@ -109,11 +109,16 @@ namespace SMSTimetable
                 ColorTimer.Start();
 
                 TG_obj = new TelegramClass();
-
                 if (DatabaseLogicClass.SQLiteGet("SELECT boolvalue FROM servicetable WHERE service='TelegramService'") == "1")
                 {
+                    TG_obj.TelegramInit(1, true);
                     TelegramEnabled = true;
-                    TG_obj.TelegramInit(1);
+                }
+                else if (DatabaseLogicClass.SQLiteGet("SELECT boolvalue FROM servicetable WHERE service='TelegramService'") == "0")
+                {
+                    TG_obj.TelegramInit(1,false);
+                    TelegramEnabled = false;
+                    TG_obj.TelegramInit(2,false);
                 }
 
                 if (DatabaseLogicClass.SQLiteGet("SELECT savedbool FROM savedlogin WHERE id=1") == "1")
