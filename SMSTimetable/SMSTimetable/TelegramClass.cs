@@ -235,14 +235,15 @@ namespace SMSTimetable
                     default:
                         const string usage = @"
 Доступные команды:
-/sms - отправка сообщения
-/balance - текущий баланс
-/history - последние отправленные сообщения
-/user - управление пользователями";
+<b>/sms</b> - отправка сообщения
+<b>/balance</b> - текущий баланс
+<b>/history</b> - последние отправленные сообщения
+<b>/user</b> - управление пользователями";
 
                         await Bot.SendTextMessageAsync(
                             message.Chat.Id,
                             usage,
+                            parseMode: ParseMode.Html,
                             replyMarkup: new ReplyKeyboardRemove());
                         break;
                 }
