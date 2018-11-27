@@ -14,9 +14,9 @@ namespace SMSTimetable
 {
     public class TelegramClass
     {
-        public   string SMS_number, SMS_message, SMS_User;
-        private  static HttpToSocks5Proxy TG_Proxy = new HttpToSocks5Proxy(JustTokenClass.TGProxy_ServerIP, Convert.ToInt32(JustTokenClass.TGProxy_ServerPort),JustTokenClass.TGProxy_User,JustTokenClass.TGProxy_Pass);
-        private  TelegramBotClient Bot = new TelegramBotClient(JustTokenClass.TG_APIKey, TG_Proxy);
+        public string SMS_number, SMS_message, SMS_User;
+        private static HttpToSocks5Proxy TG_Proxy = new HttpToSocks5Proxy(JustTokenClass.TGProxy_ServerIP, Convert.ToInt32(JustTokenClass.TGProxy_ServerPort),JustTokenClass.TGProxy_User,JustTokenClass.TGProxy_Pass);
+        private TelegramBotClient Bot = new TelegramBotClient(JustTokenClass.TG_APIKey, TG_Proxy);
     
         public  bool IntChecker(string CheckInt)
         {
