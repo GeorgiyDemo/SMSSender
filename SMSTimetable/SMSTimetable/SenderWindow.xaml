@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMSTimetable"
         mc:Ignorable="d"
-        Title="Отправка SMS" Height="393" Width="517" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized" Closing="Window_Closing">
+        Title="Отправка SMS" Height="393" Width="517" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized">
     <Grid>
         <TextBox x:Name="TextToSend" HorizontalAlignment="Left" Height="66" Margin="46,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>
         <TextBox x:Name="NumbersToSend" HorizontalAlignment="Left" Height="66" Margin="288,114,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="179"/>

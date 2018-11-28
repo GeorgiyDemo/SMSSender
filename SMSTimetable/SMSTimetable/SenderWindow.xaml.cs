@@ -283,10 +283,6 @@ namespace SMSTimetable
 
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-        }
-
         private void UsersButton_Click(object sender, RoutedEventArgs e)
         {
             UserManagmentWindow UserWindow_obj = new UserManagmentWindow();
