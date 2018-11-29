@@ -27,6 +27,8 @@ namespace SMSTimetable
 
         private async void FinalSendButton_Click(object sender, RoutedEventArgs e)
         {
+
+            //Отправка произовольного текста произвольному получателю
             if ((TextSecondRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true))
             {
                 if (MessageBox.Show("Вы действительно хотите отправить сообщение '" + TextToSend.Text + "' на номер " + NumbersToSend.Text + "?", "Отправка сообщения", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -39,6 +41,7 @@ namespace SMSTimetable
                 }
             }
 
+            //Отправка произвольного текста всем получателям из БД
             else if ((TextSecondRadioButton.IsChecked == true) && (NumbersFirstRadioButton.IsChecked == true))
             {
                 SMSSenderClass sms_obj = new SMSSenderClass();
@@ -50,6 +53,7 @@ namespace SMSTimetable
                     MessageBox.Show("Успешная отправка сообщения всем получателям из БД!");
             }
 
+            //Отправка текста из БД произвольному получателю
             else if ((TextFirstRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true) && (GroupsComboBox.SelectedIndex != -1))
             {
                 if (SaveDatabaseCheckBox.IsChecked == true)
@@ -86,6 +90,7 @@ namespace SMSTimetable
 
             }
 
+            //Отправка сообщения из БД получателям из БД 
             else if ((TextFirstRadioButton.IsChecked == true) && (NumbersFirstRadioButton.IsChecked == true))
             {
                 /*
