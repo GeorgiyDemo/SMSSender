@@ -98,15 +98,15 @@ namespace SMSTimetable
 
             EmailConfirmButton.IsEnabled = (NewValidEmail == true) && (OldValidEmail == true);
         }
-        private void Window_Initialized(object sender, EventArgs e)
-        {
-           
-        }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
+        private void Window_Initialized(object sender, EventArgs e)
+        {
+
+        }
     }
 }

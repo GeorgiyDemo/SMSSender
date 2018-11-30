@@ -19,8 +19,7 @@ namespace SMSTimetable
     /// </summary>
     public partial class UserChangePhoneWindow : Window
     {
-        bool OldPhoneValidation = false;
-        bool NewPhoneValidation = false;
+        bool OldPhoneValidation, NewPhoneValidation = false;
         public UserChangePhoneWindow()
         {
             InitializeComponent();
