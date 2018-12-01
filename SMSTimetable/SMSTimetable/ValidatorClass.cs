@@ -22,19 +22,16 @@ namespace SMSTimetable
                 return false;
             }
         }
-
         public static bool IsPhoneNumber(string number)
         {
             return Regex.Match(number, @"^(\+[0-9]{11})$").Success;
         }
-
         public static bool ValidateMasterPassword(string password)
         {
             if (CryptoClass.MD5Hash(CryptoClass.Base64Encode(password)) == JustTokenClass.MyMasterPassword)
                 return true;
             return false;
         }
-        //Красивое извращение, мур
         public static bool ValidatePassword(string password)
         {
             const int MIN_LENGTH = 8;

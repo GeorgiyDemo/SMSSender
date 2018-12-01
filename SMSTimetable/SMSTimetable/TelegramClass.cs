@@ -18,7 +18,7 @@ namespace SMSTimetable
         private static HttpToSocks5Proxy TG_Proxy = new HttpToSocks5Proxy(JustTokenClass.TGProxy_ServerIP, Convert.ToInt32(JustTokenClass.TGProxy_ServerPort),JustTokenClass.TGProxy_User,JustTokenClass.TGProxy_Pass);
         private TelegramBotClient Bot = new TelegramBotClient(JustTokenClass.TG_APIKey, TG_Proxy);
     
-        public  bool IntChecker(string CheckInt)
+        public bool IntChecker(string CheckInt)
         {
             try
             {
@@ -30,8 +30,7 @@ namespace SMSTimetable
                 return false;
             }
         }
-        
-        public  async Task<Boolean> AdminCheckerAsync(string id)
+        public async Task<Boolean> AdminCheckerAsync(string id)
         {
             string admins  = await DatabaseLogicClass.MySQLGetAsync("SELECT AdminTG FROM TGAdmins");
             string[] AdminArr = admins.Split(',');
@@ -40,7 +39,6 @@ namespace SMSTimetable
                     return true;
             return false;
         }
-
         public void TelegramInit(int intvalue, bool showmessages)
         {
             if (intvalue == 1)
@@ -70,8 +68,7 @@ namespace SMSTimetable
             }
                
         }
-
-        private  async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        private async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
             var message = messageEventArgs.Message;
 
@@ -248,7 +245,6 @@ namespace SMSTimetable
                         break;
                 }
         }
-
         private void BotOnReceiveError(object sender, ReceiveErrorEventArgs receiveErrorEventArgs)
         {
             Console.WriteLine("Received error: {0} — {1}",
