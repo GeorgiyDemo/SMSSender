@@ -46,11 +46,6 @@ namespace SMSTimetable
             }
         }
 
-        internal static void MySQLExecuteAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public static async Task<string> MySQLGetAsync(string SQL)
         {
             string return_str = "";
@@ -64,7 +59,6 @@ namespace SMSTimetable
             }
             return return_str;
         }
-
 
         public static void SQLiteExecute(string sql)
         {

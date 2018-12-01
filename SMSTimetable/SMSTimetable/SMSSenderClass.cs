@@ -1,27 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net;
+﻿using System.Net;
 using System.IO;
 using System.Windows;
 namespace SMSTimetable
 {
     public class SMSSenderClass
     {
-  
         const string From = "SMS Aero";
 
-        /**
-        * Отправка сообщения
-        * @param numbers dynamic    - Номер телефона
-        * @param text string        - Текст сообщения
-        * @param channel string     - Канал отправки
-        * @param dateSend integer   - Дата для отложенной отправки сообщения (в формате unixtime)
-        * @param callbackUrl string - url для отправки статуса сообщения в формате http://mysite.com или https://mysite.com (в ответ система ждет статус 200)
-        * @return string(json)
-        */
         public string sms_send(Request request)
         {
             string Data = "";
@@ -58,26 +43,12 @@ namespace SMSTimetable
             string method = "sms/send/";
             return send(Data, method);
         }
-
-        /**
-         * Проверка статуса SMS сообщения
-         * @param   id int - Идентификатор сообщения
-         * @return  string(json)
-         */
         public string check_send(Request request)
         {
             string Data = "id=" + request.id;
             string method = "sms/status/";
             return send(Data, method);
         }
-
-        /**
-         * Получение списка отправленных sms сообщений
-         * @param   number      string  - Фильтровать сообщения по номеру телефона
-         * @param   text        string  - Фильтровать сообщения по тексту
-         * @param   page        integer - Номер страницы
-         * @return  string(json)
-         */
         public string sms_list(Request request)
         {
             string Data = "";
@@ -96,11 +67,6 @@ namespace SMSTimetable
             string method = "sms/list/";
             return send(Data, method);
         }
-
-        /**
-         * Запрос баланса
-         * @return string(json)
-         */
         public string balance()
         {
             string Data = "";
@@ -108,243 +74,6 @@ namespace SMSTimetable
 
             return send(Data, method);
         }
-
-        /**
-        * Добавление группы
-        * @param name string - Имя  группы
-        * @return string(json)
-        */
-        public string group_add(Request request)
-        {
-            string Data = "name=" + request.name;
-            string method = "group/add/";
-
-            return send(Data, method);
-        }
-
-        /**
-        * Удаление группы
-        * @param id int - Идентификатор группы
-        * @return string(json)
-        */
-        public string group_delete(Request request)
-        {
-            string Data = "id=" + request.id;
-            string method = "group/delete/";
-
-            return send(Data, method);
-        }
-
-        /**
-         * Получение списка групп
-         * @param page int - Пагинация
-         * @return string(json)
-         */
-        public string group_list(Request request)
-        {
-            string Data = "";
-            if (request.page != null)
-            {
-                Data += "page=" + request.page;
-            }
-            string method = "group/list/";
-
-            return send(Data, method);
-        }
-
-        /**
-        * Добавление контакта
-        * @param number     string  - Номер абонента
-        * @param groupId    int     - Идентификатор группы
-        * @param birthday   int     - Дата рождения абонента (в формате unixtime)
-        * @param sex        string  - Пол
-        * @param lname      string  - Фамилия абонента
-        * @param fname      string  - Имя абонента
-        * @param sname      string  - Отчество абонента
-        * @param param1     string  - Свободный параметр
-        * @param param2     string  - Свободный параметр
-        * @param param3     string  - Свободный параметр
-        * @return string(json)
-        */
-        public string contact_add(Request request)
-        {
-            string Data = "";
-            if (request.number != null)
-            {
-                Data += "number=" + request.number + "&";
-            }
-            if (request.groupId != null)
-            {
-                Data += "groupId=" + request.groupId + "&";
-            }
-            if (request.birthday != null)
-            {
-                Data += "birthday=" + request.birthday + "&";
-            }
-            if (request.sex != null)
-            {
-                Data += "sex=" + request.sex + "&";
-            }
-            if (request.lname != null)
-            {
-                Data += "lname=" + request.lname + "&";
-            }
-            if (request.fname != null)
-            {
-                Data += "fname=" + request.fname + "&";
-            }
-            if (request.sname != null)
-            {
-                Data += "sname=" + request.sname + "&";
-            }
-            if (request.param1 != null)
-            {
-                Data += "param1=" + request.param1 + "&";
-            }
-            if (request.param2 != null)
-            {
-                Data += "param2=" + request.param2 + "&";
-            }
-            if (request.param3 != null)
-            {
-                Data += "param3=" + request.param3 + "&";
-            }
-            string method = "contact/add/";
-            return send(Data, method);
-        }
-
-        /**
-        * Удаление контакта
-        * @param id int - Идентификатор абонента
-        * @return string(json)
-        */
-        public string contact_delete(Request request)
-        {
-            string Data = "id=" + request.id;
-            string method = "contact/delete/";
-
-            return send(Data, method);
-        }
-
-        /**
-         * Список контактов
-         * @param number    string  - Номер абонента
-         * @param groupId   int     - Идентификатор группы
-         * @param birthday  int     - Дата рождения абонента (в формате unixtime)
-         * @param sex       string  - Пол
-         * @param operat    string  - Оператор
-         * @param lname     string  - Фамилия абонента
-         * @param fname     string  - Имя абонента
-         * @param sname     string  - Отчество абонента
-         * @param param1    string  - Свободный параметр
-         * @param param2    string  - Свободный параметр
-         * @param param3    string  - Свободный параметр
-         * @param page      integer - Пагинация
-         * @return string(json)
-         */
-        public string contact_list(Request request)
-        {
-            string Data = "";
-            if (request.number != null)
-            {
-                Data += "number=" + request.number + "&";
-            }
-            if (request.groupId != null)
-            {
-                Data += "groupId=" + request.groupId + "&";
-            }
-            if (request.birthday != null)
-            {
-                Data += "birthday=" + request.birthday + "&";
-            }
-            if (request.sex != null)
-            {
-                Data += "sex=" + request.sex + "&";
-            }
-            if (request.operat != null)
-            {
-                Data += "operator=" + request.operat + "&";
-            }
-            if (request.lname != null)
-            {
-                Data += "lname=" + request.lname + "&";
-            }
-            if (request.fname != null)
-            {
-                Data += "fname=" + request.fname + "&";
-            }
-            if (request.sname != null)
-            {
-                Data += "sname=" + request.sname + "&";
-            }
-            if (request.param1 != null)
-            {
-                Data += "param1=" + request.param1 + "&";
-            }
-            if (request.param2 != null)
-            {
-                Data += "param2=" + request.param2 + "&";
-            }
-            if (request.param3 != null)
-            {
-                Data += "param3=" + request.param3 + "&";
-            }
-            if (request.page != null)
-            {
-                Data += "page=" + request.page + "&";
-            }
-            string method = "contact/list/";
-            return send(Data, method);
-        }
-
-        /**
-         * Создание запроса на проверку HLR
-         * @param number    string  - Номер абонента
-         * @param numbers   array   - Номера телефонов
-         * @return string(json)
-         */
-        public string hlr_check(Request request)
-        {
-            string Data = "";
-            if (request.number != null)
-            {
-                Data += "number=" + request.number;
-            }
-            if (request.numbers != null)
-            {
-                foreach (string number in request.numbers)
-                {
-                    Data += "numbers[]=" + number + "&";
-                }
-            }
-            string method = "hlr/status/";
-            return send(Data, method);
-        }
-
-        /**
-         * Определение оператора
-         * @param number    string  - Номер абонента
-         * @param numbers   array   - Номера телефонов
-         * @return string(json)
-         */
-        public string number_operator(Request request)
-        {
-            string Data = "";
-            if (request.number != null)
-            {
-                Data += "number=" + request.number;
-            }
-            if (request.numbers != null)
-            {
-                foreach (string number in request.numbers)
-                {
-                    Data += "numbers[]=" + number + "&";
-                }
-            }
-            string method = "number/operator/";
-            return send(Data, method);
-        }
-      
         private string send(string Data, string method)
         {
 
@@ -395,7 +124,7 @@ namespace SMSTimetable
         public string param1 { get; set; }
         public string param2 { get; set; }
         public string param3 { get; set; }
-        public string operat { get; set; } // оператор
+        public string operat { get; set; }
         public string sign { get; set; }
         public string imageSource { get; set; }
         public string textButton { get; set; }
