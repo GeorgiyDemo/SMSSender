@@ -94,7 +94,8 @@ namespace SMSTimetable
             }
             catch (System.Net.WebException)
             {
-                MessageBox.Show("Ошибка отправки сообщения через смс, возможно не хватает денег");
+                MessageBox.Show("Ой! Похоже, интернет соединение было потеряно..");
+                Application.Current.Shutdown();
                 Out = "false";
             }
 

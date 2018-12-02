@@ -188,9 +188,16 @@ namespace SMSTimetable
 
         private void GetSMSBalance()
         {
-            SMSSenderClass sms_obj = new SMSSenderClass();
-            dynamic BalanceJSON = JObject.Parse(sms_obj.balance());
-            BalanceLabel.Content = "Текущий баланс: " + BalanceJSON.data.balance + "₽";
+            try
+            {
+                SMSSenderClass sms_obj = new SMSSenderClass();
+                dynamic BalanceJSON = JObject.Parse(sms_obj.balance());
+                BalanceLabel.Content = "Текущий баланс: " + BalanceJSON.data.balance + "₽";
+            }
+            catch (Newtonsoft.Json.JsonReaderException)
+            {
+                return;
+            }
         }
 
         private void SMSStatusButton_Click(object sender, RoutedEventArgs e)

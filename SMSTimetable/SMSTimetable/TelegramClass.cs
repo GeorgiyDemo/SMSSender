@@ -61,10 +61,17 @@ namespace SMSTimetable
             }
             else if (intvalue == 3)
             {
-                Bot.StartReceiving(Array.Empty<UpdateType>());
-                var me = Bot.GetMeAsync().Result;
-                if (showmessages == true)
-                    MessageBox.Show("Telegram успешно запущен -> @" + me.Username);
+                try
+                {
+                    Bot.StartReceiving(Array.Empty<UpdateType>());
+                    var me = Bot.GetMeAsync().Result;
+                    if (showmessages == true)
+                        MessageBox.Show("Telegram успешно запущен -> @" + me.Username);
+                }
+                catch (System.AggregateException)
+                {
+                    MessageBox.Show("Невозможно запустить сервер Telegram без активного интернет-соединения");
+                }
             }
                
         }
