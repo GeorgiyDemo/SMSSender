@@ -31,61 +31,76 @@ namespace SMSTimetable
             //Отправка произовольного текста произвольному получателю
             if ((TextSecondRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true))
             {
-                if (MessageBox.Show("Вы действительно хотите отправить сообщение '" + TextToSend.Text + "' на номер " + NumbersToSend.Text + "?", "Отправка сообщения", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if ((NumbersToSend.Text != "") && (TextToSend.Text != ""))
                 {
-                    SMSSenderClass sms_obj = new SMSSenderClass();
-                    string[] numbers = new string[] { NumbersToSend.Text };
-                    var request = new Request { numbers = numbers, text = TextToSend.Text, channel = "DIRECT" };
-                    if (sms_obj.sms_send(request) != "false")
-                        MessageBox.Show("Успешная отправка сообщения");
+                    if (MessageBox.Show("Вы действительно хотите отправить сообщение '" + TextToSend.Text + "' на номер " + NumbersToSend.Text + "?", "Отправка сообщения", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    {
+                        SMSSenderClass sms_obj = new SMSSenderClass();
+                        string[] numbers = new string[] { NumbersToSend.Text };
+                        var request = new Request { numbers = numbers, text = TextToSend.Text, channel = "DIRECT" };
+                        if (sms_obj.sms_send(request) != "false")
+                            MessageBox.Show("Успешная отправка сообщения");
+                    }
                 }
+                else
+                    MessageBox.Show("Сообщение и/или номер отправления не могут быть пустыми");
             }
 
             //Отправка произвольного текста всем получателям из БД
             else if ((TextSecondRadioButton.IsChecked == true) && (NumbersFirstRadioButton.IsChecked == true))
             {
-                SMSSenderClass sms_obj = new SMSSenderClass();
-                string bufnumberstr = await DatabaseLogicClass.MySQLGetAsync("SELECT phone FROM Phones");
-                string[] numbers = bufnumberstr.Split(',');
-                Array.Resize(ref numbers, numbers.Length - 1);
-                var request = new Request { numbers = numbers, text = TextToSend.Text, channel = "DIRECT" };
-                if (sms_obj.sms_send(request) != "false")
-                    MessageBox.Show("Успешная отправка сообщения всем получателям из БД!");
+                if (TextToSend.Text != "")
+                {
+                    SMSSenderClass sms_obj = new SMSSenderClass();
+                    string bufnumberstr = await DatabaseLogicClass.MySQLGetAsync("SELECT phone FROM Phones");
+                    string[] numbers = bufnumberstr.Split(',');
+                    Array.Resize(ref numbers, numbers.Length - 1);
+                    var request = new Request { numbers = numbers, text = TextToSend.Text, channel = "DIRECT" };
+                    if (sms_obj.sms_send(request) != "false")
+                        MessageBox.Show("Успешная отправка сообщения всем получателям из БД!");
+                }
+                else
+                    MessageBox.Show("Сообщение для отправки не может быть пустым");
             }
 
             //Отправка текста из БД произвольному получателю
             else if ((TextFirstRadioButton.IsChecked == true) && (NumbersSecondRadioButton.IsChecked == true) && (GroupsComboBox.SelectedIndex != -1))
             {
-                if (SaveDatabaseCheckBox.IsChecked == true)
-                    await DatabaseLogicClass.MySQLExecuteAsync("INSERT INTO Phones(phone,groups) VALUES (\"" + NumbersToSend.Text + "\",\""+ GroupsComboBox.SelectedValue.ToString() + "\");");
-
-                if (SendSMSCheckBox.IsChecked == true)
+                if (NumbersToSend.Text != "")
                 {
-                    ParseJSONLogicClass thisjson_obj = new ParseJSONLogicClass();
-                    thisjson_obj.GetTimetableJSON();
-                    string selectedgroup = GroupsComboBox.SelectedValue.ToString();
-                    string thisgroupresult = thisjson_obj.GetTimetableByGroup(selectedgroup);
+                    if (SaveDatabaseCheckBox.IsChecked == true)
+                        await DatabaseLogicClass.MySQLExecuteAsync("INSERT INTO Phones(phone,groups) VALUES (\"" + NumbersToSend.Text + "\",\"" + GroupsComboBox.SelectedValue.ToString() + "\");");
 
-                    SMSSenderClass sms_obj = new SMSSenderClass();
-                    if (thisgroupresult  == "false")
+                    if (SendSMSCheckBox.IsChecked == true)
                     {
-                        if (MessageBox.Show("Нет изменений в расписании для группы "+ selectedgroup+"\nХотите отправить оповещение об этом?", "Нет изменений", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                        ParseJSONLogicClass thisjson_obj = new ParseJSONLogicClass();
+                        thisjson_obj.GetTimetableJSON();
+                        string selectedgroup = GroupsComboBox.SelectedValue.ToString();
+                        string thisgroupresult = thisjson_obj.GetTimetableByGroup(selectedgroup);
+
+                        SMSSenderClass sms_obj = new SMSSenderClass();
+                        if (thisgroupresult == "false")
                         {
-                            string[] numbers = new string[] { NumbersToSend.Text };
-                            var request = new Request { numbers = numbers, text = "Нет изменений в расписании группы "+ selectedgroup, channel = "DIRECT" };
-                            if (sms_obj.sms_send(request) != "false")
-                                MessageBox.Show("Успешная отправка сообщения");
+                            if (MessageBox.Show("Нет изменений в расписании для группы " + selectedgroup + "\nХотите отправить оповещение об этом?", "Нет изменений", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                            {
+                                string[] numbers = new string[] { NumbersToSend.Text };
+                                var request = new Request { numbers = numbers, text = "Нет изменений в расписании группы " + selectedgroup, channel = "DIRECT" };
+                                if (sms_obj.sms_send(request) != "false")
+                                    MessageBox.Show("Успешная отправка сообщения");
+                            }
                         }
-                    }
-                    else
-                    {
+                        else
+                        {
                             string[] numbers = new string[] { NumbersToSend.Text };
                             var request = new Request { numbers = numbers, text = thisgroupresult, channel = "DIRECT" };
                             if (sms_obj.sms_send(request) != "false")
                                 MessageBox.Show("Успешная отправка сообщения");
+                        }
+
                     }
-                    
                 }
+                else
+                    MessageBox.Show("Номер отправления не может быть пустым");
                 
 
             }
@@ -93,10 +108,6 @@ namespace SMSTimetable
             //Отправка сообщения из БД получателям из БД 
             else if ((TextFirstRadioButton.IsChecked == true) && (NumbersFirstRadioButton.IsChecked == true))
             {
-                /*
-                 * Тут берем json по группе, из бд берем группу и номер телефона,
-                 * из json вытягиваем расписание по номеру группы и отсылаем все это дело по sms
-                 */
 
                 ParseJSONLogicClass mainjson_obj = new ParseJSONLogicClass();
                 mainjson_obj.GetTimetableJSON();

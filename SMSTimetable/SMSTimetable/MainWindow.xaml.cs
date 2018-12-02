@@ -65,9 +65,9 @@ namespace SMSTimetable
             {
                 string CheckPhoneLoginString = CheckPhoneLogin(LoginTextBox.Text, PasswordBox.Password, ThisAutoLoginEnabled);
                 string CheckEmailLoginString = CheckEmailLogin(LoginTextBox.Text, PasswordBox.Password, ThisAutoLoginEnabled);
-                if ((CheckPhoneLoginString !="") || (CheckEmailLoginString != ""))
+                if ((CheckPhoneLoginString != "") || (CheckEmailLoginString != ""))
                 {
-   
+
                     DatabaseLogicClass.SQLiteExecute("UPDATE logins SET authenticated = 0");
                     DatabaseLogicClass.SQLiteExecute("INSERT INTO logins(login,authenticated) VALUES ('" + CryptoClass.MD5Hash(LoginTextBox.Text) + "',1)");
                     string outnamestr = (CheckPhoneLoginString != "") ? CheckPhoneLoginString : CheckEmailLoginString;
@@ -91,6 +91,8 @@ namespace SMSTimetable
                     PasswordBox.Password = "";
                 }
             }
+            else
+                MessageBox.Show("Введите логин пользователя и пароль");
         }
 
         private void Window_Initialized(object sender, EventArgs e)
