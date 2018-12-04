@@ -69,7 +69,11 @@ namespace SMSTimetable
                 if (NumbersToSend.Text != "")
                 {
                     if (SaveDatabaseCheckBox.IsChecked == true)
-                        await DatabaseLogicClass.MySQLExecuteAsync("INSERT INTO Phones(phone,groups) VALUES (\"" + NumbersToSend.Text + "\",\"" + GroupsComboBox.SelectedValue.ToString() + "\");");
+                    {
+                        string thisgroup = GroupsComboBox.SelectedValue.ToString();
+                        await DatabaseLogicClass.MySQLExecuteAsync("INSERT INTO Phones(phone,groups) VALUES (\"" + NumbersToSend.Text + "\",\"" + thisgroup + "\");");
+                        MessageBox.Show("Успешное добавление нового пользователя с " + thisgroup + " и номером телефона " + NumbersToSend.Text + "!");
+                    }
 
                     if (SendSMSCheckBox.IsChecked == true)
                     {
