@@ -11,4 +11,5 @@
 * [Docker MySQL server](https://github.com/docker-library/mysql)
 * [Danted Socks5 proxy](https://github.com/Lozy/danted)
 
-![OpenCV](opencv.gif)
+![OpenCV](./ресурсы/gif/opencv1.gif)
+![OpenCV](./ресурсы/gif/opencv2.gif)
